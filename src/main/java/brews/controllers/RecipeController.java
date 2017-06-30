@@ -1,5 +1,6 @@
 package brews.controllers;
 
+import brews.domain.BrewDay;
 import brews.domain.Recipe;
 import brews.repository.RecipeRepository;
 import brews.services.ImportRecipeService;
@@ -24,6 +25,12 @@ public class RecipeController {
     @RequestMapping(value = "/recipes", method = RequestMethod.GET)
     public List<Recipe> getAll() {
         return recipeRepository.findAll();
+    }
+
+
+    @RequestMapping(value = "/recipes/{id}", method = RequestMethod.GET)
+    public Recipe get(@PathVariable Long id) {
+        return recipeRepository.findOne(id);
     }
 
     @RequestMapping(value = "/recipes/import", method = RequestMethod.POST)
