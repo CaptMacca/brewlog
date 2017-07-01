@@ -4,10 +4,10 @@ import brews.beerxml.ImportedRecipe;
 import brews.beerxml.ImportedRecipes;
 import brews.mapper.RecipeMapper;
 import brews.domain.Ingredient;
-import brews.domain.MashStep;
+import brews.domain.Mash;
 import brews.domain.Recipe;
 import brews.repository.IngredientRepository;
-import brews.repository.MashStepRepository;
+import brews.repository.MashRepository;
 import brews.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ImportRecipeService {
     IngredientRepository ingredientRepository;
 
     @Autowired
-    MashStepRepository mashStepRepository;
+    MashRepository mashRepository;
 
     @Autowired
     RecipeMapper recipeMapper;
@@ -62,9 +62,9 @@ public class ImportRecipeService {
                         ingredientRepository.flush();
                     }
 
-                    for (MashStep mashStep : recipe.getMashSteps()) {
-                        mashStepRepository.save(mashStep);
-                        mashStepRepository.flush();
+                    for (Mash mash : recipe.getMashes()) {
+                        mashRepository.save(mash);
+                        mashRepository.flush();
                     }
 
                     recipeRepository.save(recipe);

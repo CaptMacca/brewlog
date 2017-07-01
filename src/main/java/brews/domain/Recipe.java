@@ -25,7 +25,7 @@ public class Recipe {
     private List<Ingredient> ingredients;
 
     @OneToMany
-    private List<MashStep> mashSteps;
+    private List<Mash> mashes;
 
     public Long getId() {
         return id;
@@ -103,8 +103,8 @@ public class Recipe {
 
     public void setIngredients(List<Ingredient> ingredients) { this.ingredients = ingredients; }
 
-    public List<MashStep> getMashSteps() { return mashSteps; }
+    public List<Mash> getMashes() { return mashes; }
 
-    public void setMashSteps(List<MashStep> mashSteps) { this.mashSteps = mashSteps; }
+    public void setMashes(List<Mash> mashes) { this.mashes = mashes; }
 
 }

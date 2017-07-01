@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Steve on 28/06/2017.
  */
 @Entity
-public class MashStep {
+public class Mash {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

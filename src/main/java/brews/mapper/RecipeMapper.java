@@ -2,10 +2,7 @@ package brews.mapper;
 
 import brews.beerxml.*;
 import brews.domain.*;
-import org.modelmapper.PropertyMap;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class RecipeMapper {
         dest.setFinalGravity(source.getDisplayFinalGravity());
 
         List<Ingredient> ingredients = new ArrayList<>();
-        List<MashStep> mashSteps = new ArrayList<>();
+        List<Mash> mashes = new ArrayList<>();
 
         if (source.getImportedFermentables() != null) {
 
@@ -75,17 +72,17 @@ public class RecipeMapper {
 
         if (source.getImportedMash()!=null) {
             for(ImportedMashStep importedMashStep : source.getImportedMash().getImportedMashSteps()) {
-                MashStep mashStep = new MashStep();
-                mashStep.setName(importedMashStep.getName());
-                mashStep.setStepTemp(importedMashStep.getDisplayStepTemp());
-                mashStep.setStepTime(importedMashStep.getStepTime());
+                Mash mash = new Mash();
+                mash.setName(importedMashStep.getName());
+                mash.setStepTemp(importedMashStep.getDisplayStepTemp());
+                mash.setStepTime(importedMashStep.getStepTime());
 
-                mashSteps.add(mashStep);
+                mashes.add(mash);
             }
         }
 
         dest.setIngredients(ingredients);
-        dest.setMashSteps(mashSteps);
+        dest.setMashes(mashes);
 
         return dest;
     }
