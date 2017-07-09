@@ -2,6 +2,7 @@ package brews.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Steve on 11/06/2017.
@@ -16,6 +17,9 @@ public class BrewDay {
 
     @ManyToOne
     private Recipe recipe;
+
+    @OneToMany
+    private List<Measurement> measurements;
 
     public Long getId() {
         return id;
@@ -40,4 +44,8 @@ public class BrewDay {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
+
+    public List<Measurement> getMeasurements() { return measurements; }
+
+    public void setMeasurements(List<Measurement> measurements) { this.measurements = measurements; }
 }

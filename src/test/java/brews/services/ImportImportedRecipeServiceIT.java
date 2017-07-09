@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -18,12 +18,14 @@ import java.util.List;
 public class ImportImportedRecipeServiceIT {
 
     @Autowired
-    ImportRecipeService importRecipeService;
+    RecipeService recipeService;
 
     @Test
     public void testImportRecipe() {
 
-        List<Recipe> recipes = importRecipeService.importBeerXml("c:/temp/zombie_dust_clone.xml");
+        File file = new File("c:/temp/zombie_dust_clone.xml");
+
+        List<Recipe> recipes = recipeService.importBeerXml(file);
         assert(recipes.size()>0);
 
     }

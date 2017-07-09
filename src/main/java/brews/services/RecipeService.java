@@ -23,7 +23,7 @@ import java.util.List;
  * Created by Steve on 30/04/2017.
  */
 @Service
-public class ImportRecipeService {
+public class RecipeService {
 
     @Autowired
     RecipeRepository recipeRepository;
@@ -37,13 +37,12 @@ public class ImportRecipeService {
     @Autowired
     RecipeMapper recipeMapper;
 
-    public ImportRecipeService() {}
+    public RecipeService() {}
 
 
-    public List<Recipe> importBeerXml(String fileLocation) {
+    public List<Recipe> importBeerXml(File file) {
 
         try {
-            File file = new File(fileLocation);
             JAXBContext jaxbContext = JAXBContext.newInstance(ImportedRecipes.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -57,14 +56,11 @@ public class ImportRecipeService {
                 if (recipe != null) {
 
                     for (Ingredient ingredient : recipe.getIngredients()) {
-
-                        ingredientRepository.save(ingredient);
-                        ingredientRepository.flush();
+                        ingredientRepository.saveAndFlush(ingredient);
                     }
 
                     for (Mash mash : recipe.getMashes()) {
-                        mashRepository.save(mash);
-                        mashRepository.flush();
+                        mashRepository.saveAndFlush(mash);
                     }
 
                     recipeRepository.save(recipe);
@@ -73,7 +69,6 @@ public class ImportRecipeService {
                     recipes.add(recipe);
                 }
             }
-
 
             return recipes;
 
