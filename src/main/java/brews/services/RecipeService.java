@@ -42,43 +42,46 @@ public class RecipeService {
 
     public List<Recipe> importBeerXml(File file) {
 
+        ImportedRecipes importedRecipes = unmarshallBeerXML(file);
+
+        List<Recipe> recipes = new ArrayList<>();
+
+        for (ImportedRecipe importedRecipe : importedRecipes.getImportedRecipes()) {
+            Recipe recipe = recipeMapper.map(importedRecipe);
+
+            if (recipe != null) {
+
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    ingredientRepository.saveAndFlush(ingredient);
+                }
+
+                for (Mash mash : recipe.getMashes()) {
+                    mashRepository.saveAndFlush(mash);
+                }
+
+                recipeRepository.save(recipe);
+                recipeRepository.flush();
+
+                recipes.add(recipe);
+            }
+        }
+
+        return recipes;
+
+    }
+
+    private ImportedRecipes unmarshallBeerXML(File file) {
+
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(ImportedRecipes.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            ImportedRecipes importedRecipes = (ImportedRecipes) jaxbUnmarshaller.unmarshal(file);
-
-            List<Recipe> recipes = new ArrayList<>();
-
-            for (ImportedRecipe importedRecipe : importedRecipes.getImportedRecipes()) {
-                Recipe recipe = recipeMapper.map(importedRecipe);
-
-                if (recipe != null) {
-
-                    for (Ingredient ingredient : recipe.getIngredients()) {
-                        ingredientRepository.saveAndFlush(ingredient);
-                    }
-
-                    for (Mash mash : recipe.getMashes()) {
-                        mashRepository.saveAndFlush(mash);
-                    }
-
-                    recipeRepository.save(recipe);
-                    recipeRepository.flush();
-
-                    recipes.add(recipe);
-                }
-            }
-
-            return recipes;
+            return (ImportedRecipes) jaxbUnmarshaller.unmarshal(file);
 
         } catch (JAXBException e) {
-            e.printStackTrace();
+
         }
 
         return null;
     }
-
-
-
 }
