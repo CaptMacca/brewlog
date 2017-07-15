@@ -22,9 +22,6 @@ import java.util.List;
 @RequestMapping("api/v1/brews")
 public class RecipeController {
 
-    @Value("${recipe.upload.folder}")
-    private String UPLOADED_FOLDER;
-
     @Autowired
     RecipeRepository recipeRepository;
 
@@ -56,27 +53,11 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/recipes/import", method = RequestMethod.POST)
-    public @ResponseBody String importRecipe(@RequestParam MultipartFile file) {
+    public @ResponseBody String importRecipe(File file) {
 
-        String fileName = null;
+        recipeService.importBeerXml(file);
 
-        try {
-
-            fileName = file.getOriginalFilename();
-            byte[] bytes = file.getBytes();
-            BufferedOutputStream buffStream =
-                    new BufferedOutputStream(new FileOutputStream(new File(UPLOADED_FOLDER + fileName)));
-            buffStream.write(bytes);
-            buffStream.close();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        recipeService.importBeerXml(new File(fileName));
-
-        return "";
+        return "Import succeeded";
     }
 
 }

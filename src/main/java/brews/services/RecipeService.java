@@ -9,6 +9,8 @@ import brews.domain.Recipe;
 import brews.repository.IngredientRepository;
 import brews.repository.MashRepository;
 import brews.repository.RecipeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +27,14 @@ import java.util.List;
 @Service
 public class RecipeService {
 
+    private final static Logger logger = LoggerFactory.getLogger(RecipeService.class);
+
     @Autowired
     RecipeRepository recipeRepository;
-
     @Autowired
     IngredientRepository ingredientRepository;
-
     @Autowired
     MashRepository mashRepository;
-
     @Autowired
     RecipeMapper recipeMapper;
 
@@ -72,16 +73,18 @@ public class RecipeService {
 
     private ImportedRecipes unmarshallBeerXML(File file) {
 
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(ImportedRecipes.class);
+        ImportedRecipes importedRecipes=null;
 
+        try {
+            logger.debug("Unmarshall the beerxml file");
+            JAXBContext jaxbContext = JAXBContext.newInstance(ImportedRecipes.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            return (ImportedRecipes) jaxbUnmarshaller.unmarshal(file);
+            importedRecipes = (ImportedRecipes) jaxbUnmarshaller.unmarshal(file);
 
         } catch (JAXBException e) {
-
+            logger.error("Exception unmarshalling beerxml");
         }
 
-        return null;
+        return importedRecipes;
     }
 }

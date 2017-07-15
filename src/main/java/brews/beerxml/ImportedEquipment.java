@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,79 +13,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ImportedEquipment {
 
     @XmlElement(name = "NAME")
-    @Getter @Setter
     private String name;
     @XmlElement(name = "VERSION")
-    @Getter @Setter
     private int version;
     @XmlElement(name = "BOIL_SIZE")
-    @Getter @Setter
     private double boilSize;
     @XmlElement(name = "BATCH_SIZE")
-    @Getter @Setter
     private double batchSize;
     @XmlElement(name = "TUN_VOLUME")
-    @Getter @Setter
     private double tunVolumne;
     @XmlElement(name = "TUN_WEIGHT")
-    @Getter @Setter
     private double tunWeight;
     @XmlElement(name = "TUN_SPECIFIC_HEAT")
-    @Getter @Setter
     private double tunSpecificHeat;
     @XmlElement(name = "TOP_UP_WATER")
-    @Getter @Setter
     private int topUpWater;
     @XmlElement(name = "TRUB_CHILLER_LOSS")
-    @Getter @Setter
     private double trubChillerLoss;
     @XmlElement(name = "EVAP_RATE")
-    @Getter @Setter
     private int evaparationRate;
     @XmlElement(name = "BOIL_TIME")
-    @Getter @Setter
     private int boilTime;
     @XmlElement(name = "CALC_BOIL_VOLUME")
-    @Getter @Setter
     private String calculatedBoilVolume;
     @XmlElement(name = "LAUTER_DEADSPACE")
-    @Getter @Setter
     private double lauterDeadspace;
     @XmlElement(name = "TOP_UP_KETTLE")
-    @Getter @Setter
     private int topUpKettle;
     @XmlElement(name = "HOP_UTILIZATION")
-    @Getter @Setter
     private int hopUtilization;
     @XmlElement(name = "NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name = "DISPLAY_BOIL_SIZE")
-    @Getter @Setter
     private String displayBoilSize;
     @XmlElement(name = "DISPLAY_BATCH_SIZE")
-    @Getter @Setter
     private String displayBatchSize;
     @XmlElement(name = "DISPLAY_TUN_VOLUME")
-    @Getter @Setter
     private String displayTunVolume;
     @XmlElement(name = "DISPLAY_TUN_WEIGHT")
-    @Getter @Setter
     private String displayTunWeight;
     @XmlElement(name = "DISPLAY_TOP_UP_WATER")
-    @Getter @Setter
     private String displayTopUpWater;
     @XmlElement(name = "DISPLAY_TRUB_CHILLER_LOSS")
-    @Getter @Setter
     private String displayTrubChillerLoss;
     @XmlElement(name = "DISPLAY_LAUTER_DEADSPACE")
-    @Getter @Setter
     private String displayLauterDeadspace;
     @XmlElement(name = "DISPLAY_TOP_UP_KETTLE")
-    @Getter @Setter
     private String displayTopUpKettle;
 
-/*
     public String getName() {
         return name;
     }
@@ -279,5 +251,5 @@ public class ImportedEquipment {
 
     public void setDisplayTopUpKettle(String displayTopUpKettle) {
         this.displayTopUpKettle = displayTopUpKettle;
-    }*/
+    }
 }

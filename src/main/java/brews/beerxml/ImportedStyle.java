@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,112 +13,76 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ImportedStyle {
 
     @XmlElement(name = "NAME")
-    @Getter @Setter
     private String name;
     @XmlElement(name = "VERSION")
-    @Getter @Setter
     private int version;
     @XmlElement(name = "CATEGORY")
-    @Getter @Setter
     private String category;
     @XmlElement(name = "CATEGORY_NUMBER")
-    @Getter @Setter
     private int categoryNumber;
     @XmlElement(name = "STYLE_LETTER")
-    @Getter @Setter
     private String styleLetter;
     @XmlElement(name = "STYLE_GUIDE")
-    @Getter @Setter
     private String styleGuide;
     @XmlElement(name = "TYPE")
-    @Getter @Setter
     private String type;
     @XmlElement(name = "OG_MIN")
-    @Getter @Setter
     private double originalGravityMin;
     @XmlElement(name = "OG_MAX")
-    @Getter @Setter
     private double originalGravityMax;
     @XmlElement(name = "FG_MIN")
-    @Getter @Setter
     private double finalGravityMin;
     @XmlElement(name = "FG_MAX")
-    @Getter @Setter
     private double finalGravityMax;
     @XmlElement(name = "IBU_MIN")
-    @Getter @Setter
     private int ibuMin;
     @XmlElement(name = "IBU_MAX")
-    @Getter @Setter
     private int ibuMax;
     @XmlElement(name = "COLOR_MIN")
-    @Getter @Setter
     private int colourMin;
     @XmlElement(name = "COLOR_MAX")
-    @Getter @Setter
     private int colourMax;
     @XmlElement(name = "CARB_MIN")
-    @Getter @Setter
     private double carbonationMin;
     @XmlElement(name = "CARB_MAX")
-    @Getter @Setter
     private double carbonationMax;
     @XmlElement(name = "ABV_MAX")
-    @Getter @Setter
     private double abvMax;
     @XmlElement(name = "ABV_MIN")
-    @Getter @Setter
     private double abvMin;
     @XmlElement(name = "NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name = "PROFILE")
-    @Getter @Setter
     private String profile;
     @XmlElement(name = "INGREDIENTS")
-    @Getter @Setter
     private String ingredients;
     @XmlElement(name = "EXAMPLES")
-    @Getter @Setter
     private String examples;
     @XmlElement(name = "DISPLAY_OG_MIN")
-    @Getter @Setter
     private String displayOriginalGravityMin;
     @XmlElement(name = "DISPLAY_OG_MAX")
-    @Getter @Setter
     private String displayOriginalGraviryMax;
     @XmlElement(name = "DISPLAY_FG_MIN")
-    @Getter @Setter
     private String displayFinalGravityMin;
     @XmlElement(name = "DISPLAY_FG_MAX")
-    @Getter @Setter
     private String displayFinalGravityMax;
     @XmlElement(name = "DISPLAY_COLOR_MIN")
-    @Getter @Setter
     private String displayColourMin;
     @XmlElement(name = "DISPLAY_COLOR_MAX")
-    @Getter @Setter
     private String displayColourMax;
     @XmlElement(name = "OG_RANGE")
-    @Getter @Setter
     private String originalGravityRange;
     @XmlElement(name = "FG_RANGE")
-    @Getter @Setter
     private String finalGravityRange;
     @XmlElement(name = "IBU_RANGE")
-    @Getter @Setter
     private String ibuRange;
     @XmlElement(name = "CARB_RANGE")
-    @Getter @Setter
     private String carbonationRange;
     @XmlElement(name = "COLOR_RANGE")
-    @Getter @Setter
     private String colourRange;
     @XmlElement(name = "ABV_RANGE")
-    @Getter @Setter
     private String abvRange;
 
-/*
     public String getName() {
         return name;
     }
@@ -400,5 +361,5 @@ public class ImportedStyle {
 
     public void setAbvRange(String abvRange) {
         this.abvRange = abvRange;
-    }*/
+    }
 }

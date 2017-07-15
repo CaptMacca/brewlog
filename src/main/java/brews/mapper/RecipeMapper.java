@@ -13,6 +13,10 @@ import java.util.List;
 @Component
 public class RecipeMapper {
 
+    public RecipeMapper() {
+       super();
+    }
+
     public Recipe map(ImportedRecipe source) {
 
         Recipe dest = new Recipe();
@@ -36,7 +40,6 @@ public class RecipeMapper {
                 fermentable.setName(importedFermentable.getName());
                 fermentable.setAmount(importedFermentable.getDisplayAmount());
                 fermentable.setAddAfterBoil(Boolean.valueOf(importedFermentable.getAddAfterBoil()));
-                //fermentable.setRecipe(dest);
 
                 ingredients.add(fermentable);
             }

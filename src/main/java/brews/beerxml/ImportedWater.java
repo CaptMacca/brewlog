@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,43 +13,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ImportedWater {
 
     @XmlElement(name = "NAME")
-    @Getter @Setter
     private String name;
     @XmlElement(name = "VERSION")
-    @Getter @Setter
     private int version;
     @XmlElement(name = "AMOUNT")
-    @Getter @Setter
     private double amount;
     @XmlElement(name = "CALCIUM")
-    @Getter @Setter
     private int calcium;
     @XmlElement(name = "BICARBONATE")
-    @Getter @Setter
     private int bicarbonate;
     @XmlElement(name = "SULFATE")
-    @Getter @Setter
     private int sulfate;
     @XmlElement(name = "CHLORIDE")
-    @Getter @Setter
     private int chloride;
     @XmlElement(name = "SODIUM")
-    @Getter @Setter
     private int sodium;
     @XmlElement(name = "MAGNESIUM")
-    @Getter @Setter
     private int magnesium;
     @XmlElement(name = "PH")
-    @Getter @Setter
     private int ph;
     @XmlElement(name = "NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name = "DISPLAY_AMOUNT")
-    @Getter @Setter
     private String displayAmount;
 
-/*
     public String getName() {
         return name;
     }
@@ -148,5 +132,4 @@ public class ImportedWater {
     public void setDisplayAmount(String displayAmount) {
         this.displayAmount = displayAmount;
     }
-*/
 }

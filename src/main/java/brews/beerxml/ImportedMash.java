@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
@@ -14,47 +11,33 @@ import java.util.List;
 public class ImportedMash {
 
     @XmlElement(name = "GRAIN_TEMP")
-    @Getter @Setter
     private double grainTemp;
     @XmlElement(name = "TUN_TEMP")
-    @Getter @Setter
     private double tunTemp;
     @XmlElement(name = "SPARGE_TEMP")
-    @Getter @Setter
     private double spargeTemp;
     @XmlElement(name = "PH")
-    @Getter @Setter
     private double ph;
     @XmlElement(name = "TUN_WEIGHT")
-    @Getter @Setter
     private double tunWeight;
     @XmlElement(name = "TUN_SPECIFIC_HEAT")
-    @Getter @Setter
     private double tunSpecificHeat;
     @XmlElement(name = "EQUIP_ADJUST")
-    @Getter @Setter
     private String equipmentAdjust;
     @XmlElement(name = "NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name = "DISPLAY_GRAIN_TEMP")
-    @Getter @Setter
     private String displayGrainTemp;
     @XmlElement(name = "DISPLAY_TUN_TEMP")
-    @Getter @Setter
     private int displayTunTemp;
     @XmlElement(name = "DISPLAY_SPARGE_TEMP")
-    @Getter @Setter
     private String displaySpargeTemp;
     @XmlElement(name = "DISPLAY_TUN_WEIGHT")
-    @Getter @Setter
     private String displayTunWeight;
     @XmlElementWrapper(name = "MASH_STEPS")
     @XmlElement(name = "MASH_STEP")
-    @Getter @Setter
     private List<ImportedMashStep> importedMashSteps;
 
-    /*
     public double getGrainTemp() {
         return grainTemp;
     }
@@ -157,5 +140,5 @@ public class ImportedMash {
 
     public void setImportedMashSteps(List<ImportedMashStep> importedMashSteps) {
         this.importedMashSteps = importedMashSteps;
-    }*/
+    }
 }

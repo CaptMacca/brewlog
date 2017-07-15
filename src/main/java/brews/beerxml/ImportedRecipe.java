@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
@@ -14,162 +11,111 @@ import java.util.List;
 public class ImportedRecipe {
 
     @XmlElement(name="NAME")
-    @Getter @Setter
     private String name;
     @XmlElement(name="VERSION")
-    @Getter @Setter
     private int version;
     @XmlElement(name="TYPE")
-    @Getter @Setter
     private String type;
     @XmlElement(name="BREWER")
-    @Getter @Setter
     private String brewer;
     @XmlElement(name = "ASST_BREWER")
-    @Getter @Setter
     private String assistantBrewer;
     @XmlElement(name="BATCH_SIZE")
-    @Getter @Setter
     private double batchSize;
     @XmlElement(name="BOIL_SIZE")
-    @Getter @Setter
     private double boilSize;
     @XmlElement(name="BOIL_TIME")
-    @Getter @Setter
     private double boilTime;
     @XmlElement(name="EFFICIENCY")
-    @Getter @Setter
     private double efficency;
     @XmlElement(name="NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name="TASTE_NOTES")
-    @Getter @Setter
     private String tasteNotes;
     @XmlElement(name="TASTE_RATING")
-    @Getter @Setter
     private int tasteRating;
     @XmlElement(name="OG")
-    @Getter @Setter
     private double originalGravity;
     @XmlElement(name="FG")
-    @Getter @Setter
     private double finalGravity;
     @XmlElement(name="CARBONATION")
-    @Getter @Setter
     private double carbonation;
     @XmlElement(name="FERMENTATION_STAGES")
-    @Getter @Setter
     private int fermentationStages;
     @XmlElement(name="PRIMARY_AGE")
-    @Getter @Setter
     private int primaryAge;
     @XmlElement(name="PRIMARY_TEMP")
-    @Getter @Setter
     private int primaryTemp;
     @XmlElement(name="SECONDARY_AGE")
-    @Getter @Setter
     private int secondaryAge;
     @XmlElement(name="SECONDARY_TEMP")
-    @Getter @Setter
     private int secondaryTemp;
     @XmlElement(name="TERTIARY_AGE")
-    @Getter @Setter
     private int tertiaryAge;
     @XmlElement(name="AGE")
-    @Getter @Setter
     private int age;
     @XmlElement(name="AGE_TEMP")
-    @Getter @Setter
     private double ageTemp;
     @XmlElement(name="CARBONATION_USED")
-    @Getter @Setter
     private String carbonationUsed;
     @XmlElement(name="DATE")
-    @Getter @Setter
     private String date;
     @XmlElement(name="EST_OG")
-    @Getter @Setter
     private String estimatedOriginalGravity;
     @XmlElement(name="EST_FG")
-    @Getter @Setter
     private String estimatedFinalGravity;
     @XmlElement(name="EST_COLOR")
-    @Getter @Setter
     private String estimatedColour;
     @XmlElement(name="IBU")
-    @Getter @Setter
     private String ibu;
     @XmlElement(name="IBU_METHOD")
-    @Getter @Setter
     private String ibuMethod;
     @XmlElement(name="EST_ABV")
-    @Getter @Setter
     private String estimatedAbv;
     @XmlElement(name="ABV")
-    @Getter @Setter
     private String abv;
     @XmlElement(name="ACTUAL_EFFICENCY")
-    @Getter @Setter
     private String actualEfficency;
     @XmlElement(name="CALORIES")
-    @Getter @Setter
     private String calories;
     @XmlElement(name="DISPLAY_BATCH_SIZE")
-    @Getter @Setter
     private String displayBatchSize;
     @XmlElement(name="DISPLAY_BOIL_SIZE")
-    @Getter @Setter
     private String displayBoilSize;
     @XmlElement(name="DISPLAY_OG")
-    @Getter @Setter
     private String displayOriginalGravity;
     @XmlElement(name="DISPLAY_FG")
-    @Getter @Setter
     private String displayFinalGravity;
     @XmlElement(name="DISPLAY_PRIMARY_TEMP")
-    @Getter @Setter
     private String displayPrimaryTemp;
     @XmlElement(name="DISPLAY_SECONDARY_TEMP")
-    @Getter @Setter
     private String displaySecondaryTemp;
     @XmlElement(name="DISPLAY_TERTIARY_TEMP")
-    @Getter @Setter
     private String displayTertiaryTemp;
     @XmlElement(name="DISPLAY_AGE_TEMP")
-    @Getter @Setter
     private String displayAgeTemp;
     @XmlElementWrapper(name="HOPS")
     @XmlElement(name="HOP")
-    @Getter @Setter
     private List<ImportedHop> importedHops;
     @XmlElementWrapper(name="MISCS")
     @XmlElement(name="MISC")
-    @Getter @Setter
     private List<ImportedMisc> importedMiscs;
     @XmlElementWrapper(name="FERMENTABLES")
     @XmlElement(name="FERMENTABLE")
-    @Getter @Setter
     private List<ImportedFermentable> importedFermentables;
     @XmlElementWrapper(name="YEASTS")
     @XmlElement(name="YEAST")
-    @Getter @Setter
     private List<ImportedYeast> importedYeasts;
     @XmlElementWrapper(name="WATERS")
     @XmlElement(name="WATER")
-    @Getter @Setter
     private List<ImportedWater> importedWaters;
     @XmlElement(name="STYLE")
-    @Getter @Setter
     private ImportedStyle importedStyle;
     @XmlElement(name="EQUIPMENT")
-    @Getter @Setter
     private ImportedEquipment importedEquipment;
     @XmlElement(name="MASH")
-    @Getter @Setter
     private ImportedMash importedMash;
 
-    /*
     public String getName() {
         return name;
     }
@@ -185,6 +131,7 @@ public class ImportedRecipe {
     public void setVersion(int version) {
         this.version = version;
     }
+
     public String getType() {
         return type;
     }
@@ -320,7 +267,6 @@ public class ImportedRecipe {
     public void setSecondaryAge(int secondaryAge) {
         this.secondaryAge = secondaryAge;
     }
-
 
     public int getSecondaryTemp() {
         return secondaryTemp;
@@ -566,7 +512,7 @@ public class ImportedRecipe {
         return importedMash;
     }
 
-    public void setImportedMash(ImportedMash importedMash) { this.importedMash = importedMash; }
-
-    */
+    public void setImportedMash(ImportedMash importedMash) {
+        this.importedMash = importedMash;
+    }
 }

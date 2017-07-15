@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,46 +13,32 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ImportedMisc {
 
     @XmlElement(name = "NAME")
-    @Getter @Setter
     private String name;
     @XmlElement(name = "VERSION")
-    @Getter @Setter
     private int version;
     @XmlElement(name = "TYPE")
-    @Getter @Setter
     private String type;
     @XmlElement(name = "USE")
-    @Getter @Setter
     private String use;
     @XmlElement(name = "AMOUNT")
-    @Getter @Setter
     private double amount;
     @XmlElement(name = "TIME")
-    @Getter @Setter
     private int time;
     @XmlElement(name = "AMOUNT_IS_WEIGHT")
-    @Getter @Setter
     private String amountIsWeight;
     @XmlElement(name = "USE_FOR")
-    @Getter @Setter
     private String usedFor;
     @XmlElement(name = "NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name = "DISPLAY_AMOUNT")
-    @Getter @Setter
     private String displayAmount;
     @XmlElement(name = "INVENTORY")
-    @Getter @Setter
     private String inventory;
     @XmlElement(name = "DISPLAY_TIME")
-    @Getter @Setter
     private String displayTime;
     @XmlElement(name = "BATCH_SIZE")
-    @Getter @Setter
     private String batchSize;
 
-/*
     public String getName() {
         return name;
     }
@@ -158,5 +141,5 @@ public class ImportedMisc {
 
     public void setBatchSize(String batchSize) {
         this.batchSize = batchSize;
-    }*/
+    }
 }

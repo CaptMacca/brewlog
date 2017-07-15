@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,73 +13,50 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ImportedYeast {
 
     @XmlElement(name = "NAME")
-    @Getter @Setter
     private String name;
     @XmlElement(name = "VERSION")
-    @Getter @Setter
     private String version;
     @XmlElement(name = "TYPE")
-    @Getter @Setter
     private String type;
     @XmlElement(name = "FORM")
-    @Getter @Setter
     private String form;
     @XmlElement(name = "AMOUNT")
-    @Getter @Setter
     private double amount;
     @XmlElement(name = "AMOUNT_IS_WEIGHT")
-    @Getter @Setter
     private String amountIsWeight;
     @XmlElement(name = "LABORATORY")
-    @Getter @Setter
     private String laboratory;
     @XmlElement(name = "PRODUCT_ID")
-    @Getter @Setter
     private String productId;
     @XmlElement(name = "MIN_TEMPERATURE")
-    @Getter @Setter
     private int minTemperature;
     @XmlElement(name = "MAX_TEMPERATURE")
-    @Getter @Setter
     private int maxTemperature;
     @XmlElement(name = "FLOCCULATION")
-    @Getter @Setter
     private String flocculation;
     @XmlElement(name = "ATTENUATION")
-    @Getter @Setter
     private int attenuation;
     @XmlElement(name = "NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name = "BEST_FOR")
-    @Getter @Setter
     private String bestFor;
     @XmlElement(name = "MAX_REUSE")
-    @Getter @Setter
     private int maxReuse;
     @XmlElement(name = "TIMES_CULTURED")
-    @Getter @Setter
     private int timesCultures;
     @XmlElement(name = "ADD_TO_SECONDARY")
-    @Getter @Setter
     private String addToSecondary;
     @XmlElement(name = "DISPLAY_AMOUNT")
-    @Getter @Setter
     private String displayAmount;
     @XmlElement(name = "DISP_MIN_TEMP")
-    @Getter @Setter
     private String displayMinTemp;
     @XmlElement(name = "DISP_MAX_TEMP")
-    @Getter @Setter
     private String displayMaxTemp;
-    @Getter @Setter
     @XmlElement(name = "INVENTORY")
     private String inventory;
     @XmlElement(name = "CULTURE_DATE")
-    @Getter @Setter
     private String cultureDate;
 
-    /*
     public String getName() {
         return name;
     }
@@ -258,5 +232,4 @@ public class ImportedYeast {
     public void setCultureDate(String cultureDate) {
         this.cultureDate = cultureDate;
     }
-    */
 }

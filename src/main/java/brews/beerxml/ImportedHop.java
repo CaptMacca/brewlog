@@ -1,8 +1,5 @@
 package brews.beerxml;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,52 +13,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ImportedHop {
 
     @XmlElement(name="NAME")
-    @Getter @Setter
     private String name;
     @XmlElement(name="VERSION")
-    @Getter @Setter
     private int version;
     @XmlElement(name="ORIGIN")
-    @Getter @Setter
     private String origin;
     @XmlElement(name="ALPHA")
-    @Getter @Setter
     private double alpha;
     @XmlElement(name="AMOUNT")
-    @Getter @Setter
     private double amount;
     @XmlElement(name="USE")
-    @Getter @Setter
     private String use;
     @XmlElement(name="TIME")
-    @Getter @Setter
     private int time;
     @XmlElement(name="NOTES")
-    @Getter @Setter
     private String notes;
     @XmlElement(name="TYPE")
-    @Getter @Setter
     private String type;
     @XmlElement(name="FORM")
-    @Getter @Setter
     private String form;
     @XmlElement(name="BETA")
-    @Getter @Setter
     private double beta;
     @XmlElement(name="HSI")
-    @Getter @Setter
     private int hsi;
     @XmlElement(name="DISPLAY_AMOUNT")
-    @Getter @Setter
     private String displayAmount;
     @XmlElement(name="INVENTORY")
-    @Getter @Setter
     private String inventory;
     @XmlElement(name="DISPLAY_TIME")
-    @Getter @Setter
     private String displayTime;
 
-    /*public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -171,11 +155,11 @@ public class ImportedHop {
         this.inventory = inventory;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayTime() {
+        return displayTime;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }*/
+    public void setDisplayTime(String displayTime) {
+        this.displayTime = displayTime;
+    }
 }
