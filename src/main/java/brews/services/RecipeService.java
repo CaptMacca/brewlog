@@ -29,13 +29,9 @@ public class RecipeService {
 
     private final static Logger logger = LoggerFactory.getLogger(RecipeService.class);
 
-    @Autowired
     RecipeRepository recipeRepository;
-    @Autowired
     IngredientRepository ingredientRepository;
-    @Autowired
     MashRepository mashRepository;
-    @Autowired
     RecipeMapper recipeMapper;
 
     public RecipeService() {}
@@ -43,26 +39,28 @@ public class RecipeService {
 
     public List<Recipe> importBeerXml(File file) {
 
+        logger.debug("Importing beerxml file : " + file.getName());
         ImportedRecipes importedRecipes = unmarshallBeerXML(file);
 
         List<Recipe> recipes = new ArrayList<>();
 
+        logger.debug("Saving recipes in database");
         for (ImportedRecipe importedRecipe : importedRecipes.getImportedRecipes()) {
             Recipe recipe = recipeMapper.map(importedRecipe);
 
             if (recipe != null) {
-
+                logger.debug("Saving recipe: " + recipe.getName());
                 for (Ingredient ingredient : recipe.getIngredients()) {
+                    logger.debug("Saving ingredient: " +ingredient.getName());
                     ingredientRepository.saveAndFlush(ingredient);
                 }
-
                 for (Mash mash : recipe.getMashes()) {
+                    logger.debug("Saving mash: " + mash.getName());
                     mashRepository.saveAndFlush(mash);
                 }
 
                 recipeRepository.save(recipe);
                 recipeRepository.flush();
-
                 recipes.add(recipe);
             }
         }
@@ -76,15 +74,38 @@ public class RecipeService {
         ImportedRecipes importedRecipes=null;
 
         try {
-            logger.debug("Unmarshall the beerxml file");
+            logger.debug("Unmarshalling the beerxml file");
             JAXBContext jaxbContext = JAXBContext.newInstance(ImportedRecipes.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             importedRecipes = (ImportedRecipes) jaxbUnmarshaller.unmarshal(file);
-
+            logger.debug("Beerxml has been unmarshalled");
+            if ((importedRecipes!==null) && (importedRecipes.getImportedRecipes() !=null)) {
+                logger.debug("Found " + importedRecipes.getImportedRecipes().size() + " recipes.");
+            }
         } catch (JAXBException e) {
             logger.error("Exception unmarshalling beerxml");
         }
 
         return importedRecipes;
+    }
+
+    @Autowired
+    public void setRecipeRepository(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+    }
+
+    @Autowired
+    public void setIngredientRepository(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
+
+    @Autowired
+    public void setMashRepository(MashRepository mashRepository) {
+        this.mashRepository = mashRepository;
+    }
+
+    @Autowired
+    public void setRecipeMapper(RecipeMapper recipeMapper) {
+        this.recipeMapper = recipeMapper;
     }
 }

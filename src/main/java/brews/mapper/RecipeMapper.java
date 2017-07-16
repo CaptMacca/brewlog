@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Steve on 27/06/2017.
  */
-@Component
+@Component("RecipeMapper")
 public class RecipeMapper {
 
     public RecipeMapper() {

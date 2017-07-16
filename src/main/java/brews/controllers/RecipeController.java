@@ -22,10 +22,7 @@ import java.util.List;
 @RequestMapping("api/v1/brews")
 public class RecipeController {
 
-    @Autowired
     RecipeRepository recipeRepository;
-
-    @Autowired
     RecipeService recipeService;
 
     @RequestMapping(value = "/recipes", method = RequestMethod.GET)
@@ -60,4 +57,21 @@ public class RecipeController {
         return "Import succeeded";
     }
 
+    public RecipeRepository getRecipeRepository() {
+        return recipeRepository;
+    }
+
+    @Autowired
+    public void setRecipeRepository(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+    }
+
+    public RecipeService getRecipeService() {
+        return recipeService;
+    }
+
+    @Autowired
+    public void setRecipeService(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 }

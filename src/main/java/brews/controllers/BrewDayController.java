@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("api/v1/")
 public class BrewDayController {
 
-    @Autowired
     BrewDayRepository brewDayRepository;
 
     @RequestMapping(value = "/brews", method = RequestMethod.GET)
@@ -45,5 +44,10 @@ public class BrewDayController {
         BrewDay existingBrewDay = brewDayRepository.findOne(id);
         brewDayRepository.delete(id);
         return existingBrewDay;
+    }
+
+    @Autowired
+    public void setBrewDayRepository(BrewDayRepository brewDayRepository) {
+        this.brewDayRepository = brewDayRepository;
     }
 }
