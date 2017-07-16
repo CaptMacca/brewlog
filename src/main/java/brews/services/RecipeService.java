@@ -79,7 +79,7 @@ public class RecipeService {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             importedRecipes = (ImportedRecipes) jaxbUnmarshaller.unmarshal(file);
             logger.debug("Beerxml has been unmarshalled");
-            if ((importedRecipes!==null) && (importedRecipes.getImportedRecipes() !=null)) {
+            if ((importedRecipes!=null) && (importedRecipes.getImportedRecipes() !=null)) {
                 logger.debug("Found " + importedRecipes.getImportedRecipes().size() + " recipes.");
             }
         } catch (JAXBException e) {
