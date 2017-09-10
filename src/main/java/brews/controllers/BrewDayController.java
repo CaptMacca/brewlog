@@ -15,39 +15,40 @@ import java.util.List;
 @RequestMapping("api/v1/")
 public class BrewDayController {
 
-    BrewDayRepository brewDayRepository;
+    private final BrewDayRepository brewDayRepository;
 
-    @RequestMapping(value = "/brews", method = RequestMethod.GET)
+    @Autowired
+    public BrewDayController(BrewDayRepository brewDayRepository) {
+        this.brewDayRepository = brewDayRepository;
+    }
+
+    @GetMapping("/brews")
     public List<BrewDay> getBrewDays() {
         return brewDayRepository.findAll();
     }
 
-    @RequestMapping(value = "/brews/{id}", method = RequestMethod.GET)
+    @GetMapping("/brews/{id}")
     public BrewDay get(@PathVariable Long id) {
         return brewDayRepository.findOne(id);
     }
 
-    @RequestMapping(value = "brews", method = RequestMethod.POST)
+    @PostMapping("brews")
     public void create(@RequestBody BrewDay brewDay) {
         brewDayRepository.save(brewDay);
     }
 
-    @RequestMapping(value = "brews/{id}", method = RequestMethod.PUT)
+    @PutMapping("brews/{id}")
     public void update(@PathVariable Long id, @RequestBody BrewDay brewDay) {
         BrewDay existingBrewDay = brewDayRepository.findOne(id);
         BeanUtils.copyProperties(brewDay,existingBrewDay);
         brewDayRepository.saveAndFlush(brewDay);
     }
 
-    @RequestMapping(value = "brews/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("brews/{id}")
     public BrewDay delete(@PathVariable Long id) {
         BrewDay existingBrewDay = brewDayRepository.findOne(id);
         brewDayRepository.delete(id);
         return existingBrewDay;
     }
 
-    @Autowired
-    public void setBrewDayRepository(BrewDayRepository brewDayRepository) {
-        this.brewDayRepository = brewDayRepository;
-    }
 }

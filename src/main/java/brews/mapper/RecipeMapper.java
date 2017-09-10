@@ -54,7 +54,6 @@ public class RecipeMapper {
                 hop.setHopUsage(importedHop.getUse());
                 hop.setAmount(importedHop.getDisplayAmount());
                 hop.setAdditionTime(importedHop.getDisplayTime());
-                //hop.setRecipe(dest);
 
                 ingredients.add(hop);
             }
@@ -67,7 +66,6 @@ public class RecipeMapper {
                 yeast.setLaboratory(importedYeast.getLaboratory());
                 yeast.setProductId(importedYeast.getProductId());
                 yeast.setAmount(importedYeast.getDisplayAmount());
-                //yeast.setRecipe(dest);
 
                 ingredients.add(yeast);
             }

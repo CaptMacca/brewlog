@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface RecipeRepository extends JpaRepository<Recipe,Long> {
 
-    List<Recipe> findRecipesByType(String type);
-    Recipe findRecipeByName(String name);
+    public List<Recipe> findRecipesByType(String type);
+    public Recipe findRecipeByName(String name);
  }
