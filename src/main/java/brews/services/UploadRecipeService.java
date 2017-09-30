@@ -1,5 +1,7 @@
 package brews.services;
 
+import brews.beerxml.ImportedRecipe;
+import brews.domain.Recipe;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
@@ -10,10 +12,12 @@ import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by Steve on 9/07/2017.
@@ -24,6 +28,16 @@ public class UploadRecipeService {
     private static final Logger logger = LoggerFactory.getLogger(UploadRecipeService.class);
     private final String bucketName = "";
     private final String keyName = "";
+    private final ImportRecipeService importRecipeService;
+
+    @Autowired
+    public UploadRecipeService(ImportRecipeService importRecipeService) {
+        this.importRecipeService = importRecipeService;
+    }
+
+    public List<Recipe> uploadFile(InputStream file) {
+        return importRecipeService.importBeerXml(file);
+    }
 
     public String uploadFileToS3(String fileName) {
 

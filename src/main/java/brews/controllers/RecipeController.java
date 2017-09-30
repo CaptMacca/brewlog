@@ -3,10 +3,18 @@ package brews.controllers;
 import brews.domain.Recipe;
 import brews.repository.RecipeRepository;
 import brews.services.UploadRecipeService;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -16,6 +24,7 @@ import java.util.List;
 @RequestMapping("api/v1/brews")
 public class RecipeController {
 
+    private static final Logger logger = LoggerFactory.getLogger(RecipeController.class);
     private final RecipeRepository recipeRepository;
     private final UploadRecipeService uploadRecipeService;
 
@@ -50,11 +59,30 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/upload")
-    public @ResponseBody String uploadRecipe(String fileName) {
+    public ResponseEntity<?> uploadRecipe(@RequestParam("file") MultipartFile uploadfile) {
 
-        uploadRecipeService.uploadFileToS3(fileName);
+        //uploadRecipeService.uploadFile(fileName);
+        logger.debug("File uploading");
+        if (uploadfile.isEmpty()) {
+            return new ResponseEntity<>("Please upload a file", HttpStatus.BAD_REQUEST);
+        }
 
-        return "Import succeeded";
+        if (!uploadfile.getOriginalFilename().endsWith(".xml")) {
+            return new ResponseEntity<>("Please load a beersmith .xml file",HttpStatus.BAD_REQUEST);
+        }
+
+        List<Recipe> recipes;
+        try {
+            InputStream fileContents = uploadfile.getInputStream();
+
+            recipes = uploadRecipeService.uploadFile(fileContents);
+
+        } catch (IOException e) {
+            logger.error("IOException uploading file:", e);
+            return new ResponseEntity<>("Upload failed due to IO problems", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(recipes, HttpStatus.ACCEPTED);
     }
 
 }
