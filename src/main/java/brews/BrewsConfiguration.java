@@ -12,6 +12,7 @@ public class BrewsConfiguration {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
+        // Allow CORS
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {

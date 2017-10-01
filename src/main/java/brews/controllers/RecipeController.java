@@ -52,10 +52,16 @@ public class RecipeController {
     }
 
     @DeleteMapping("/recipes/{id}")
-    public Recipe deleteRecipe(@PathVariable Long id) {
+    public ResponseEntity<?> deleteRecipe(@PathVariable Long id) {
         Recipe existingRecipe = recipeRepository.findOne(id);
+
+        if (existingRecipe==null) {
+            return new ResponseEntity<>("Recipe could not be found to delete",HttpStatus.BAD_REQUEST);
+        }
+
         recipeRepository.delete(existingRecipe);
-        return existingRecipe;
+        List<Recipe> recipes = recipeRepository.findAll();
+        return new ResponseEntity<>(recipes, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/recipes/upload")

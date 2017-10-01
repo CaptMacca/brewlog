@@ -25,9 +25,9 @@ import java.util.List;
 @Service
 public class UploadRecipeService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UploadRecipeService.class);
-    private final String bucketName = "";
-    private final String keyName = "";
+   // private static final Logger logger = LoggerFactory.getLogger(UploadRecipeService.class);
+  //  private final String bucketName = "";
+//    private final String keyName = "";
     private final ImportRecipeService importRecipeService;
 
     @Autowired
@@ -39,6 +39,7 @@ public class UploadRecipeService {
         return importRecipeService.importBeerXml(file);
     }
 
+    /*
     public String uploadFileToS3(String fileName) {
 
         File file = new File(fileName);
@@ -70,4 +71,5 @@ public class UploadRecipeService {
         return "File successfully uploaded";
     }
 
+*/
 }
