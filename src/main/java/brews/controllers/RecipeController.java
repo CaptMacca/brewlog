@@ -45,10 +45,15 @@ public class RecipeController {
     }
 
     @PutMapping("/recipes/{id}")
-    public Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
+    public ResponseEntity<?> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
         Recipe existingRecipe = recipeRepository.findOne(id);
+        if (existingRecipe==null) {
+            return new ResponseEntity<>("Recipe could not be found to delete",HttpStatus.BAD_REQUEST);
+        }
+
         BeanUtils.copyProperties(recipe,existingRecipe);
-        return recipeRepository.saveAndFlush(existingRecipe);
+        recipe = recipeRepository.saveAndFlush(existingRecipe);
+        return new ResponseEntity<>(recipe,HttpStatus.OK);
     }
 
     @DeleteMapping("/recipes/{id}")

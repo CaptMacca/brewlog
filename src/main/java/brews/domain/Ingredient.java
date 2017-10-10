@@ -15,6 +15,8 @@ public class Ingredient {
     private Long id;
     private String name;
     private String amount;
+    @Transient
+    private String type;
 
     @OneToOne
     private Recipe recipe;
@@ -50,4 +52,6 @@ public class Ingredient {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
+
+    public String getType() { return type; }
 }

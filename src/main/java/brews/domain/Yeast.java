@@ -28,4 +28,7 @@ public class Yeast extends Ingredient {
     public void setLaboratory(String laboratory) {
         this.laboratory = laboratory;
     }
+
+    @Override
+    public String getType() { return "Yeast"; }
 }

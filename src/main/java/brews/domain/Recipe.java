@@ -14,6 +14,7 @@ public class Recipe {
     private Long id;
     private String name;
     private String type;
+    private String style;
     private String estimatedABV;
     private String estimatedColour;
     private String batchSize;
@@ -48,6 +49,10 @@ public class Recipe {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getStyle() { return style; }
+
+    public void setStyle(String style) { this.style = style; }
 
     public String getEstimatedABV() {
         return estimatedABV;

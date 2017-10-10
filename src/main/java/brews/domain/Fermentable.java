@@ -11,6 +11,9 @@ public class Fermentable extends Ingredient {
 
     private Boolean addAfterBoil;
 
+    @Override
+    public String getType() { return "Fermentable"; }
+
     public Boolean getAddAfterBoil() {
         return addAfterBoil;
     }

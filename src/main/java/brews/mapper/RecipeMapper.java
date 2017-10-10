@@ -30,6 +30,10 @@ public class RecipeMapper {
         dest.setOriginalGravity(source.getDisplayOriginalGravity());
         dest.setFinalGravity(source.getDisplayFinalGravity());
 
+        if (source.getImportedStyle()!=null) {
+            dest.setStyle(source.getImportedStyle().getName());
+        }
+
         List<Ingredient> ingredients = new ArrayList<>();
         List<Mash> mashes = new ArrayList<>();
 
@@ -72,13 +76,16 @@ public class RecipeMapper {
         }
 
         if (source.getImportedMash()!=null) {
-            for(ImportedMashStep importedMashStep : source.getImportedMash().getImportedMashSteps()) {
-                Mash mash = new Mash();
-                mash.setName(importedMashStep.getName());
-                mash.setStepTemp(importedMashStep.getDisplayStepTemp());
-                mash.setStepTime(importedMashStep.getStepTime());
+            ImportedMash importedMash = source.getImportedMash();
+            if (importedMash.getImportedMashSteps()!=null) {
+                for (ImportedMashStep importedMashStep : source.getImportedMash().getImportedMashSteps()) {
+                    Mash mash = new Mash();
+                    mash.setName(importedMashStep.getName());
+                    mash.setStepTemp(importedMashStep.getDisplayStepTemp());
+                    mash.setStepTime(importedMashStep.getStepTime());
 
-                mashes.add(mash);
+                    mashes.add(mash);
+                }
             }
         }
 

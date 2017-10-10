@@ -37,4 +37,7 @@ public class Hop extends Ingredient {
     public void setHopUsage(String use) {
         this.hopUsage = use;
     }
+
+    @Override
+    public String getType() { return "Hop"; }
 }
