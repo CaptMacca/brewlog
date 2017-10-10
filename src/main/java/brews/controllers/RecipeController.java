@@ -72,8 +72,7 @@ public class RecipeController {
     @PostMapping("/recipes/upload")
     public ResponseEntity<?> uploadRecipe(@RequestParam("file") MultipartFile uploadfile) {
 
-        //uploadRecipeService.uploadFile(fileName);
-        logger.debug("File uploading");
+        logger.debug("File upload requested." );
         if (uploadfile.isEmpty()) {
             return new ResponseEntity<>("Please upload a file", HttpStatus.BAD_REQUEST);
         }
