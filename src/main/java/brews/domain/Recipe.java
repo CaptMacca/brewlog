@@ -15,18 +15,30 @@ public class Recipe {
     private String name;
     private String type;
     private String style;
+    private String ibu;
     private String estimatedABV;
     private String estimatedColour;
     private String batchSize;
     private String originalGravity;
     private String finalGravity;
     private String boilTime;
+    private String notes;
 
-    @OneToMany
+    @OneToMany(
+        mappedBy = "recipe",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     private List<Ingredient> ingredients;
 
-    @OneToMany
+    @OneToMany(
+        mappedBy = "recipe",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     private List<Mash> mashes;
+
+    //TODO : Link back to recipes
 
     public Long getId() {
         return id;
@@ -51,6 +63,10 @@ public class Recipe {
     }
 
     public String getStyle() { return style; }
+
+    public String getIbu() { return ibu; }
+
+    public void setIbu(String ibu) { this.ibu = ibu; }
 
     public void setStyle(String style) { this.style = style; }
 
@@ -112,4 +128,7 @@ public class Recipe {
 
     public void setMashes(List<Mash> mashes) { this.mashes = mashes; }
 
+    public String getNotes() { return this.notes; }
+
+    public void setNotes(String notes) { this.notes = notes; }
 }

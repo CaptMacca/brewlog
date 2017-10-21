@@ -16,7 +16,8 @@ public class Mash {
     private String stepTemp;
     private Integer stepTime;
 
-    @OneToOne
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
     public Long getId() {

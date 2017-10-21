@@ -12,7 +12,8 @@ public class Measurement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne()
+    @JoinColumn(name="brew_id")
     private BrewDay brewDay;
 
     public Long getId() { return id; }

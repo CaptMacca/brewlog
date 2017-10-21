@@ -2,10 +2,8 @@ package brews.services;
 
 import brews.beerxml.ImportedRecipe;
 import brews.beerxml.ImportedRecipes;
-import brews.mapper.RecipeMapper;
-import brews.domain.Ingredient;
-import brews.domain.Mash;
 import brews.domain.Recipe;
+import brews.mapper.RecipeMapper;
 import brews.repository.IngredientRepository;
 import brews.repository.MashRepository;
 import brews.repository.RecipeRepository;
@@ -42,7 +40,7 @@ public class ImportRecipeService {
         this.recipeMapper = recipeMapper;
     }
 
-    public List<Recipe> importBeerXml(InputStream contents) {
+    public List<Recipe> importBeerXml(InputStream contents) throws RecipeExistsException {
 
         logger.debug("Importing beerxml file ");
         ImportedRecipes importedRecipes = unmarshallBeerXML(contents);
@@ -53,26 +51,94 @@ public class ImportRecipeService {
         List<ImportedRecipe> candidateRecipes = importedRecipes.getImportedRecipes();
 
         candidateRecipes.forEach((importedRecipe)-> {
-            Recipe recipe = recipeMapper.map(importedRecipe);
-            recipe = saveRecipe(recipe);
-            recipes.add(recipe);
+            Recipe candidateRecipe = recipeMapper.map(importedRecipe);
+
+            // Update an already uploaded recipe
+            Recipe existingRecipe = recipeRepository.findRecipeByName(candidateRecipe.getName());
+            if (existingRecipe == null) {
+                candidateRecipe = saveRecipe(candidateRecipe);
+            } else{
+                // TODO: Revisit for cascading update but throw exception at this point
+                //candidateRecipe = updateRecipe(existingRecipe,candidateRecipe);
+                throw new RecipeExistsException();
+            }
+            recipes.add(candidateRecipe);
         });
 
         return recipes;
-
     }
+
+    /*
+    private Recipe updateRecipe(Recipe existingRecipe,Recipe recipe) {
+
+        if (recipe != null) {
+            // For each ingredient attempt to find it and update
+
+            List<Ingredient> existingIngredients = existingRecipe.getIngredients();
+            List<Mash> existingMashSteps = existingRecipe.getMashes();
+
+            recipe.getIngredients()
+                  .forEach(ingredient -> {
+                      Optional<Ingredient> candidateIngredient =
+                                existingIngredients.stream()
+                                    .filter((Ingredient p) -> p.getName().equals(ingredient.getName()))
+                                    .findAny();
+
+                      if (candidateIngredient.isPresent()) {
+                           Ingredient existingIngredient = candidateIngredient.get();
+
+                           if (existingIngredient instanceof Hop) {
+                               Hop existingHop = (Hop) existingIngredient;
+                               Hop newHop = (Hop) ingredient;
+
+                               BeanUtils.copyProperties(newHop,existingHop,"id");
+                               ingredientRepository.saveAndFlush(existingHop);
+                           } else if (existingIngredient instanceof Yeast) {
+                               Yeast existingYeast = (Yeast) existingIngredient;
+                               Yeast newYeast = (Yeast) ingredient;
+
+                               BeanUtils.copyProperties(newYeast,existingYeast,"id");
+                               ingredientRepository.saveAndFlush(existingYeast);
+                           } else if (existingIngredient instanceof Fermentable) {
+                               Fermentable existingFermentable = (Fermentable) existingIngredient;
+                               Fermentable newFermentable = (Fermentable) ingredient;
+
+                               BeanUtils.copyProperties(newFermentable,existingFermentable,"id");
+                               ingredientRepository.saveAndFlush(existingFermentable);
+                           }
+                      }
+                  });
+
+
+            recipe.getMashes().forEach((Mash mash) -> {
+                Optional<Mash> candidateMash =
+                        existingMashSteps.stream()
+                                .filter((Mash p) -> p.getName().equals(mash.getName()))
+                                .findAny();
+
+                BeanUtils.copyProperties(candidateMash,mash,"id");
+                mashRepository.save(mash);
+            });
+
+            BeanUtils.copyProperties(recipe,existingRecipe,"id");
+            recipeRepository.saveAndFlush(existingRecipe);
+        }
+
+        return recipe;
+    }
+    */
 
     private Recipe saveRecipe(Recipe recipe) {
         if (recipe != null) {
             logger.debug("Saving recipe: " + recipe.getName());
-            for (Ingredient ingredient : recipe.getIngredients()) {
-                logger.debug("Saving ingredient: " + ingredient.getName());
-                ingredientRepository.saveAndFlush(ingredient);
-            }
-            for (Mash mash : recipe.getMashes()) {
+            recipe.getIngredients().forEach(ingredient -> {
+                        logger.debug("Saving ingredient: " + ingredient.getName());
+                        ingredientRepository.save(ingredient);
+                    });
+            recipe.getMashes().forEach(mash -> {
                 logger.debug("Saving mash: " + mash.getName());
-                mashRepository.saveAndFlush(mash);
-            }
+                mashRepository.save(mash);
+            });
 
             recipeRepository.save(recipe);
             recipeRepository.flush();

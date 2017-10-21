@@ -15,10 +15,15 @@ public class BrewDay {
     private Long id;
     private Date brewDate;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
-    @OneToMany
+    @OneToMany(
+            mappedBy = "brewDay",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<Measurement> measurements;
 
     public Long getId() {

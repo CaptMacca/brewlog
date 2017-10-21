@@ -2,8 +2,8 @@ package brews.controllers;
 
 import brews.domain.Recipe;
 import brews.repository.RecipeRepository;
-import brews.services.UploadRecipeService;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import brews.services.ImportRecipeService;
+import brews.services.RecipeExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,16 +23,17 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/v1/brews")
+@CrossOrigin(origins = "*")
 public class RecipeController {
 
     private static final Logger logger = LoggerFactory.getLogger(RecipeController.class);
     private final RecipeRepository recipeRepository;
-    private final UploadRecipeService uploadRecipeService;
+    private final ImportRecipeService importRecipeService;
 
     @Autowired
-    public RecipeController(RecipeRepository recipeRepository, UploadRecipeService uploadRecipeService) {
-        this.uploadRecipeService = uploadRecipeService;
+    public RecipeController(RecipeRepository recipeRepository, ImportRecipeService importRecipeService) {
         this.recipeRepository = recipeRepository;
+        this.importRecipeService = importRecipeService;
     }
 
     @GetMapping("/recipes")
@@ -47,12 +49,13 @@ public class RecipeController {
     @PutMapping("/recipes/{id}")
     public ResponseEntity<?> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
         Recipe existingRecipe = recipeRepository.findOne(id);
+
         if (existingRecipe==null) {
             return new ResponseEntity<>("Recipe could not be found to delete",HttpStatus.BAD_REQUEST);
         }
 
-        BeanUtils.copyProperties(recipe,existingRecipe);
-        recipe = recipeRepository.saveAndFlush(existingRecipe);
+        BeanUtils.copyProperties(existingRecipe,recipe);
+        recipe = recipeRepository.saveAndFlush(recipe);
         return new ResponseEntity<>(recipe,HttpStatus.OK);
     }
 
@@ -81,15 +84,20 @@ public class RecipeController {
             return new ResponseEntity<>("Please load a beersmith .xml file",HttpStatus.BAD_REQUEST);
         }
 
-        List<Recipe> recipes;
+        List<Recipe> recipes=new ArrayList<>();
         try {
             InputStream fileContents = uploadfile.getInputStream();
-
-            recipes = uploadRecipeService.uploadFile(fileContents);
+            if (fileContents!=null) {
+              recipes = importRecipeService.importBeerXml(fileContents);
+            }
 
         } catch (IOException e) {
             logger.error("IOException uploading file:", e);
             return new ResponseEntity<>("Upload failed due to IO problems", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (RecipeExistsException e) {
+            String msg = "Recipe of same name already exists in recipe database";
+            logger.warn(msg);
+            return new ResponseEntity<Object>(msg,HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(recipes, HttpStatus.ACCEPTED);

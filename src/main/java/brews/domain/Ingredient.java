@@ -15,10 +15,12 @@ public class Ingredient {
     private Long id;
     private String name;
     private String amount;
+
     @Transient
     private String type;
 
-    @OneToOne
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
     public Long getId() {
@@ -54,4 +56,6 @@ public class Ingredient {
     }
 
     public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
 }
