@@ -27,14 +27,14 @@ public class Recipe {
     @OneToMany(
         mappedBy = "recipe",
         cascade = CascadeType.ALL,
-        orphanRemoval = true
+        fetch = FetchType.LAZY
     )
     private List<Ingredient> ingredients;
 
     @OneToMany(
         mappedBy = "recipe",
         cascade = CascadeType.ALL,
-        orphanRemoval = true
+        fetch = FetchType.LAZY
     )
     private List<Mash> mashes;
 

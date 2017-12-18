@@ -54,8 +54,8 @@ public class RecipeController {
             return new ResponseEntity<>("Recipe could not be found to delete",HttpStatus.BAD_REQUEST);
         }
 
-        BeanUtils.copyProperties(existingRecipe,recipe);
-        recipe = recipeRepository.saveAndFlush(recipe);
+        BeanUtils.copyProperties(recipe,existingRecipe);
+        recipe = recipeRepository.saveAndFlush(existingRecipe);
         return new ResponseEntity<>(recipe,HttpStatus.OK);
     }
 
@@ -100,7 +100,7 @@ public class RecipeController {
             return new ResponseEntity<Object>(msg,HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(recipes, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(recipes, HttpStatus.CREATED);
     }
 
 }

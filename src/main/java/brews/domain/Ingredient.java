@@ -1,5 +1,7 @@
 package brews.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -19,8 +21,9 @@ public class Ingredient {
     @Transient
     private String type;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="recipe_id")
+    @JsonIgnore
     private Recipe recipe;
 
     public Long getId() {

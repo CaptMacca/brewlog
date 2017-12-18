@@ -22,7 +22,7 @@ public class BrewDay {
     @OneToMany(
             mappedBy = "brewDay",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            fetch=FetchType.LAZY
     )
     private List<Measurement> measurements;
 

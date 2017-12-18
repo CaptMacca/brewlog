@@ -4,6 +4,8 @@ import brews.domain.BrewDay;
 import brews.repository.BrewDayRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,22 +35,42 @@ public class BrewDayController {
     }
 
     @PostMapping("brews")
-    public void create(@RequestBody BrewDay brewDay) {
-        brewDayRepository.save(brewDay);
+    public ResponseEntity<?> create(@RequestBody BrewDay brewDay) {
+        BrewDay newBrewDay = brewDayRepository.save(brewDay);
+
+        if (newBrewDay==null) {
+            return new ResponseEntity<>("Brew Details could not be saved", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(newBrewDay, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("brews/{id}")
-    public void update(@PathVariable Long id, @RequestBody BrewDay brewDay) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody BrewDay brewDay) {
+
         BrewDay existingBrewDay = brewDayRepository.findOne(id);
+
+        if (existingBrewDay==null) {
+            return new ResponseEntity<>("Brew record could not be found", HttpStatus.BAD_REQUEST);
+        }
+
         BeanUtils.copyProperties(brewDay,existingBrewDay);
-        brewDayRepository.saveAndFlush(brewDay);
+        brewDay = brewDayRepository.saveAndFlush(existingBrewDay);
+
+        return new ResponseEntity<>(brewDay, HttpStatus.OK);
     }
 
     @DeleteMapping("brews/{id}")
-    public BrewDay delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         BrewDay existingBrewDay = brewDayRepository.findOne(id);
+
+        if (existingBrewDay==null) {
+            return new ResponseEntity<>("Brew record could not be found to delete", HttpStatus.BAD_REQUEST);
+        }
+
         brewDayRepository.delete(id);
-        return existingBrewDay;
+        List<BrewDay> brews = brewDayRepository.findAll();
+        return new ResponseEntity<>(brews,HttpStatus.ACCEPTED);
     }
 
 }

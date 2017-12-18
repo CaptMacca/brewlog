@@ -1,6 +1,7 @@
 package brews.mapper;
 
-import brews.beerxml.*;
+import brews.beerxml.ImportedMash;
+import brews.beerxml.ImportedRecipe;
 import brews.domain.*;
 import org.springframework.stereotype.Component;
 
@@ -46,6 +47,7 @@ public class RecipeMapper {
                       fermentable.setName(importedFermentable.getName());
                       fermentable.setAmount(importedFermentable.getDisplayAmount());
                       fermentable.setAddAfterBoil(Boolean.valueOf(importedFermentable.getAddAfterBoil()));
+                      fermentable.setRecipe(dest);
 
                       ingredients.add(fermentable);
                   });
@@ -61,6 +63,7 @@ public class RecipeMapper {
                       hop.setHopUsage(importedHop.getUse());
                       hop.setAmount(importedHop.getDisplayAmount());
                       hop.setAdditionTime(importedHop.getDisplayTime());
+                      hop.setRecipe(dest);
 
                       ingredients.add(hop);
                     });
@@ -75,6 +78,7 @@ public class RecipeMapper {
                         yeast.setLaboratory(importedYeast.getLaboratory());
                         yeast.setProductId(importedYeast.getProductId());
                         yeast.setAmount(importedYeast.getDisplayAmount());
+                        yeast.setRecipe(dest);
 
                         ingredients.add(yeast);
                     });
@@ -89,6 +93,7 @@ public class RecipeMapper {
                             mash.setName(importedMashStep.getName());
                             mash.setStepTemp(importedMashStep.getDisplayStepTemp());
                             mash.setStepTime(importedMashStep.getStepTime());
+                            mash.setRecipe(dest);
 
                             mashes.add(mash);
                         });

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,6 +19,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by Steve on 30/04/2017.
@@ -40,6 +42,7 @@ public class ImportRecipeService {
         this.recipeMapper = recipeMapper;
     }
 
+    @Transactional
     public List<Recipe> importBeerXml(InputStream contents) throws RecipeExistsException {
 
         logger.debug("Importing beerxml file ");
@@ -50,7 +53,8 @@ public class ImportRecipeService {
         logger.debug("Saving recipes in database");
         List<ImportedRecipe> candidateRecipes = importedRecipes.getImportedRecipes();
 
-        candidateRecipes.forEach((importedRecipe)-> {
+        for (ImportedRecipe importedRecipe : candidateRecipes) {
+
             Recipe candidateRecipe = recipeMapper.map(importedRecipe);
 
             // Update an already uploaded recipe
@@ -63,7 +67,7 @@ public class ImportRecipeService {
                 throw new RecipeExistsException();
             }
             recipes.add(candidateRecipe);
-        });
+        }
 
         return recipes;
     }
@@ -131,14 +135,6 @@ public class ImportRecipeService {
     private Recipe saveRecipe(Recipe recipe) {
         if (recipe != null) {
             logger.debug("Saving recipe: " + recipe.getName());
-            recipe.getIngredients().forEach(ingredient -> {
-                        logger.debug("Saving ingredient: " + ingredient.getName());
-                        ingredientRepository.save(ingredient);
-                    });
-            recipe.getMashes().forEach(mash -> {
-                logger.debug("Saving mash: " + mash.getName());
-                mashRepository.save(mash);
-            });
 
             recipeRepository.save(recipe);
             recipeRepository.flush();
