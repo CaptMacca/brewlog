@@ -1,6 +1,8 @@
 package brews.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 
@@ -61,4 +63,32 @@ public class Ingredient {
     public String getType() { return type; }
 
     public void setType(String type) { this.type = type; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ingredient that = (Ingredient) o;
+
+        return new EqualsBuilder()
+                .append(id, that.id)
+                .append(name, that.name)
+                .append(amount, that.amount)
+                .append(type, that.type)
+                .append(recipe, that.recipe)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(name)
+                .append(amount)
+                .append(type)
+                .append(recipe)
+                .toHashCode();
+    }
 }

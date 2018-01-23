@@ -1,12 +1,12 @@
 package brews.mapper;
 
-import brews.beerxml.ImportedMash;
-import brews.beerxml.ImportedRecipe;
+import brews.beerxml.*;
 import brews.domain.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Steve on 27/06/2017.
@@ -40,63 +40,98 @@ public class RecipeMapper {
         List<Ingredient> ingredients = new ArrayList<>();
         List<Mash> mashes = new ArrayList<>();
 
-        if (source.getImportedFermentables() != null) {
-            source.getImportedFermentables()
-                  .forEach(importedFermentable -> {
-                      Fermentable fermentable = new Fermentable();
-                      fermentable.setName(importedFermentable.getName());
-                      fermentable.setAmount(importedFermentable.getDisplayAmount());
-                      fermentable.setAddAfterBoil(Boolean.valueOf(importedFermentable.getAddAfterBoil()));
-                      fermentable.setRecipe(dest);
+        Optional<List<ImportedFermentable>> _fermentables = Optional.ofNullable(source.getImportedFermentables());
+        Optional<List<ImportedHop>> _hops = Optional.ofNullable(source.getImportedHops());
+        Optional<List<ImportedYeast>> _yeasts = Optional.ofNullable(source.getImportedYeasts());
+        Optional<ImportedMash> _mashes = Optional.ofNullable(source.getImportedMash());
 
-                      ingredients.add(fermentable);
-                  });
+        if (_fermentables.isPresent()) {
+            ingredients.addAll(
+                _fermentables.get()
+                    .stream()
+                    .collect(
+                        ()-> new ArrayList<>(),
+                        (list, importedFermentable) -> {
+                            Fermentable fermentable = new Fermentable();
+                            fermentable.setName(importedFermentable.getName());
+                            fermentable.setAmount(importedFermentable.getDisplayAmount());
+                            fermentable.setAddAfterBoil(Boolean.valueOf(importedFermentable.getAddAfterBoil()));
+                            fermentable.setRecipe(dest);
+
+                            list.add(fermentable);
+                        },
+                        (list1,list2) -> list1.addAll(list2)
+                )
+            );
+        }
+
+        if (_hops.isPresent()) {
+            ingredients.addAll(
+                _hops.get()
+                    .stream()
+                    .collect(
+                        () -> new ArrayList<>(),
+                        (list, importedHop) -> {
+                            Hop hop = new Hop();
+                            hop.setName(importedHop.getName());
+                            hop.setAlpha(importedHop.getAlpha());
+                            hop.setHopUsage(importedHop.getUse());
+                            hop.setAmount(importedHop.getDisplayAmount());
+                            hop.setAdditionTime(importedHop.getDisplayTime());
+                            hop.setRecipe(dest);
+
+                            list.add(hop);
+                        },
+                        (list1,list2) -> list1.addAll(list2)
+                    )
+            );
 
         }
 
-        if (source.getImportedHops() != null) {
-            source.getImportedHops()
-                  .forEach(importedHop -> {
-                      Hop hop = new Hop();
-                      hop.setName(importedHop.getName());
-                      hop.setAlpha(importedHop.getAlpha());
-                      hop.setHopUsage(importedHop.getUse());
-                      hop.setAmount(importedHop.getDisplayAmount());
-                      hop.setAdditionTime(importedHop.getDisplayTime());
-                      hop.setRecipe(dest);
+        if (_yeasts.isPresent()) {
+            ingredients.addAll(
+                    _yeasts.get()
+                        .stream()
+                        .collect(
+                            () -> new ArrayList<>(),
+                            (list, importedYeast) -> {
+                                Yeast yeast = new Yeast();
+                                yeast.setName(importedYeast.getName());
+                                yeast.setLaboratory(importedYeast.getLaboratory());
+                                yeast.setProductId(importedYeast.getProductId());
+                                yeast.setAmount(importedYeast.getDisplayAmount());
+                                yeast.setRecipe(dest);
 
-                      ingredients.add(hop);
-                    });
+                                list.add(yeast);
+                            },
+                            (list1,list2) -> list1.addAll(list2)
+                    )
+            );
+    }
 
-        }
+        if (_mashes.isPresent()) {
+            ImportedMash _importedMash = _mashes.get();
+            Optional<List<ImportedMashStep>> _mashSteps
+                    = Optional.ofNullable(_importedMash.getImportedMashSteps());
 
-        if (source.getImportedYeasts() != null) {
-            source.getImportedYeasts()
-                    .forEach(importedYeast -> {
-                        Yeast yeast = new Yeast();
-                        yeast.setName(importedYeast.getName());
-                        yeast.setLaboratory(importedYeast.getLaboratory());
-                        yeast.setProductId(importedYeast.getProductId());
-                        yeast.setAmount(importedYeast.getDisplayAmount());
-                        yeast.setRecipe(dest);
+            if (_mashSteps.isPresent()) {
+                mashes.addAll(
+                        _mashSteps.get()
+                                .stream()
+                                .collect(
+                                    () -> new ArrayList<>(),
+                                    (list,importedMashStep) -> {
+                                        Mash mash = new Mash();
+                                        mash.setName(importedMashStep.getName());
+                                        mash.setStepTemp(importedMashStep.getDisplayStepTemp());
+                                        mash.setStepTime(importedMashStep.getStepTime());
+                                        mash.setRecipe(dest);
 
-                        ingredients.add(yeast);
-                    });
-        }
-
-        if (source.getImportedMash()!=null) {
-            ImportedMash importedMash = source.getImportedMash();
-            if (importedMash.getImportedMashSteps()!=null) {
-                importedMash.getImportedMashSteps()
-                        .forEach(importedMashStep -> {
-                            Mash mash = new Mash();
-                            mash.setName(importedMashStep.getName());
-                            mash.setStepTemp(importedMashStep.getDisplayStepTemp());
-                            mash.setStepTime(importedMashStep.getStepTime());
-                            mash.setRecipe(dest);
-
-                            mashes.add(mash);
-                        });
+                                        list.add(mash);
+                                    },
+                                    (list1,list2) -> list1.addAll(list2)
+                                )
+                );
             }
         }
 

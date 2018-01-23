@@ -1,5 +1,8 @@
 package brews.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -31,4 +34,26 @@ public class Yeast extends Ingredient {
 
     @Override
     public String getType() { return "Yeast"; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Yeast yeast = (Yeast) o;
+
+        return new EqualsBuilder()
+                .append(productId, yeast.productId)
+                .append(laboratory, yeast.laboratory)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(productId)
+                .append(laboratory)
+                .toHashCode();
+    }
 }

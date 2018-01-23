@@ -1,5 +1,8 @@
 package brews.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -37,8 +40,6 @@ public class Recipe {
         fetch = FetchType.LAZY
     )
     private List<Mash> mashes;
-
-    //TODO : Link back to recipes
 
     public Long getId() {
         return id;
@@ -131,4 +132,50 @@ public class Recipe {
     public String getNotes() { return this.notes; }
 
     public void setNotes(String notes) { this.notes = notes; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Recipe recipe = (Recipe) o;
+
+        return new EqualsBuilder()
+                .append(id, recipe.id)
+                .append(name, recipe.name)
+                .append(type, recipe.type)
+                .append(style, recipe.style)
+                .append(ibu, recipe.ibu)
+                .append(estimatedABV, recipe.estimatedABV)
+                .append(estimatedColour, recipe.estimatedColour)
+                .append(batchSize, recipe.batchSize)
+                .append(originalGravity, recipe.originalGravity)
+                .append(finalGravity, recipe.finalGravity)
+                .append(boilTime, recipe.boilTime)
+                .append(notes, recipe.notes)
+                .append(ingredients, recipe.ingredients)
+                .append(mashes, recipe.mashes)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(name)
+                .append(type)
+                .append(style)
+                .append(ibu)
+                .append(estimatedABV)
+                .append(estimatedColour)
+                .append(batchSize)
+                .append(originalGravity)
+                .append(finalGravity)
+                .append(boilTime)
+                .append(notes)
+                .append(ingredients)
+                .append(mashes)
+                .toHashCode();
+    }
 }

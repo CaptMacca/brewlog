@@ -1,5 +1,8 @@
 package brews.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 
 /**
@@ -20,5 +23,27 @@ public class Fermentable extends Ingredient {
 
     public void setAddAfterBoil(Boolean addAfterBoil) {
         this.addAfterBoil = addAfterBoil;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Fermentable that = (Fermentable) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(addAfterBoil, that.addAfterBoil)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(addAfterBoil)
+                .toHashCode();
     }
 }

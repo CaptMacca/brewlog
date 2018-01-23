@@ -22,7 +22,7 @@ import java.util.List;
  * Created by Steve on 8/05/2017.
  */
 @RestController
-@RequestMapping("api/v1/brews")
+@RequestMapping("api/v1/")
 @CrossOrigin(origins = "*")
 public class RecipeController {
 

@@ -1,5 +1,8 @@
 package brews.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 
 /**
@@ -40,4 +43,30 @@ public class Hop extends Ingredient {
 
     @Override
     public String getType() { return "Hop"; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Hop hop = (Hop) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(alpha, hop.alpha)
+                .append(additionTime, hop.additionTime)
+                .append(hopUsage, hop.hopUsage)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(alpha)
+                .append(additionTime)
+                .append(hopUsage)
+                .toHashCode();
+    }
 }
