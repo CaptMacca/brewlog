@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @EntityScan
 public class BrewlogApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BrewlogApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BrewlogApplication.class, args);
+    }
 }

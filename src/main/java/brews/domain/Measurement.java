@@ -1,51 +1,38 @@
 package brews.domain;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by Steve on 1/07/2017.
  */
+
+@Getter
+@Setter
+@EqualsAndHashCode(of = {"id"})
+@ToString
 @Entity
-public class Measurement {
+public class Measurement implements Serializable {
+
+    public static final String ORIGINAL_GRAVITY_MEASUREMENT_TYPE = "OG";
+    public static final String FINAL_GRAVITY_MEASUREMENT_TYPE = "FG";
+    public static final String PRE_BOIL_GRAVITY_MEASUREMENT_TYPE = "PRE_OG";
+    public static final String FINAL_VOL_MEASUREMENT_TYPE = "VOL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne()
-    @JoinColumn(name="brew_id")
-    private BrewDay brewDay;
+    @JoinColumn(name = "brew_id")
+    private Brew brew;
 
-    public Long getId() { return id; }
+    private String type;
+    private Double value;
 
-    public void setId(Long id) { this.id = id; }
-
-    public BrewDay getBrewDay() { return brewDay; }
-
-    public void setBrewDay(BrewDay brewDay) { this.brewDay = brewDay; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Measurement that = (Measurement) o;
-
-        return new EqualsBuilder()
-                .append(id, that.id)
-                .append(brewDay, that.brewDay)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .append(brewDay)
-                .toHashCode();
-    }
 }

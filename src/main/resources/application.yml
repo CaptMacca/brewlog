@@ -11,7 +11,7 @@ spring:
 #JPA-Hibernate
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
       naming:
         strategy: org.hibernate.cfg.ImprovedNamingStrategy

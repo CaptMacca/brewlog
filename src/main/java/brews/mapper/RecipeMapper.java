@@ -1,143 +1,85 @@
 package brews.mapper;
 
-import brews.beerxml.*;
-import brews.domain.*;
+import brews.domain.Recipe;
+import brews.domain.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-/**
- * Created by Steve on 27/06/2017.
- */
-@Component("RecipeMapper")
+@Component
 public class RecipeMapper {
 
-    public RecipeMapper() {
-       super();
+    private final HopMapper hopMapper;
+    private final FermentableMapper fermentableMapper;
+    private final YeastMapper yeastMapper;
+    private final MashMapper mashMapper;
+
+    @Autowired
+    public RecipeMapper(HopMapper hopMapper,
+                        FermentableMapper fermentableMapper,
+                        YeastMapper yeastMapper,
+                        MashMapper mashMapper) {
+        this.hopMapper = hopMapper;
+        this.fermentableMapper = fermentableMapper;
+        this.yeastMapper = yeastMapper;
+        this.mashMapper = mashMapper;
     }
 
-    public Recipe map(ImportedRecipe source) {
+    public Recipe map(RecipeDto recipeDto) {
 
-        Recipe dest = new Recipe();
+        Recipe recipe = new Recipe();
+        recipe.setId(recipeDto.getId());
+        recipe.setName(recipeDto.getName());
+        recipe.setStyle(recipeDto.getStyle());
+        recipe.setType(recipeDto.getType());
+        recipe.setBatchSize(recipeDto.getBatchSize());
+        recipe.setEstimatedABV(recipeDto.getEstimatedAbv());
+        recipe.setEstimatedColour(recipeDto.getEstimatedColour());
+        recipe.setBoilTime(recipeDto.getBoilTime());
+        recipe.setOriginalGravity(recipeDto.getOriginalGravity());
+        recipe.setFinalGravity(recipeDto.getFinalGravity());
+        recipe.setIbu(recipeDto.getEstimatedIbu());
+        recipe.setNotes(recipeDto.getNotes());
 
-        dest.setEstimatedABV(source.getEstimatedAbv());
-        dest.setName(source.getName());
-        dest.setType(source.getType());
-        dest.setEstimatedColour(source.getEstimatedColour());
-        dest.setBatchSize(source.getDisplayBatchSize());
-        dest.setBoilTime(String.valueOf(source.getBoilTime()));
-        dest.setOriginalGravity(source.getDisplayOriginalGravity());
-        dest.setFinalGravity(source.getDisplayFinalGravity());
-        dest.setIbu(source.getIbu());
-        dest.setNotes(source.getNotes());
-
-        if (source.getImportedStyle()!=null) {
-            dest.setStyle(source.getImportedStyle().getName());
+        List<HopDto> hopDtos = recipeDto.getHops();
+        if (hopDtos != null) {
+            hopDtos.stream()
+                    .map(hopMapper::map)
+                    .forEach(recipe::addIngredient);
         }
 
-        List<Ingredient> ingredients = new ArrayList<>();
-        List<Mash> mashes = new ArrayList<>();
-
-        Optional<List<ImportedFermentable>> _fermentables = Optional.ofNullable(source.getImportedFermentables());
-        Optional<List<ImportedHop>> _hops = Optional.ofNullable(source.getImportedHops());
-        Optional<List<ImportedYeast>> _yeasts = Optional.ofNullable(source.getImportedYeasts());
-        Optional<ImportedMash> _mashes = Optional.ofNullable(source.getImportedMash());
-
-        if (_fermentables.isPresent()) {
-            ingredients.addAll(
-                _fermentables.get()
-                    .stream()
-                    .collect(
-                        ()-> new ArrayList<>(),
-                        (list, importedFermentable) -> {
-                            Fermentable fermentable = new Fermentable();
-                            fermentable.setName(importedFermentable.getName());
-                            fermentable.setAmount(importedFermentable.getDisplayAmount());
-                            fermentable.setAddAfterBoil(Boolean.valueOf(importedFermentable.getAddAfterBoil()));
-                            fermentable.setRecipe(dest);
-
-                            list.add(fermentable);
-                        },
-                        (list1,list2) -> list1.addAll(list2)
-                )
-            );
+        List<FermentableDto> fermentableDtos = recipeDto.getFermentables();
+        if (fermentableDtos != null) {
+            fermentableDtos.stream()
+                    .map(fermentableMapper::map)
+                    .forEach(recipe::addIngredient);
         }
 
-        if (_hops.isPresent()) {
-            ingredients.addAll(
-                _hops.get()
-                    .stream()
-                    .collect(
-                        () -> new ArrayList<>(),
-                        (list, importedHop) -> {
-                            Hop hop = new Hop();
-                            hop.setName(importedHop.getName());
-                            hop.setAlpha(importedHop.getAlpha());
-                            hop.setHopUsage(importedHop.getUse());
-                            hop.setAmount(importedHop.getDisplayAmount());
-                            hop.setAdditionTime(importedHop.getDisplayTime());
-                            hop.setRecipe(dest);
-
-                            list.add(hop);
-                        },
-                        (list1,list2) -> list1.addAll(list2)
-                    )
-            );
-
+        List<YeastDto> yeastDtos = recipeDto.getYeasts();
+        if (yeastDtos != null) {
+            yeastDtos.stream()
+                    .map(yeastMapper::map)
+                    .forEach(recipe::addIngredient);
         }
 
-        if (_yeasts.isPresent()) {
-            ingredients.addAll(
-                    _yeasts.get()
-                        .stream()
-                        .collect(
-                            () -> new ArrayList<>(),
-                            (list, importedYeast) -> {
-                                Yeast yeast = new Yeast();
-                                yeast.setName(importedYeast.getName());
-                                yeast.setLaboratory(importedYeast.getLaboratory());
-                                yeast.setProductId(importedYeast.getProductId());
-                                yeast.setAmount(importedYeast.getDisplayAmount());
-                                yeast.setRecipe(dest);
+        List<MashDto> mashDtos = recipeDto.getMashes();
+        if (mashDtos != null) {
+            mashDtos.stream()
+                    .map(mashMapper::map)
+                    .forEach(recipe::addMash);
+        }
 
-                                list.add(yeast);
-                            },
-                            (list1,list2) -> list1.addAll(list2)
-                    )
-            );
+        return recipe;
     }
 
-        if (_mashes.isPresent()) {
-            ImportedMash _importedMash = _mashes.get();
-            Optional<List<ImportedMashStep>> _mashSteps
-                    = Optional.ofNullable(_importedMash.getImportedMashSteps());
-
-            if (_mashSteps.isPresent()) {
-                mashes.addAll(
-                        _mashSteps.get()
-                                .stream()
-                                .collect(
-                                    () -> new ArrayList<>(),
-                                    (list,importedMashStep) -> {
-                                        Mash mash = new Mash();
-                                        mash.setName(importedMashStep.getName());
-                                        mash.setStepTemp(importedMashStep.getDisplayStepTemp());
-                                        mash.setStepTime(importedMashStep.getStepTime());
-                                        mash.setRecipe(dest);
-
-                                        list.add(mash);
-                                    },
-                                    (list1,list2) -> list1.addAll(list2)
-                                )
-                );
-            }
-        }
-
-        dest.setIngredients(ingredients);
-        dest.setMashes(mashes);
-
-        return dest;
+    public List<Recipe> map(List<RecipeDto> recipeDtos) {
+        return recipeDtos.stream()
+                .filter(Objects::nonNull)
+                .map(this::map)
+                .collect(Collectors.toList());
     }
+
 }
