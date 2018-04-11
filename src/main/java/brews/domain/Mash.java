@@ -20,7 +20,7 @@ public class Mash {
 
     private String name;
     private String stepTemp;
-    private Integer stepTime;
+    private Double stepTime;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
