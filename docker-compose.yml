@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+
+  # Todo Ngix and angular web app service
+
+  brews-backend:
+    image: brewlog:latest
+    ports:
+      - "8080:8080"
+
+  brewsdb:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=brews
+      - MYSQL_USER=springboot
+      - MYSQL_PASSWORD=springboot
+    ports:
+      - "3306:3306"
