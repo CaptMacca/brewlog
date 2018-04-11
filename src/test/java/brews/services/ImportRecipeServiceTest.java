@@ -6,7 +6,9 @@ import brews.MockXMLRecipe;
 import brews.domain.Recipe;
 import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.beerxml.ImportedRecipes;
+import brews.domain.dto.RecipeDto;
 import brews.exceptions.ImportRecipeServiceException;
+import brews.mapper.RecipeDtoMapper;
 import brews.mapper.beerxml.BeerXMLRecipeMapper;
 import brews.repository.RecipeRepository;
 import org.junit.Before;
@@ -32,6 +34,8 @@ public class ImportRecipeServiceTest {
     BeerXMLRecipeMapper beerXMLRecipeMapper;
     @Mock
     BeerXMLReaderService beerXMLReaderService;
+    @Mock
+    RecipeDtoMapper recipeDtoMapper;
 
     ImportRecipeService importRecipeService;
 
@@ -39,7 +43,7 @@ public class ImportRecipeServiceTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
 
-        importRecipeService = new ImportRecipeServiceImpl(recipeRepository, beerXMLRecipeMapper, beerXMLReaderService);
+        importRecipeService = new ImportRecipeServiceImpl(recipeRepository, beerXMLRecipeMapper, beerXMLReaderService, recipeDtoMapper);
     }
 
     @Test
@@ -59,7 +63,7 @@ public class ImportRecipeServiceTest {
         ArgumentCaptor<ImportedRecipe> importedRecipeArgumentCaptor = ArgumentCaptor.forClass(ImportedRecipe.class);
 
         // When
-        List<Recipe> recipes = importRecipeService.importBeerXml(mockedFile);
+        List<RecipeDto> recipes = importRecipeService.importBeerXml(mockedFile);
 
         // Then
         assertNotNull(recipes);
@@ -83,7 +87,7 @@ public class ImportRecipeServiceTest {
         when(recipeRepository.findRecipeByName(anyString())).thenReturn(Optional.of(mockRecipe));
 
         // When
-        List<Recipe> recipes = importRecipeService.importBeerXml(mockedFile);
+        List<RecipeDto> recipes = importRecipeService.importBeerXml(mockedFile);
 
         // Then - Should throw the exception
     }

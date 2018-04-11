@@ -1,6 +1,7 @@
 package brews.controllers;
 
 import brews.domain.Recipe;
+import brews.domain.dto.RecipeDto;
 import brews.exceptions.RecipeServiceException;
 import brews.services.ImportRecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,6 @@ public class UploadRecipeController {
         this.importRecipeService = importRecipeService;
     }
 
-    // TODO: Move this to a separate controller ?
     @PostMapping("/recipes/upload")
     public ResponseEntity<?> uploadRecipe(@RequestParam("file") MultipartFile uploadfile) {
 
@@ -41,7 +41,7 @@ public class UploadRecipeController {
             return new ResponseEntity<>("Please load a beersmith .xml file", HttpStatus.BAD_REQUEST);
         }
 
-        List<Recipe> recipes = new ArrayList<>();
+        List<RecipeDto> recipes = new ArrayList<>();
         try {
             InputStream fileContents = uploadfile.getInputStream();
             if (fileContents != null) {
