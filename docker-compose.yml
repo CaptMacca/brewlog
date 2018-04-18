@@ -2,19 +2,38 @@ version: "3"
 
 services:
 
-  # Todo Ngix and angular web app service
+  brews-frontend:
+    image: brewlog-ui:latest
+    depends_on:
+      - brews-backend
+    links:
+      - brews-backend
+
+    ports:
+      - "4200:80"
 
   brews-backend:
+    build:
+          context: .
+          dockerfile: Dockerfile
     image: brewlog:latest
+    depends_on:
+      - brews-db
     ports:
       - "8080:8080"
 
-  brewsdb:
+  brews-db:
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=brews
       - MYSQL_USER=springboot
       - MYSQL_PASSWORD=springboot
+    volumes:
+      - mysqldata:/var/lib/mysql
     ports:
       - "3306:3306"
+
+volumes:
+  mysqldata:
+    driver: "local"
