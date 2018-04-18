@@ -2,15 +2,15 @@ version: "3"
 
 services:
 
-  brews-frontend:
-    image: brewlog-ui:latest
-    depends_on:
-      - brews-backend
-    links:
-      - brews-backend
-
-    ports:
-      - "4200:80"
+#  brews-frontend:
+#    image: brewlog-ui:latest
+#    depends_on:
+#      - brews-backend
+#    links:
+#      - brews-backend
+#
+#    ports:
+#      - "4200:80"
 
   brews-backend:
     build:

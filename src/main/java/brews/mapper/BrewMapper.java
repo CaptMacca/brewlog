@@ -2,6 +2,7 @@ package brews.mapper;
 
 import brews.domain.Brew;
 import brews.domain.dto.BrewDto;
+import brews.domain.dto.MeasurementDto;
 import brews.domain.dto.RecipeDto;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 public class BrewMapper {
 
     private final RecipeMapper recipeMapper;
+    private final MeasurementMapper measurementMapper;
 
-    public BrewMapper(RecipeMapper recipeMapper) {
+    public BrewMapper(RecipeMapper recipeMapper, MeasurementMapper measurementMapper) {
         this.recipeMapper = recipeMapper;
+        this.measurementMapper = measurementMapper;
     }
 
     public Brew map(BrewDto brewDto) {
@@ -27,6 +30,11 @@ public class BrewMapper {
         RecipeDto recipeDto = brewDto.getRecipe();
         if (recipeDto != null) {
             brew.setRecipe(recipeMapper.map(recipeDto));
+        }
+
+        List<MeasurementDto> measurementDtos = brewDto.getMeasurements();
+        if (brewDto.getMeasurements() != null) {
+            brew.setMeasurements(measurementMapper.map(measurementDtos));
         }
         return brew;
     }
