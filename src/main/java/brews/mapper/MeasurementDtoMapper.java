@@ -1,5 +1,6 @@
 package brews.mapper;
 
+import brews.domain.Brew;
 import brews.domain.Measurement;
 import brews.domain.dto.MeasurementDto;
 import org.springframework.stereotype.Component;
@@ -14,9 +15,15 @@ public class MeasurementDtoMapper {
     public MeasurementDto map(Measurement measurement) {
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(measurement.getId());
-        measurementDto.setType(measurement.getType());
+        measurementDto.setType(measurement.getType().name());
         measurementDto.setMeasurementDate(measurement.getMeasurementDate());
         measurementDto.setValue(measurement.getValue());
+        measurementDto.setTypeDescription(measurement.getType().toString());
+
+        Brew brew = measurement.getBrew();
+        if (brew!=null) {
+            measurementDto.setBrewId(brew.getId());
+        }
 
         return measurementDto;
     }

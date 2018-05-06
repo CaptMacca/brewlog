@@ -48,7 +48,7 @@ public class BrewController {
             return new ResponseEntity<>("No brewer details to save", HttpStatus.BAD_REQUEST);
         }
 
-        BrewDto newBrew = brewService.newBrew(brewDto);
+        BrewDto newBrew = brewService.saveBrew(brewDto);
 
         return new ResponseEntity<>(newBrew, HttpStatus.ACCEPTED);
     }
@@ -59,7 +59,7 @@ public class BrewController {
         BrewDto updatedBrewDto;
 
         try {
-            updatedBrewDto = brewService.saveBrew(brewDto);
+            updatedBrewDto = brewService.updateBrew(brewDto);
         } catch (BrewServiceException e) {
             return new ResponseEntity<>("Brew record could not be saved", HttpStatus.BAD_REQUEST);
         }

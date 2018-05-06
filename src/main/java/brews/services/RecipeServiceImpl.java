@@ -9,6 +9,7 @@ import brews.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeDtoMapper recipeDtoMapper;
     private final RecipeMapper recipeMapper;
 
+    private static final String NO_RECIPE_FOUND_MSG = "Recipe with id: %d could not be found";
+
     public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeDtoMapper recipeDtoMapper, RecipeMapper recipeMapper) {
         this.recipeRepository = recipeRepository;
         this.recipeDtoMapper = recipeDtoMapper;
@@ -29,6 +32,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public List<RecipeDto> getAllRecipes() {
         log.debug("Retrieving all recipes from the database");
         List<RecipeDto> recipeDtos;
@@ -45,6 +49,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public RecipeDto getRecipeById(Long id) {
 
         log.debug("Retrieve recipe with id:" + id);
@@ -55,7 +60,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipe.isPresent()) {
             recipeDto = recipeDtoMapper.map(recipe.get());
         } else {
-            String response = "Recipe with id:" + id + "could not be found";
+            String response = String.format(NO_RECIPE_FOUND_MSG, id);
             log.error(response);
             throw new RecipeServiceException(response);
         }
@@ -64,6 +69,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public RecipeDto saveRecipe(RecipeDto recipeDto) {
 
         log.debug("Saving recipe: " + recipeDto.toString());
@@ -71,7 +77,7 @@ public class RecipeServiceImpl implements RecipeService {
         Recipe existingRecipe = recipeRepository.findOne(detachedRecipe.getId());
 
         if (existingRecipe == null) {
-            String response = "Recipe with id:" + recipeDto.getId() + "could not be found";
+            String response = String.format(NO_RECIPE_FOUND_MSG, + recipeDto.getId());
             log.error(response);
             throw new RecipeServiceException(response);
         }
@@ -82,12 +88,13 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public void deleteRecipe(Long id) {
-        log.debug("Deleting recipe with id:" + id);
+        log.debug(String.format("Deleting recipe with id: %d",id));
         Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null) {
-            String response = "Recipe with id:" + id + "could not be found";
+            String response = String.format(NO_RECIPE_FOUND_MSG, id);
             log.error(response);
             throw new RecipeServiceException(response);
         }

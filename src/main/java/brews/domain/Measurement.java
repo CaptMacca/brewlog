@@ -16,25 +16,20 @@ import java.sql.Date;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
-@ToString
+@ToString(exclude = "brew")
 @Entity
 public class Measurement implements Serializable {
-
-    public static final String ORIGINAL_GRAVITY_MEASUREMENT_TYPE = "OG";
-    public static final String FINAL_GRAVITY_MEASUREMENT_TYPE = "FG";
-    public static final String PRE_BOIL_GRAVITY_MEASUREMENT_TYPE = "PRE_OG";
-    public static final String FINAL_VOL_MEASUREMENT_TYPE = "VOL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brew_id")
     private Brew brew;
 
     private Date measurementDate;
-    private String type;
+    private MeasurementType type;
     private Double value;
 
 }

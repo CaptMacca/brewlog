@@ -9,5 +9,4 @@ import java.io.InputStream;
 public interface BeerXMLReaderService {
 
     ImportedRecipes readBeerXML(InputStream contents);
-
 }

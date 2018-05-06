@@ -5,13 +5,13 @@ import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.beerxml.ImportedRecipes;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.ImportRecipeServiceException;
-import brews.exceptions.RecipeServiceException;
 import brews.mapper.RecipeDtoMapper;
 import brews.mapper.beerxml.BeerXMLRecipeMapper;
 import brews.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,7 +44,8 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
      * Import, transform and save the recipes in the xml file into our DB.
      */
     @Override
-    public List<RecipeDto> importBeerXml(InputStream contents) throws RecipeServiceException {
+    @Transactional
+    public List<RecipeDto> importBeerXml(InputStream contents) {
 
         log.debug("Importing beerxml file ");
         ImportedRecipes importedRecipes = beerXMLReaderService.readBeerXML(contents);

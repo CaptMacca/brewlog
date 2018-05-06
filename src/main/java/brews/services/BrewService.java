@@ -9,9 +9,9 @@ public interface BrewService {
 
     BrewDto getBrew(Long id);
 
-    BrewDto newBrew(BrewDto brewDto);
-
     BrewDto saveBrew(BrewDto brewDto);
+
+    BrewDto updateBrew(BrewDto brewDto);
 
     void deleteBrew(Long id);
 }

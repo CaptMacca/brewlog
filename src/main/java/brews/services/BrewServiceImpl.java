@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,17 +33,20 @@ public class BrewServiceImpl implements BrewService {
     }
 
     @Override
+    @Transactional
     public List<BrewDto> getAllBrews() {
         return brewDtoMapper.map(brewsRepository.findAll());
     }
 
     @Override
+    @Transactional
     public BrewDto getBrew(Long id) {
         return brewDtoMapper.map(brewsRepository.findOne(id));
     }
 
     @Override
-    public BrewDto newBrew(BrewDto brewDto) {
+    @Transactional
+    public BrewDto saveBrew(BrewDto brewDto) {
         Recipe recipe = recipeRepository.findOne(brewDto.getRecipe().getId());
 
         Brew newBrew = new Brew();
@@ -57,12 +61,13 @@ public class BrewServiceImpl implements BrewService {
     }
 
     @Override
-    public BrewDto saveBrew(BrewDto brewDto) {
+    @Transactional
+    public BrewDto updateBrew(BrewDto brewDto) {
         Brew detachedBrew = brewMapper.map(brewDto);
         Brew existingBrew = brewsRepository.findOne(detachedBrew.getId());
 
         if (existingBrew == null) {
-            throw new BrewServiceException("Brew for id: " + brewDto.getId() + "could not be found");
+            throw new BrewServiceException(String.format("Brew for id: %d could not be found", brewDto.getId()));
         }
 
         BeanUtils.copyProperties(detachedBrew, existingBrew);
@@ -71,12 +76,13 @@ public class BrewServiceImpl implements BrewService {
     }
 
     @Override
+    @Transactional
     public void deleteBrew(Long id) {
 
         Brew existingBrew = brewsRepository.findOne(id);
 
         if (existingBrew == null) {
-            throw new BrewServiceException("Brew for id:" + id + "could not be found.");
+            throw new BrewServiceException(String.format("Brew for id: %d could not be found.",id));
         }
 
         brewsRepository.delete(id);
