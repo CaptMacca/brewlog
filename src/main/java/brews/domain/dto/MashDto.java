@@ -11,7 +11,7 @@ public class MashDto {
 
     private Long id;
     private String name;
-    private String stepTemp;
+    private Double stepTemp;
     private Double stepTime;
 
 }

@@ -34,7 +34,7 @@ public class ImportMashMapper {
     public Mash map(ImportedMashStep importedMashStep, Recipe recipe) {
         Mash mash = new Mash();
         mash.setName(importedMashStep.getName());
-        mash.setStepTemp(importedMashStep.getDisplayStepTemp());
+        mash.setStepTemp(importedMashStep.getStepTemp());
         mash.setStepTime(importedMashStep.getStepTime());
         mash.setRecipe(recipe);
 

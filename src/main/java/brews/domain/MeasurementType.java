@@ -5,6 +5,7 @@ public enum MeasurementType {
     PBG("Pre Boil Gravity"),
     OG("Original Gravity"),
     FG("Final Gravity"),
+    GR("Gravity Reading"),
     VF("Volume in Fermenter"),
     FV("Volume in Keg");
 

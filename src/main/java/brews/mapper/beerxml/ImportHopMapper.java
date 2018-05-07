@@ -24,8 +24,8 @@ public class ImportHopMapper {
         hop.setName(importedHop.getName());
         hop.setAlpha(importedHop.getAlpha());
         hop.setHopUsage(importedHop.getUse());
-        hop.setAmount(importedHop.getDisplayAmount());
-        hop.setAdditionTime(importedHop.getDisplayTime());
+        hop.setAmount(importedHop.getAmount());
+        hop.setAdditionTime(importedHop.getTime());
         hop.setRecipe(recipe);
 
         return hop;

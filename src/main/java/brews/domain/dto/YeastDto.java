@@ -10,7 +10,7 @@ import lombok.ToString;
 public class YeastDto {
 
     private Long id;
-    private String amount;
+    private Double amount;
     private String name;
 
 }

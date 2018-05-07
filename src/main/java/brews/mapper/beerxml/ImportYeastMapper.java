@@ -24,7 +24,7 @@ public class ImportYeastMapper {
         yeast.setName(importedYeast.getName());
         yeast.setLaboratory(importedYeast.getLaboratory());
         yeast.setProductId(importedYeast.getProductId());
-        yeast.setAmount(importedYeast.getDisplayAmount());
+        yeast.setAmount(importedYeast.getAmount());
         yeast.setRecipe(recipe);
 
         return yeast;

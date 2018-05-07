@@ -12,7 +12,7 @@ public class HopDto {
     private Long id;
     private String name;
     private Double alpha;
-    private String additionTime;
+    private Double additionTime;
     private String hopUsage;
-    private String amount;
+    private Double amount;
 }

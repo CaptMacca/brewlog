@@ -25,7 +25,7 @@ public class ImportFermentablesMapper {
     public Fermentable map(ImportedFermentable importedFermentable, Recipe recipe) {
         Fermentable fermentable = new Fermentable();
         fermentable.setName(importedFermentable.getName());
-        fermentable.setAmount(importedFermentable.getDisplayAmount());
+        fermentable.setAmount(importedFermentable.getAmount());
         fermentable.setAddAfterBoil(Boolean.valueOf(importedFermentable.getAddAfterBoil()));
         fermentable.setRecipe(recipe);
         return fermentable;

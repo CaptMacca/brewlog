@@ -19,7 +19,7 @@ public class Mash {
     private Long id;
 
     private String name;
-    private String stepTemp;
+    private Double stepTemp;
     private Double stepTime;
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -33,6 +33,7 @@ public class Recipe implements Serializable {
     private String originalGravity;
     private String finalGravity;
     private String boilTime;
+    @Lob
     private String notes;
 
     @OneToMany(

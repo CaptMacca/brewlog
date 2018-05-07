@@ -25,7 +25,7 @@ public class ImportedHop {
     @XmlElement(name = "USE")
     private String use;
     @XmlElement(name = "TIME")
-    private int time;
+    private double time;
     @XmlElement(name = "NOTES")
     private String notes;
     @XmlElement(name = "TYPE")
@@ -91,11 +91,11 @@ public class ImportedHop {
         this.use = use;
     }
 
-    public int getTime() {
+    public double getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(double time) {
         this.time = time;
     }
 
