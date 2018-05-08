@@ -44,6 +44,10 @@ public class BrewServiceImpl implements BrewService {
         return brewDtoMapper.map(brewsRepository.findOne(id));
     }
 
+    public List<BrewDto> getBrewsForRecipe(Long recipeId) {
+        return brewDtoMapper.map(brewsRepository.findBrewsByRecipeId(recipeId));
+    }
+
     @Override
     @Transactional
     public BrewDto saveBrew(BrewDto brewDto) {
