@@ -2,15 +2,17 @@ version: "3"
 
 services:
 
-#  brews-frontend:
-#    image: brewlog-ui:latest
-#    depends_on:
-#      - brews-backend
-#    links:
-#      - brews-backend
-#
-#    ports:
-#      - "4200:80"
+  brews-frontend:
+    build:
+        context: ../brewlog-ui/
+        dockerfile: Dockerfile
+    image: brewlog-ui:latest
+    depends_on:
+      - brews-backend
+    links:
+      - brews-backend
+    ports:
+      - "4200:4200"
 
   brews-backend:
     build:
