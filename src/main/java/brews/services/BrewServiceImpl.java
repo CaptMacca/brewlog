@@ -9,11 +9,11 @@ import brews.mapper.BrewMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Slf4j
@@ -54,7 +54,7 @@ public class BrewServiceImpl implements BrewService {
         Recipe recipe = recipeRepository.findOne(brewDto.getRecipe().getId());
 
         Brew newBrew = new Brew();
-        newBrew.setBrewDate(DateTime.now().toDate());
+        newBrew.setBrewDate(new Timestamp(System.currentTimeMillis()));
         newBrew.setBrewer(brewDto.getBrewer());
         newBrew.setRecipe(recipe);
         newBrew.setMeasurements(null);
@@ -63,6 +63,7 @@ public class BrewServiceImpl implements BrewService {
 
         return brewDtoMapper.map(newBrew);
     }
+
 
     @Override
     @Transactional

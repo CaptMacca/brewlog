@@ -7,7 +7,8 @@ public enum MeasurementType {
     FG("Final Gravity"),
     GR("Gravity Reading"),
     VF("Volume in Fermenter"),
-    FV("Volume in Keg");
+    FV("Volume in Keg"),
+    FT("Fermentation Temperature");
 
     private final String displayName;
 

@@ -4,7 +4,7 @@ VOLUME /tmp
 
 RUN mkdir /app
 
-ADD ./target/brewlog-0.0.1-SNAPSHOT.jar /app/app.jar
+ADD ./build/libs/brewlog-**.jar /app/app.jar
 
 EXPOSE 8080
 
