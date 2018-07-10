@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Created by Steve on 25/06/2017.
+ * Deserialised beer xml misc
  */
 @XmlRootElement(name = "MISC")
 @XmlAccessorType(XmlAccessType.FIELD)

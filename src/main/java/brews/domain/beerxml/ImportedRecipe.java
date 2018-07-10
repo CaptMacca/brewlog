@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
- * A single exported beerxml recipe
+ * Deserialised beer xml recipe
  */
 @XmlRootElement(name = "RECIPE")
 @XmlAccessorType(XmlAccessType.FIELD)

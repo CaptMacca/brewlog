@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by Steve on 25/06/2017.
+ * Deserialised beer xml mash
  */
 @XmlRootElement(name = "MASH")
 @XmlAccessorType(XmlAccessType.FIELD)

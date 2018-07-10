@@ -3,6 +3,8 @@ package brews.controllers;
 import brews.domain.dto.BrewDto;
 import brews.exceptions.BrewServiceException;
 import brews.services.BrewService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +18,10 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/v1/")
+@RequestMapping("api/brews")
 @CrossOrigin(origins = "*")
-public class BrewController {
+@Api(description = "API for creating, retrieving, deleting and updating a brew")
+public final class BrewController {
 
     private final BrewService brewService;
 
@@ -27,17 +30,20 @@ public class BrewController {
         this.brewService = brewService;
     }
 
-    @GetMapping("/brews")
+    @GetMapping()
+    @ApiOperation("Returns all brews in the repository")
     public List<BrewDto> getBrews() {
         return brewService.getAllBrews();
     }
 
-    @GetMapping("/brews/{id}")
+    @GetMapping("{id}")
+    @ApiOperation("Returns an individual brew identified by the id")
     public BrewDto get(@PathVariable Long id) {
         return brewService.getBrew(id);
     }
 
-    @PostMapping("/brews/new")
+    @PostMapping("new")
+    @ApiOperation("Creates a new brew")
     public ResponseEntity<?> create(@RequestBody BrewDto brewDto) {
 
         if (brewDto.getRecipe() == null) {
@@ -53,7 +59,8 @@ public class BrewController {
         return new ResponseEntity<>(newBrew, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/brews")
+    @PutMapping()
+    @ApiOperation("Updates a brew identified by the id")
     public ResponseEntity<?> update(@RequestBody BrewDto brewDto) {
 
         BrewDto updatedBrewDto;
@@ -67,10 +74,11 @@ public class BrewController {
         return new ResponseEntity<>(updatedBrewDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("brews/{id}")
+    @DeleteMapping("{id}")
+    @ApiOperation("Deletes a brew identified by the id")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         brewService.deleteBrew(id);
-        return new ResponseEntity<>(this.getBrews(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.getBrews(), HttpStatus.NO_CONTENT);
     }
 
 }

@@ -11,15 +11,15 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode()
 @ToString
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
 public class Ingredient implements Serializable {
 
-    public final static String INGREDIENT_TYPE_FERMENTABLE = "Fermentable";
-    public final static String INGREDIENT_TYPE_YEAST = "Yeast";
+    public static final String INGREDIENT_TYPE_FERMENTABLE = "Fermentable";
+    public static final String INGREDIENT_TYPE_YEAST = "Yeast";
     public static final String INGREDIENT_TYPE_HOP = "Hop";
 
     @Id

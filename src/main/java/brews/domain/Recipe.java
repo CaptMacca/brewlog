@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode()
 @ToString
 @Entity
 public class Recipe implements Serializable {

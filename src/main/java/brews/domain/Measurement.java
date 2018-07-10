@@ -15,7 +15,7 @@ import java.sql.Date;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode()
 @ToString(exclude = "brew")
 @Entity
 public class Measurement implements Serializable {

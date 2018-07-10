@@ -3,6 +3,7 @@ package brews.controllers;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.RecipeServiceException;
 import brews.services.RecipeService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,11 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/v1/")
+@RequestMapping("api/recipes")
 @CrossOrigin(origins = "*")
-public class RecipeController {
+@ApiOperation("API for updating, retrieving and deleting recipes. Recipes cannot be created," +
+              " see the upload endpoint for importing a beer.xml file to create a recipe")
+public final class RecipeController {
 
     private final RecipeService recipeService;
 
@@ -27,17 +30,20 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/recipes")
+    @GetMapping()
+    @ApiOperation("Returns all recipes stored in the repository")
     public ResponseEntity<List<RecipeDto>> getAll() {
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 
-    @GetMapping("/recipes/{id}")
+    @GetMapping("{id}")
+    @ApiOperation("Returns a recipe identified by the id")
     public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long id) {
         return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
-    @PutMapping("/recipes")
+    @PutMapping()
+    @ApiOperation("Updates a recipe identified by the id")
     public ResponseEntity<?> updateRecipe(@RequestBody RecipeDto recipeDto) {
         RecipeDto updatedRecipeDto;
         try {
@@ -48,7 +54,8 @@ public class RecipeController {
         return new ResponseEntity<>(updatedRecipeDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/recipes/{id}")
+    @DeleteMapping("{id}")
+    @ApiOperation("Deletes a recipe identified by the id")
     public ResponseEntity<?> deleteRecipe(@PathVariable Long id) {
 
         try {
@@ -58,7 +65,7 @@ public class RecipeController {
             return new ResponseEntity<>("Recipe could not be found to delete", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(this.getAll(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(this.getAll(), HttpStatus.NO_CONTENT);
     }
 
 }

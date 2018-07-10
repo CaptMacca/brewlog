@@ -1,9 +1,10 @@
 package brews.controllers;
 
-import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.RecipeServiceException;
 import brews.services.ImportRecipeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,10 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/")
+@RequestMapping("api/recipes")
 @CrossOrigin(origins = "*")
-public class UploadRecipeController {
+@Api(description = "API for uploading a recipe in beer xml format, note this only supports beer.xml v1 files")
+public final class UploadRecipeController {
 
     private final ImportRecipeService importRecipeService;
 
@@ -27,7 +29,8 @@ public class UploadRecipeController {
         this.importRecipeService = importRecipeService;
     }
 
-    @PostMapping("/recipes/upload")
+    @PostMapping("upload")
+    @ApiOperation("Handles the upload of a beer.xml file, will fail if a recipe with the same name already exists in the repository")
     public ResponseEntity<?> uploadRecipe(@RequestParam("file") MultipartFile uploadfile) {
 
         log.debug("File upload requested.");
@@ -38,7 +41,7 @@ public class UploadRecipeController {
 
         if (!uploadfile.getOriginalFilename().endsWith(".xml")) {
             log.error("File is not a beer xml file.");
-            return new ResponseEntity<>("Please load a beersmith .xml file", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Please load a beer.xml file", HttpStatus.BAD_REQUEST);
         }
 
         List<RecipeDto> recipes = new ArrayList<>();

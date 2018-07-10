@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode()
 @ToString
 @Entity
 public class Mash {
