@@ -2,27 +2,27 @@ version: "3"
 
 services:
 
-  brews-frontend:
-    build:
-        context: ../brewlog-ui/
-        dockerfile: Dockerfile
-    image: brewlog-ui:latest
-    depends_on:
-      - brews-backend
-    links:
-      - brews-backend
-    ports:
-      - "4200:80"
-
-  brews-backend:
-    build:
-          context: .
-          dockerfile: Dockerfile
-    image: brewlog:latest
-    depends_on:
-      - brews-db
-    ports:
-      - "8080:8080"
+#  brews-frontend:
+#    build:
+#        context: ../brewlog-ui/
+#        dockerfile: Dockerfile
+#    image: brewlog-ui:latest
+#    depends_on:
+#      - brews-backend
+#    links:
+#      - brews-backend
+#    ports:
+#      - "4200:80"
+#
+#  brews-backend:
+#    build:
+#          context: .
+#          dockerfile: Dockerfile
+#    image: brewlog:latest
+#    depends_on:
+#      - brews-db
+#    ports:
+#      - "8080:8080"
 
   brews-db:
     image: mysql:latest

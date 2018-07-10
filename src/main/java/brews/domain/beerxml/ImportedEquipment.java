@@ -21,7 +21,7 @@ public class ImportedEquipment {
     @XmlElement(name = "BATCH_SIZE")
     private double batchSize;
     @XmlElement(name = "TUN_VOLUME")
-    private double tunVolumne;
+    private double tunVolume;
     @XmlElement(name = "TUN_WEIGHT")
     private double tunWeight;
     @XmlElement(name = "TUN_SPECIFIC_HEAT")
@@ -93,12 +93,12 @@ public class ImportedEquipment {
         this.batchSize = batchSize;
     }
 
-    public double getTunVolumne() {
-        return tunVolumne;
+    public double getTunVolume() {
+        return tunVolume;
     }
 
-    public void setTunVolumne(double tunVolumne) {
-        this.tunVolumne = tunVolumne;
+    public void setTunVolume(double tunVolume) {
+        this.tunVolume = tunVolume;
     }
 
     public double getTunWeight() {

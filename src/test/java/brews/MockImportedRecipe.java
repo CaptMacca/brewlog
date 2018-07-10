@@ -121,7 +121,7 @@ public class MockImportedRecipe {
         importedEquipment.setVersion(1);
         importedEquipment.setBoilSize(27.1875);
         importedEquipment.setBatchSize(21.00);
-        importedEquipment.setTunVolumne(40.0);
+        importedEquipment.setTunVolume(40.0);
         importedEquipment.setTunWeight(4.5359);
         importedEquipment.setTunSpecificHeat(0.12);
         importedEquipment.setTopUpWater(0);

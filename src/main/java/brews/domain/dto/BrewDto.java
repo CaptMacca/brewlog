@@ -1,6 +1,5 @@
 package brews.domain.dto;
 
-import brews.domain.Measurement;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
