@@ -59,14 +59,13 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
             Recipe candidateRecipe = beerXMLRecipeMapper.map(importedRecipe);
 
-
             Optional<Recipe> existingRecipe = recipeRepository.findRecipeByName(candidateRecipe.getName());
             if (existingRecipe.isPresent()) {
                 // Update an already uploaded recipe
                 log.error("Recipe already exists");
                 throw new ImportRecipeServiceException("Recipe already has been uploaded");
             } else {
-                log.debug("Saving recipe: " + candidateRecipe.getName());
+                log.debug(String.format("Saving recipe: %s",candidateRecipe.getName()));
                 recipeRepository.save(candidateRecipe);
             }
             recipes.add(candidateRecipe);
