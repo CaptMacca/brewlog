@@ -24,13 +24,13 @@ public class RecipeControllerIT {
 
     @Test
     public void testGetAllRecipes() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/recipes", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/recipes", String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
 
     @Test
     public void testGetRecipe() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/recipes/1" , String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/recipes/1" , String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
 

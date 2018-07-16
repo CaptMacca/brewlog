@@ -72,19 +72,21 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public RecipeDto saveRecipe(RecipeDto recipeDto) {
 
-        log.debug("Saving recipe: " + recipeDto.toString());
+        log.debug(String.format("Saving recipe: %s", recipeDto.toString()));
         Recipe detachedRecipe = recipeMapper.map(recipeDto);
-        Recipe existingRecipe = recipeRepository.findOne(detachedRecipe.getId());
+        Optional<Recipe> existingRecipe = Optional.of(recipeRepository.findOne(detachedRecipe.getId()));
 
-        if (existingRecipe == null) {
+        if (existingRecipe.isPresent()) {
+            log.debug("Updating the recipe in the repository");
+            Recipe recipeResult = existingRecipe.get();
+            BeanUtils.copyProperties(detachedRecipe, recipeResult);
+            Recipe updatedRecipe = recipeRepository.saveAndFlush(recipeResult);
+            return recipeDtoMapper.map(updatedRecipe);
+        } else {
             String response = String.format(NO_RECIPE_FOUND_MSG, + recipeDto.getId());
             log.error(response);
             throw new RecipeServiceException(response);
         }
-
-        BeanUtils.copyProperties(detachedRecipe, existingRecipe);
-        existingRecipe = recipeRepository.saveAndFlush(existingRecipe);
-        return recipeDtoMapper.map(existingRecipe);
     }
 
     @Override

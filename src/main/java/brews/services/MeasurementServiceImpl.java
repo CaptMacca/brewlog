@@ -92,7 +92,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         log.info("Saving measurement: " + measurementDto.toString());
         Measurement detachedMeasurement = measurementMapper.map(measurementDto);
 
-        Measurement savedMeasurement = null;
+        Measurement savedMeasurement;
         Long measurementId = detachedMeasurement.getId();
 
         if (measurementId != null) {
@@ -128,7 +128,6 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Transactional
     public void deleteMeasurement(Long id) {
         Measurement existingMeasurement = measurementRepository.findOne(id);
-        Brew brew = existingMeasurement.getBrew();
 
         if (existingMeasurement == null) {
             throw new BrewServiceException(String.format("Measurement for id: %d could not be found.", id));

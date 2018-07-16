@@ -11,11 +11,11 @@ import static org.junit.Assert.assertNotNull;
 
 public class BeerXMLRecipeMapperTest {
 
-    ImportFermentablesMapper importFermentablesMapper;
-    ImportHopMapper importHopMapper;
-    ImportMashMapper importMashMapper;
-    ImportYeastMapper importYeastMapper;
-    BeerXMLRecipeMapper beerXMLRecipeMapper;
+    private ImportFermentablesMapper importFermentablesMapper;
+    private ImportHopMapper importHopMapper;
+    private ImportMashMapper importMashMapper;
+    private ImportYeastMapper importYeastMapper;
+    private BeerXMLRecipeMapper beerXMLRecipeMapper;
 
     @Before
     public void setUp() throws Exception {

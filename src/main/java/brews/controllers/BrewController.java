@@ -42,7 +42,7 @@ public final class BrewController {
         return brewService.getBrew(id);
     }
 
-    @PostMapping("new")
+    @PostMapping()
     @ApiOperation("Creates a new brew")
     public ResponseEntity<?> create(@RequestBody BrewDto brewDto) {
 
