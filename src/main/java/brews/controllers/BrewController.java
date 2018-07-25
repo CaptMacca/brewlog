@@ -60,15 +60,7 @@ public final class BrewController {
     @PutMapping()
     @ApiOperation("Updates a brew identified by the id")
     public ResponseEntity<BrewDto> update(@RequestBody BrewDto brewDto) {
-
-        BrewDto updatedBrewDto;
-
-//        try {
-            updatedBrewDto = brewService.updateBrew(brewDto);
-//        } catch (BrewNotFoundException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-
+        BrewDto updatedBrewDto = brewService.updateBrew(brewDto);
         return new ResponseEntity<>(updatedBrewDto, HttpStatus.OK);
     }
 

@@ -55,29 +55,14 @@ public final class MeasurementController {
     }
 
     private ResponseEntity<MeasurementDto> saveMeasurement(MeasurementDto measurementDto) {
-
-        MeasurementDto savedMeasurement;
-
-//        try {
-            savedMeasurement = this.measurementService.saveMeasurement(measurementDto);
-//        } catch (MeasurementNotFoundException mse) {
-//            log.error("Error saving measurement. Measurement could not be found.",mse);
-            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
+        MeasurementDto savedMeasurement = this.measurementService.saveMeasurement(measurementDto);
         return new ResponseEntity<>(savedMeasurement, HttpStatus.ACCEPTED);
     }
-
 
     @DeleteMapping("{id}")
     @ApiOperation("Deletes a measurement identified by the id")
     public ResponseEntity<Void> deleteMeasurement(@PathVariable Long id) {
-//        try {
-            this.measurementService.deleteMeasurement(id);
-//        } catch (MeasurementNotFoundException mse) {
-//            log.error("Error deleting measurement. Measurement could not be found.", mse);
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-
+        this.measurementService.deleteMeasurement(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

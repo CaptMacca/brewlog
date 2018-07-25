@@ -43,18 +43,10 @@ public final class UploadRecipeController {
         }
 
         List<RecipeDto> recipes = new ArrayList<>();
-//        try {
-            InputStream fileContents = uploadfile.getInputStream();
-            if (fileContents != null) {
-                recipes = importRecipeService.importBeerXml(fileContents);
-            }
-
-//        } catch (IOException e) {
-//            log.error("IOException uploading file:", e);
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        } catch (ImportedRecipeExistsException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
+        InputStream fileContents = uploadfile.getInputStream();
+        if (fileContents != null) {
+            recipes = importRecipeService.importBeerXml(fileContents);
+        }
 
         return new ResponseEntity<>(recipes, HttpStatus.CREATED);
     }

@@ -52,12 +52,25 @@ public class RecipeControllerTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
         recipeDto.setName("mock");
+        recipes.add(recipeDto);
 
         when(recipeService.getAllRecipes()).thenReturn(recipes);
 
         // When
         mockMvc.perform(get("/api/recipes"))
                 .andExpect(status().isOk());
+
+        verify(recipeService, times(1)).getAllRecipes();
+    }
+
+    @Test
+    public void testGetAllRecipesFatal() throws Exception {
+        // Given
+        when(recipeService.getAllRecipes()).thenThrow(new NullPointerException());
+
+        // When
+        mockMvc.perform(get("/api/recipes"))
+                .andExpect(status().is5xxServerError());
 
         verify(recipeService, times(1)).getAllRecipes();
     }
