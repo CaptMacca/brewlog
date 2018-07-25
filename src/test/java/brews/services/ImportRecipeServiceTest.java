@@ -7,7 +7,7 @@ import brews.domain.Recipe;
 import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.beerxml.ImportedRecipes;
 import brews.domain.dto.RecipeDto;
-import brews.exceptions.ImportRecipeServiceException;
+import brews.exceptions.ImportedRecipeExistsException;
 import brews.mapper.RecipeDtoMapper;
 import brews.mapper.beerxml.BeerXMLRecipeMapper;
 import brews.repository.RecipeRepository;
@@ -73,7 +73,7 @@ public class ImportRecipeServiceTest {
 
     }
 
-    @Test(expected = ImportRecipeServiceException.class)
+    @Test(expected = ImportedRecipeExistsException.class)
     public void testImportExistingRecipe() {
 
         // Given

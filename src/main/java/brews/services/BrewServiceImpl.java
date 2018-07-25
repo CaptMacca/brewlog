@@ -3,7 +3,7 @@ package brews.services;
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.dto.BrewDto;
-import brews.exceptions.BrewServiceException;
+import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.BrewDtoMapper;
 import brews.mapper.BrewMapper;
 import brews.repository.BrewsRepository;
@@ -44,6 +44,8 @@ public class BrewServiceImpl implements BrewService {
         return brewDtoMapper.map(brewsRepository.findOne(id));
     }
 
+    @Override
+    @Transactional
     public List<BrewDto> getBrewsForRecipe(Long recipeId) {
         return brewDtoMapper.map(brewsRepository.findBrewsByRecipeId(recipeId));
     }
@@ -64,20 +66,20 @@ public class BrewServiceImpl implements BrewService {
         return brewDtoMapper.map(newBrew);
     }
 
-
     @Override
     @Transactional
     public BrewDto updateBrew(BrewDto brewDto) {
         Brew detachedBrew = brewMapper.map(brewDto);
-        Brew existingBrew = brewsRepository.findOne(detachedBrew.getId());
+        Long id = detachedBrew.getId();
+        Brew existingBrew = brewsRepository.findOne(id);
 
         if (existingBrew == null) {
-            throw new BrewServiceException(String.format("Brew for id: %d could not be found", brewDto.getId()));
+            throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id));
         }
 
         BeanUtils.copyProperties(detachedBrew, existingBrew);
-        Brew updatedbrew = brewsRepository.saveAndFlush(existingBrew);
-        return brewDtoMapper.map(updatedbrew);
+        Brew updatedBrew = brewsRepository.saveAndFlush(existingBrew);
+        return brewDtoMapper.map(updatedBrew);
     }
 
     @Override
@@ -87,7 +89,7 @@ public class BrewServiceImpl implements BrewService {
         Brew existingBrew = brewsRepository.findOne(id);
 
         if (existingBrew == null) {
-            throw new BrewServiceException(String.format("Brew for id: %d could not be found.",id));
+            throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to delete.", id));
         }
 
         brewsRepository.delete(id);

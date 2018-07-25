@@ -29,7 +29,7 @@ public class BeerXMLReaderServiceImpl implements BeerXMLReaderService {
                 log.debug("Found " + importedRecipes.getImportedRecipes().size() + " recipes in the beer xml file.");
             }
         } catch (JAXBException e) {
-            log.error("Exception unmarshalling beerxml");
+            log.error("Exception unmarshalling the beerxml file");
         }
 
         return importedRecipes;

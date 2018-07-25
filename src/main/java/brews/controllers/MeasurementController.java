@@ -2,7 +2,6 @@ package brews.controllers;
 
 import brews.domain.dto.MeasurementDto;
 import brews.domain.dto.MeasurementTypeDto;
-import brews.exceptions.MeasurementServiceException;
 import brews.services.MeasurementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,50 +42,42 @@ public final class MeasurementController {
 
     @PostMapping()
     @ApiOperation("Creates a new measurement")
-    public ResponseEntity<?> createMeasurement(@RequestBody MeasurementDto measurementDto) {
-        log.debug(String.format("Creating new measurement"));
+    public ResponseEntity<MeasurementDto> createMeasurement(@RequestBody MeasurementDto measurementDto) {
+        log.debug("Creating new measurement");
         return saveMeasurement(measurementDto);
     }
 
     @PutMapping()
     @ApiOperation("Updates a measurement identified by the id")
-    public ResponseEntity<?> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
-        log.debug(String.format("Updating measurement id: %d", measurementDto.getId()));
+    public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
+        log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
         return saveMeasurement(measurementDto);
     }
 
-    private ResponseEntity<?> saveMeasurement(MeasurementDto measurementDto) {
+    private ResponseEntity<MeasurementDto> saveMeasurement(MeasurementDto measurementDto) {
 
-        MeasurementDto savedMeasurement = null;
+        MeasurementDto savedMeasurement;
 
-        try {
+//        try {
             savedMeasurement = this.measurementService.saveMeasurement(measurementDto);
-        } catch (MeasurementServiceException mse) {
-            log.error("Error saving measurement.",mse);
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+//        } catch (MeasurementNotFoundException mse) {
+//            log.error("Error saving measurement. Measurement could not be found.",mse);
+            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
         return new ResponseEntity<>(savedMeasurement, HttpStatus.ACCEPTED);
     }
 
 
     @DeleteMapping("{id}")
     @ApiOperation("Deletes a measurement identified by the id")
-    public ResponseEntity<?> deleteMeasurement(@PathVariable Long id) {
-        List<MeasurementDto> measurements = null;
-
-
-        try {
-            MeasurementDto attachedMeasurement = this.measurementService.getMeasurement(id);
-            Long brewId = attachedMeasurement.getBrewId();
+    public ResponseEntity<Void> deleteMeasurement(@PathVariable Long id) {
+//        try {
             this.measurementService.deleteMeasurement(id);
+//        } catch (MeasurementNotFoundException mse) {
+//            log.error("Error deleting measurement. Measurement could not be found.", mse);
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
 
-            measurements = this.measurementService.getMeasurementsForBrew(brewId);
-        } catch (MeasurementServiceException mse) {
-            log.error("Error deleting measurement.", mse);
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(measurements, HttpStatus.NO_CONTENT);
-
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,12 +1,11 @@
 package brews.controllers;
 
 import brews.domain.dto.BrewDto;
-import brews.exceptions.BrewServiceException;
 import brews.services.BrewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,6 @@ public final class BrewController {
 
     private final BrewService brewService;
 
-    @Autowired
     public BrewController(BrewService brewService) {
         this.brewService = brewService;
     }
@@ -44,14 +42,14 @@ public final class BrewController {
 
     @PostMapping()
     @ApiOperation("Creates a new brew")
-    public ResponseEntity<?> create(@RequestBody BrewDto brewDto) {
+    public ResponseEntity<BrewDto> create(@RequestBody BrewDto brewDto) {
 
         if (brewDto.getRecipe() == null) {
-            return new ResponseEntity<>("No recipe id to save", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if (brewDto.getBrewer() == null) {
-            return new ResponseEntity<>("No brewer details to save", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         BrewDto newBrew = brewService.saveBrew(brewDto);
@@ -61,24 +59,24 @@ public final class BrewController {
 
     @PutMapping()
     @ApiOperation("Updates a brew identified by the id")
-    public ResponseEntity<?> update(@RequestBody BrewDto brewDto) {
+    public ResponseEntity<BrewDto> update(@RequestBody BrewDto brewDto) {
 
         BrewDto updatedBrewDto;
 
-        try {
+//        try {
             updatedBrewDto = brewService.updateBrew(brewDto);
-        } catch (BrewServiceException e) {
-            return new ResponseEntity<>("Brew record could not be saved", HttpStatus.BAD_REQUEST);
-        }
+//        } catch (BrewNotFoundException e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
 
         return new ResponseEntity<>(updatedBrewDto, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     @ApiOperation("Deletes a brew identified by the id")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         brewService.deleteBrew(id);
-        return new ResponseEntity<>(this.getBrews(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

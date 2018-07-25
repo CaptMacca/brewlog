@@ -9,6 +9,8 @@ public interface BrewService {
 
     BrewDto getBrew(Long id);
 
+    List<BrewDto> getBrewsForRecipe(Long recipeId);
+
     BrewDto saveBrew(BrewDto brewDto);
 
     BrewDto updateBrew(BrewDto brewDto);

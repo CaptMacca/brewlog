@@ -1,9 +1,10 @@
 package brews.controllers;
 
 import brews.domain.dto.RecipeDto;
-import brews.exceptions.RecipeServiceException;
+import brews.exceptions.BrewsEntityNotFoundException;
 import brews.services.RecipeService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,6 @@ public final class RecipeController {
 
     private final RecipeService recipeService;
 
-    @Autowired
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
@@ -42,30 +42,18 @@ public final class RecipeController {
         return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
-    @PutMapping()
+    @PutMapping("{id}")
     @ApiOperation("Updates a recipe identified by the id")
-    public ResponseEntity<?> updateRecipe(@RequestBody RecipeDto recipeDto) {
+    public ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto) {
         RecipeDto updatedRecipeDto;
-        try {
-            updatedRecipeDto = recipeService.saveRecipe(recipeDto);
-        } catch (RecipeServiceException e) {
-            return new ResponseEntity<>("Recipe could not be updated", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(updatedRecipeDto, HttpStatus.OK);
+        updatedRecipeDto = recipeService.saveRecipe(id, recipeDto);
+        return ResponseEntity.ok(updatedRecipeDto);
     }
 
     @DeleteMapping("{id}")
     @ApiOperation("Deletes a recipe identified by the id")
-    public ResponseEntity<?> deleteRecipe(@PathVariable Long id) {
-
-        try {
-            recipeService.deleteRecipe(id);
-
-        } catch (RecipeServiceException e) {
-            return new ResponseEntity<>("Recipe could not be found to delete", HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(this.getAll(), HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.noContent().build();
     }
-
 }

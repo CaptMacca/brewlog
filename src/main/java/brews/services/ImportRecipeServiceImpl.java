@@ -4,7 +4,7 @@ import brews.domain.Recipe;
 import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.beerxml.ImportedRecipes;
 import brews.domain.dto.RecipeDto;
-import brews.exceptions.ImportRecipeServiceException;
+import brews.exceptions.ImportedRecipeExistsException;
 import brews.mapper.RecipeDtoMapper;
 import brews.mapper.beerxml.BeerXMLRecipeMapper;
 import brews.repository.RecipeRepository;
@@ -61,9 +61,7 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
             Optional<Recipe> existingRecipe = recipeRepository.findRecipeByName(candidateRecipe.getName());
             if (existingRecipe.isPresent()) {
-                // Update an already uploaded recipe
-                log.error("Recipe already exists");
-                throw new ImportRecipeServiceException("Recipe already has been uploaded");
+                throw new ImportedRecipeExistsException("Recipe of same name already exists in recipe database");
             } else {
                 log.debug(String.format("Saving recipe: %s",candidateRecipe.getName()));
                 recipeRepository.save(candidateRecipe);

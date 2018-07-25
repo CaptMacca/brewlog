@@ -5,8 +5,7 @@ import brews.domain.Measurement;
 import brews.domain.MeasurementType;
 import brews.domain.dto.MeasurementDto;
 import brews.domain.dto.MeasurementTypeDto;
-import brews.exceptions.BrewServiceException;
-import brews.exceptions.MeasurementServiceException;
+import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.MeasurementDtoMapper;
 import brews.mapper.MeasurementMapper;
 import brews.repository.BrewsRepository;
@@ -61,14 +60,12 @@ public class MeasurementServiceImpl implements MeasurementService {
         log.debug(String.format("Retrieve measurement with id: %d", id));
         MeasurementDto measurementDto;
 
-        Optional<Measurement> measurement = Optional.of(measurementRepository.findOne(id));
+        Measurement measurement = measurementRepository.findOne(id);
 
-        if (measurement.isPresent()) {
-            measurementDto = measurementDtoMapper.map(measurement.get());
+        if (measurement!=null) {
+            measurementDto = measurementDtoMapper.map(measurement);
         } else {
-            String response = String.format("Measurement with id: %d could not be found", id);
-            log.error(response);
-            throw new MeasurementServiceException(response);
+            throw new BrewsEntityNotFoundException(String.format("Measurement for measurement id: %d could not be found", id));
         }
 
         return measurementDto;
@@ -109,12 +106,12 @@ public class MeasurementServiceImpl implements MeasurementService {
             if (brewId != null) {
                 Brew brew = brewsRepository.findOne(brewId);
                 if (brew == null) {
-                    throw new MeasurementServiceException(String.format("Cannot find brew that matches brew id: %d", brewId));
+                    throw new BrewsEntityNotFoundException(String.format("Brew could not be found for brew id: %d" , brewId));
                 } else {
                     detachedMeasurement.setBrew(brew);
                 }
             } else {
-                throw new MeasurementServiceException("Measurement not attached to a brew, please ensure brew id is provided");
+                throw new BrewsEntityNotFoundException("Measurement does not have a linked brew");
             }
 
             savedMeasurement = measurementRepository.saveAndFlush(detachedMeasurement);
@@ -130,7 +127,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         Measurement existingMeasurement = measurementRepository.findOne(id);
 
         if (existingMeasurement == null) {
-            throw new BrewServiceException(String.format("Measurement for id: %d could not be found.", id));
+            throw new BrewsEntityNotFoundException(String.format("Measurement for id: %d could not be found.", id));
         }
         measurementRepository.delete(id);
     }

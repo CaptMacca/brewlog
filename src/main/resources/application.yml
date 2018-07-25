@@ -1,8 +1,10 @@
 server:
   port: 8080
 
-#Datasource
+# Application Settings and Datasource
 spring:
+  application:
+    name: brewlog
   datasource:
     url: jdbc:mysql://192.168.99.100:3306/brews
     username: springboot
