@@ -44,24 +44,22 @@ public final class MeasurementController {
     @ApiOperation("Creates a new measurement")
     public ResponseEntity<MeasurementDto> createMeasurement(@RequestBody MeasurementDto measurementDto) {
         log.debug("Creating new measurement");
-        return saveMeasurement(measurementDto);
+        MeasurementDto createdMeasurementDto = this.measurementService.createMeasurement(measurementDto);
+        return ResponseEntity.ok(createdMeasurementDto);
     }
 
-    @PutMapping()
+    @PutMapping("{id}")
     @ApiOperation("Updates a measurement identified by the id")
-    public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
-        log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
-        return saveMeasurement(measurementDto);
-    }
-
-    private ResponseEntity<MeasurementDto> saveMeasurement(MeasurementDto measurementDto) {
-        MeasurementDto savedMeasurement = this.measurementService.saveMeasurement(measurementDto);
-        return new ResponseEntity<>(savedMeasurement, HttpStatus.ACCEPTED);
+    public ResponseEntity<MeasurementDto> updateMeasurement(@PathVariable Long id, @RequestBody MeasurementDto measurementDto) {
+        log.debug(String.format("Updating measurement with id: %d", id));
+        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(measurementDto);
+        return ResponseEntity.ok(savedMeasurementDto);
     }
 
     @DeleteMapping("{id}")
     @ApiOperation("Deletes a measurement identified by the id")
     public ResponseEntity<Void> deleteMeasurement(@PathVariable Long id) {
+        log.debug(String.format("Deleting measurement with id: %d", id));
         this.measurementService.deleteMeasurement(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

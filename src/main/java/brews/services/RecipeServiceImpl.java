@@ -39,7 +39,6 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     @Transactional
     public RecipeDto getRecipeById(Long id) {
-
         log.debug("Retrieve recipe with id:" + id);
         Recipe recipe = recipeRepository.findOne(id);
 
@@ -52,7 +51,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public RecipeDto saveRecipe(Long id, RecipeDto recipeDto) {
+    public RecipeDto updateRecipe(Long id, RecipeDto recipeDto) {
 
         log.debug(String.format("Saving recipe: %s", recipeDto.toString()));
         Recipe detachedRecipe = recipeMapper.map(recipeDto);

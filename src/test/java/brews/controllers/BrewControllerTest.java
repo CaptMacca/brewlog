@@ -13,15 +13,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class BrewControllerTest {
 
@@ -32,11 +31,15 @@ public class BrewControllerTest {
 
     MockMvc mockMvc;
 
+    ObjectMapper objectMapper;
+
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         brewController = new BrewController(brewService);
+
+        objectMapper = new ObjectMapper();
 
         mockMvc = MockMvcBuilders.standaloneSetup(brewController)
                 .setControllerAdvice(new BrewsControllerExceptionHandler())
@@ -128,11 +131,13 @@ public class BrewControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
 
         // When
-        mockMvc.perform(post("/api/brews")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(brew))
-        )
-                .andExpect(status().isAccepted());
+        mockMvc.perform(post("/api/brews").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(brew)))
+                .andExpect(status().isAccepted())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.brewer", is("a brewer")));
 
         // Then
         verify(brewService, times(1)).saveBrew(anyObject());
@@ -154,11 +159,10 @@ public class BrewControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
 
         // When
-        mockMvc.perform(post("/api/brews")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(brew))
-        )
+        mockMvc.perform(post("/api/brews").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(brew)))
                 .andExpect(status().isBadRequest());
+
     }
 
     @Test
@@ -169,7 +173,6 @@ public class BrewControllerTest {
         recipe.setName("Recipe");
 
         BrewDto brew = new BrewDto();
-        brew.setId(1L);
         brew.setRecipe(recipe);
 
         when(brewService.saveBrew(anyObject())).thenReturn(brew);
@@ -179,28 +182,82 @@ public class BrewControllerTest {
         // When
         mockMvc.perform(post("/api/brews")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(brew))
-        )
+                .content(objectMapper.writeValueAsString(brew)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void testUpdateBrew() throws Exception {
-        throw new NotImplementedException();
+        // Given
+        RecipeDto recipe = new RecipeDto();
+        recipe.setId(1L);
+        recipe.setName("mock");
+
+        BrewDto brew = new BrewDto();
+        brew.setId(1L);
+        brew.setRecipe(recipe);
+
+        when(brewService.updateBrew(anyLong(), anyObject())).thenReturn(brew);
+
+        // When
+        mockMvc.perform(put("/api/brews/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(brew)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.recipe.name", is("mock")));
+
+        // Then
+        verify(brewService, times(1)).updateBrew(anyLong(), anyObject());
+
     }
 
     @Test
     public void testUpdateBrewUnknownId() throws Exception {
-        throw new NotImplementedException();
+        // Given
+        RecipeDto recipe = new RecipeDto();
+        recipe.setId(1L);
+        recipe.setName("Recipe");
+
+        BrewDto brew = new BrewDto();
+        brew.setId(1L);
+        brew.setRecipe(recipe);
+
+        when(brewService.updateBrew(anyLong(), anyObject())).thenThrow(new BrewsEntityNotFoundException());
+
+        // When
+        mockMvc.perform(put("/api/brews/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(brew)))
+                .andExpect(status().isNotFound());
+
+        // Then
+        verify(brewService, times(1)).updateBrew(anyLong(), anyObject());
     }
 
     @Test
     public void testDeleteBrew() throws Exception {
-        throw new NotImplementedException();
+        // Given
+
+        // When
+        mockMvc.perform(delete("/api/brews/1")).andExpect(status().isNoContent());
+
+        // Then
+        verify(brewService, times(1)).deleteBrew(anyLong());
     }
 
     @Test
     public void testDeleteBrewUnknowId() throws Exception {
-        throw new NotImplementedException();
+        //Given
+        doThrow(new BrewsEntityNotFoundException()).when(brewService).deleteBrew(anyLong());
+
+        // When
+        mockMvc.perform(delete("/api/brews/1")).andExpect(status().isNotFound());
+
+        // Then
+        verify(brewService, times(1)).deleteBrew(anyLong());
     }
 }

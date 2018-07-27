@@ -57,11 +57,11 @@ public final class BrewController {
         return new ResponseEntity<>(newBrew, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping()
+    @PutMapping("{id}")
     @ApiOperation("Updates a brew identified by the id")
-    public ResponseEntity<BrewDto> update(@RequestBody BrewDto brewDto) {
-        BrewDto updatedBrewDto = brewService.updateBrew(brewDto);
-        return new ResponseEntity<>(updatedBrewDto, HttpStatus.OK);
+    public ResponseEntity<BrewDto> update(@PathVariable Long id, @RequestBody BrewDto brewDto) {
+        BrewDto updatedBrewDto = brewService.updateBrew(id,brewDto);
+        return ResponseEntity.ok(updatedBrewDto);
     }
 
     @DeleteMapping("{id}")

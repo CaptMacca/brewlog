@@ -13,7 +13,9 @@ public interface MeasurementService {
 
     List<MeasurementDto> getMeasurementsForBrew(Long id);
 
-    MeasurementDto saveMeasurement(MeasurementDto measurementDto);
+    MeasurementDto createMeasurement(MeasurementDto measurementDto);
+
+    MeasurementDto updateMeasurement(MeasurementDto measurementDto);
 
     void deleteMeasurement(Long measurementId);
 }

@@ -13,7 +13,7 @@ public interface BrewService {
 
     BrewDto saveBrew(BrewDto brewDto);
 
-    BrewDto updateBrew(BrewDto brewDto);
+    BrewDto updateBrew(Long id, BrewDto brewDto);
 
     void deleteBrew(Long id);
 }

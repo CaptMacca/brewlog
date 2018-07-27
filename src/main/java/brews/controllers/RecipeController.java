@@ -1,13 +1,9 @@
 package brews.controllers;
 
 import brews.domain.dto.RecipeDto;
-import brews.exceptions.BrewsEntityNotFoundException;
 import brews.services.RecipeService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +41,7 @@ public final class RecipeController {
     @PutMapping("{id}")
     @ApiOperation("Updates a recipe identified by the id")
     public ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto) {
-        RecipeDto updatedRecipeDto;
-        updatedRecipeDto = recipeService.saveRecipe(id, recipeDto);
+        RecipeDto updatedRecipeDto = recipeService.updateRecipe(id, recipeDto);
         return ResponseEntity.ok(updatedRecipeDto);
     }
 

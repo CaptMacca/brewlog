@@ -10,7 +10,7 @@ public interface RecipeService {
 
     RecipeDto getRecipeById(Long id);
 
-    RecipeDto saveRecipe(Long id, RecipeDto recipeDto);
+    RecipeDto updateRecipe(Long id, RecipeDto recipeDto);
 
     void deleteRecipe(Long id);
 }

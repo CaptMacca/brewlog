@@ -16,11 +16,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Created by Steve on 3/07/2017.
@@ -34,12 +35,14 @@ public class RecipeControllerTest {
 
     MockMvc mockMvc;
 
+    ObjectMapper objectMapper;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         recipeController = new RecipeController(recipeService);
+        objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
                 .setControllerAdvice(new BrewsControllerExceptionHandler())
                 .build();
@@ -117,17 +120,18 @@ public class RecipeControllerTest {
         recipeDto.setId(id);
         recipeDto.setName("mock");
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        when(recipeService.saveRecipe(anyLong(), anyObject())).thenReturn(recipeDto);
+        when(recipeService.updateRecipe(anyLong(), anyObject())).thenReturn(recipeDto);
 
         // When
         mockMvc.perform(put("/api/recipes/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(recipeDto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("mock")));
 
-        verify(recipeService, times(1)).saveRecipe(anyLong(), anyObject());
+        verify(recipeService, times(1)).updateRecipe(anyLong(), anyObject());
     }
 
     @Test
@@ -140,7 +144,7 @@ public class RecipeControllerTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        when(recipeService.saveRecipe(anyLong(), anyObject())).thenThrow(new BrewsEntityNotFoundException());
+        when(recipeService.updateRecipe(anyLong(), anyObject())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         mockMvc.perform(put("/api/recipes/1")
@@ -149,13 +153,12 @@ public class RecipeControllerTest {
                 .andExpect(status().isNotFound());
 
         //Then
-        verify(recipeService, times(1)).saveRecipe(anyLong(), anyObject());
+        verify(recipeService, times(1)).updateRecipe(anyLong(), anyObject());
     }
 
     @Test
     public void testDeleteRecipe() throws Exception {
         // Given
-        Long id = 1L;
 
         //When
         mockMvc.perform(delete("/api/recipes/1")).andExpect(status().isNoContent());

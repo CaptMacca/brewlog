@@ -68,9 +68,8 @@ public class BrewServiceImpl implements BrewService {
 
     @Override
     @Transactional
-    public BrewDto updateBrew(BrewDto brewDto) {
+    public BrewDto updateBrew(Long id,BrewDto brewDto) {
         Brew detachedBrew = brewMapper.map(brewDto);
-        Long id = detachedBrew.getId();
         Brew existingBrew = brewsRepository.findOne(id);
 
         if (existingBrew == null) {
