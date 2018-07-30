@@ -1,7 +1,6 @@
 package brews.repository;
 
 import brews.domain.Brew;
-import brews.domain.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

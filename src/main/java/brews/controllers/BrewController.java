@@ -4,7 +4,6 @@ import brews.domain.dto.BrewDto;
 import brews.services.BrewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,7 @@ public final class BrewController {
     @PutMapping("{id}")
     @ApiOperation("Updates a brew identified by the id")
     public ResponseEntity<BrewDto> update(@PathVariable Long id, @RequestBody BrewDto brewDto) {
-        BrewDto updatedBrewDto = brewService.updateBrew(id,brewDto);
+        BrewDto updatedBrewDto = brewService.updateBrew(id, brewDto);
         return ResponseEntity.ok(updatedBrewDto);
     }
 

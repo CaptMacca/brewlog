@@ -1,6 +1,7 @@
 package brews.controllers;
 
 import brews.domain.dto.RecipeDto;
+import brews.exceptions.ImportedRecipeUploadException;
 import brews.handler.BrewsControllerExceptionHandler;
 import brews.services.ImportRecipeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +81,7 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-
+        verify(importRecipeService, times(0)).importBeerXml(anyObject());
     }
 
 
@@ -94,7 +96,7 @@ public class UploadRecipeControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        when(importRecipeService.importBeerXml(anyObject())).thenReturn(recipes);
+        when(importRecipeService.importBeerXml(any(InputStream.class))).thenReturn(recipes);
 
         // When
         mockMvc.perform(fileUpload("/api/recipes/upload")
@@ -102,6 +104,30 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
+        verify(importRecipeService, times(0)).importBeerXml(anyObject());
 
     }
+
+    @Test
+    public void testUploadRecipeParseFailureFile() throws Exception {
+
+        // Given
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "myrecipe.xml",
+                "text/plain", "test data".getBytes());
+        List<RecipeDto> recipes = new ArrayList<>();
+        RecipeDto recipe = new RecipeDto();
+        recipe.setId(1L);
+        recipe.setName("Recipe");
+
+        when(importRecipeService.importBeerXml(any(InputStream.class))).thenThrow(new ImportedRecipeUploadException());
+
+        // When
+        mockMvc.perform(fileUpload("/api/recipes/upload")
+                .file(mockMultipartFile))
+                .andExpect(status().isBadRequest());
+
+        // Then
+        verify(importRecipeService, times(1)).importBeerXml(any(InputStream.class));
+    }
+
 }

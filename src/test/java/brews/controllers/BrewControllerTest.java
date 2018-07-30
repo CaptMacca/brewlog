@@ -126,7 +126,7 @@ public class BrewControllerTest {
         brew.setBrewer("a brewer");
         brew.setRecipe(recipe);
 
-        when(brewService.saveBrew(anyObject())).thenReturn(brew);
+        when(brewService.saveBrew(any(BrewDto.class))).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -140,7 +140,7 @@ public class BrewControllerTest {
                 .andExpect(jsonPath("$.brewer", is("a brewer")));
 
         // Then
-        verify(brewService, times(1)).saveBrew(anyObject());
+        verify(brewService, times(1)).saveBrew(any(BrewDto.class));
     }
 
     @Test
@@ -154,7 +154,7 @@ public class BrewControllerTest {
         brew.setId(1L);
         brew.setBrewer("a brewer");
 
-        when(brewService.saveBrew(anyObject())).thenReturn(brew);
+        when(brewService.saveBrew(any(BrewDto.class))).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -162,6 +162,9 @@ public class BrewControllerTest {
         mockMvc.perform(post("/api/brews").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(brew)))
                 .andExpect(status().isBadRequest());
+
+        // Then
+        verify(brewService,times(0)).saveBrew(any(BrewDto.class));
 
     }
 
@@ -184,6 +187,8 @@ public class BrewControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(brew)))
                 .andExpect(status().isBadRequest());
+
+        // Then
     }
 
     @Test

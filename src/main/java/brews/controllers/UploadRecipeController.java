@@ -1,7 +1,7 @@
 package brews.controllers;
 
 import brews.domain.dto.RecipeDto;
-import brews.exceptions.ImportedRecipeExistsException;
+import brews.exceptions.ImportedRecipeUploadException;
 import brews.services.ImportRecipeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +31,7 @@ public final class UploadRecipeController {
 
     @PostMapping("upload")
     @ApiOperation("Handles the upload of a beer.xml file, will fail if a recipe with the same name already exists in the repository")
-    public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("file") MultipartFile uploadfile) throws Throwable {
+    public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("file") MultipartFile uploadfile) {
 
         log.debug("File upload requested.");
         if (uploadfile.isEmpty()) {
@@ -42,12 +42,16 @@ public final class UploadRecipeController {
             throw new IllegalArgumentException("File is not a beer xml file.");
         }
 
-        List<RecipeDto> recipes = new ArrayList<>();
-        InputStream fileContents = uploadfile.getInputStream();
-        if (fileContents != null) {
-            recipes = importRecipeService.importBeerXml(fileContents);
-        }
+        try {
+            List<RecipeDto> recipes = new ArrayList<>();
+            InputStream fileContents = uploadfile.getInputStream();
+            if (fileContents != null) {
+                recipes = importRecipeService.importBeerXml(fileContents);
+            }
 
-        return new ResponseEntity<>(recipes, HttpStatus.CREATED);
+            return new ResponseEntity<>(recipes, HttpStatus.CREATED);
+        } catch (IOException e) {
+            throw new ImportedRecipeUploadException("Exception encountered importing the uploaded",e);
+        }
     }
 }

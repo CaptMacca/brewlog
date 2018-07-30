@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
@@ -29,5 +30,11 @@ public class RecipeRepositoryIT {
     public void testFindAllRecipes() {
         List<Recipe> recipes = recipeRepository.findAll();
         assertThat(recipes.size(),is(greaterThanOrEqualTo(0)));
+    }
+
+    @Test
+    public void testFindOneRecipe() {
+        Recipe recipe = recipeRepository.getOne(1L);
+        assertThat(recipe.getId(), equalTo(1L));
     }
 }

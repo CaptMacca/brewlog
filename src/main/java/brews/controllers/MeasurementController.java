@@ -52,7 +52,7 @@ public final class MeasurementController {
     @ApiOperation("Updates a measurement identified by the id")
     public ResponseEntity<MeasurementDto> updateMeasurement(@PathVariable Long id, @RequestBody MeasurementDto measurementDto) {
         log.debug(String.format("Updating measurement with id: %d", id));
-        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(measurementDto);
+        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(id, measurementDto);
         return ResponseEntity.ok(savedMeasurementDto);
     }
 

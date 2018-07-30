@@ -67,9 +67,12 @@ public class ImportRecipeServiceTest {
 
         // Then
         assertNotNull(recipes);
+        verify(beerXMLReaderService, times(1)).readBeerXML(any(InputStream.class));
         verify(beerXMLRecipeMapper, times(1)).map(importedRecipeArgumentCaptor.capture());
         verify(recipeRepository, times(1)).findRecipeByName(recipeNameArgumentCaptor.capture());
         verify(recipeRepository, times(1)).save(recipeArgumentCaptor.capture());
+        verify(recipeRepository, times(1)).flush();
+        verify(recipeDtoMapper, times(1)).map(anyListOf(Recipe.class));
 
     }
 
@@ -90,6 +93,13 @@ public class ImportRecipeServiceTest {
         List<RecipeDto> recipes = importRecipeService.importBeerXml(mockedFile);
 
         // Then - Should throw the exception
+        verify(beerXMLReaderService, times(1)).readBeerXML(any(InputStream.class));
+        verify(beerXMLRecipeMapper, times(1)).map(any(ImportedRecipe.class));
+        verify(recipeRepository, times(1)).findRecipeByName(anyString());
+        verify(recipeRepository, times(0)).save(any(Recipe.class));
+        verify(recipeRepository, times(0)).flush();
+        verify(recipeDtoMapper, times(0)).map(anyListOf(Recipe.class));
+
     }
 
 }

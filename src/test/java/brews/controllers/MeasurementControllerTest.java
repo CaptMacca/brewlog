@@ -112,7 +112,7 @@ public class MeasurementControllerTest {
         measurement.setType("type");
         measurement.setValue(123.00);
 
-        when(measurementService.createMeasurement(anyObject())).thenReturn(measurement);
+        when(measurementService.createMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
 
         // When
         mockMvc.perform(post("/api/measurement")
@@ -125,7 +125,7 @@ public class MeasurementControllerTest {
                 .andExpect(jsonPath("$.value", is(123.0)));
 
         // Then
-        verify(measurementService, times(1)).createMeasurement(anyObject());
+        verify(measurementService, times(1)).createMeasurement(any(MeasurementDto.class));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class MeasurementControllerTest {
         measurement.setType("type");
         measurement.setValue(123.00);
 
-        when(measurementService.createMeasurement(anyObject())).thenThrow(new IllegalArgumentException());
+        when(measurementService.createMeasurement(any(MeasurementDto.class))).thenThrow(new IllegalArgumentException());
 
         // When
         mockMvc.perform(post("/api/measurement")
@@ -145,7 +145,7 @@ public class MeasurementControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(measurementService, times(1)).createMeasurement(anyObject());
+        verify(measurementService, times(1)).createMeasurement(any(MeasurementDto.class));
     }
 
     @Test
@@ -156,7 +156,7 @@ public class MeasurementControllerTest {
         measurement.setType("type");
         measurement.setValue(123.00);
 
-        when(measurementService.createMeasurement(anyObject())).thenThrow(new BrewsEntityNotFoundException());
+        when(measurementService.createMeasurement(any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         mockMvc.perform(post("/api/measurement")
@@ -165,7 +165,7 @@ public class MeasurementControllerTest {
                 .andExpect(status().isNotFound());
 
         // Then
-        verify(measurementService, times(1)).createMeasurement(anyObject());
+        verify(measurementService, times(1)).createMeasurement(any(MeasurementDto.class));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class MeasurementControllerTest {
         measurement.setType("type");
         measurement.setValue(123.00);
 
-        when(measurementService.updateMeasurement(anyObject())).thenReturn(measurement);
+        when(measurementService.updateMeasurement(anyLong(), any(MeasurementDto.class))).thenReturn(measurement);
 
         // When
         mockMvc.perform(put("/api/measurement/1")
@@ -191,7 +191,7 @@ public class MeasurementControllerTest {
                 .andExpect(jsonPath("$.value", is(123.0)));
 
         // Then
-        verify(measurementService, times(1)).updateMeasurement(anyObject());
+        verify(measurementService, times(1)).updateMeasurement(anyLong(), any(MeasurementDto.class));
     }
 
     @Test
@@ -203,7 +203,7 @@ public class MeasurementControllerTest {
         measurement.setType("type");
         measurement.setValue(123.00);
 
-        when(measurementService.updateMeasurement(anyObject())).thenThrow(new BrewsEntityNotFoundException());
+        when(measurementService.updateMeasurement(anyLong(), any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         mockMvc.perform(put("/api/measurement/1")
@@ -213,7 +213,7 @@ public class MeasurementControllerTest {
                 .andExpect(status().isNotFound());
 
         // Then
-        verify(measurementService, times(1)).updateMeasurement(anyObject());
+        verify(measurementService, times(1)).updateMeasurement(anyLong(), any(MeasurementDto.class));
     }
 
     @Test

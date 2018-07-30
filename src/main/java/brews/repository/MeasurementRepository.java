@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MeasurementRepository extends JpaRepository<Measurement,Long> {
+public interface MeasurementRepository extends JpaRepository<Measurement, Long> {
 
     List<Measurement> findMeasurementsByBrewId(Long id);
 }

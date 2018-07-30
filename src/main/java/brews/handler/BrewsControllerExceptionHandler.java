@@ -2,6 +2,7 @@ package brews.handler;
 
 import brews.exceptions.ImportedRecipeExistsException;
 import brews.exceptions.BrewsEntityNotFoundException;
+import brews.exceptions.ImportedRecipeUploadException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,13 @@ public class BrewsControllerExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public final ResponseEntity<ErrorDetails> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
         log.error("Illegal argument exception: ",ex);
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ImportedRecipeUploadException.class)
+    public final ResponseEntity<ErrorDetails> handleImportedRecipeUploadException(ImportedRecipeUploadException ex, WebRequest request) {
+        log.error("Imported recipe could not be parsed and imported: ",ex);
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

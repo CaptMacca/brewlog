@@ -1,5 +1,6 @@
 package brews.controllers;
 
+import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.handler.BrewsControllerExceptionHandler;
@@ -120,7 +121,7 @@ public class RecipeControllerTest {
         recipeDto.setId(id);
         recipeDto.setName("mock");
 
-        when(recipeService.updateRecipe(anyLong(), anyObject())).thenReturn(recipeDto);
+        when(recipeService.updateRecipe(anyLong(), any(RecipeDto.class))).thenReturn(recipeDto);
 
         // When
         mockMvc.perform(put("/api/recipes/1")
@@ -131,7 +132,7 @@ public class RecipeControllerTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("mock")));
 
-        verify(recipeService, times(1)).updateRecipe(anyLong(), anyObject());
+        verify(recipeService, times(1)).updateRecipe(anyLong(), any(RecipeDto.class));
     }
 
     @Test
@@ -144,7 +145,7 @@ public class RecipeControllerTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        when(recipeService.updateRecipe(anyLong(), anyObject())).thenThrow(new BrewsEntityNotFoundException());
+        when(recipeService.updateRecipe(anyLong(), any(RecipeDto.class))).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         mockMvc.perform(put("/api/recipes/1")
@@ -153,7 +154,7 @@ public class RecipeControllerTest {
                 .andExpect(status().isNotFound());
 
         //Then
-        verify(recipeService, times(1)).updateRecipe(anyLong(), anyObject());
+        verify(recipeService, times(1)).updateRecipe(anyLong(), any(RecipeDto.class));
     }
 
     @Test
