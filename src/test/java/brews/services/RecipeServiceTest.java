@@ -3,8 +3,7 @@ package brews.services;
 import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
-import brews.mapper.RecipeDtoMapper;
-import brews.mapper.RecipeMapper;
+import brews.mapper.domain.RecipeMapper;
 import brews.repository.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +26,6 @@ public class RecipeServiceTest {
     RecipeRepository recipeRepository;
     @Mock
     RecipeMapper recipeMapper;
-    @Mock
-    RecipeDtoMapper recipeDtoMapper;
 
     RecipeService recipeService;
 
@@ -36,7 +33,7 @@ public class RecipeServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        recipeService = new RecipeServiceImpl(recipeRepository, recipeDtoMapper, recipeMapper);
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeMapper);
     }
 
     @Test
@@ -48,7 +45,7 @@ public class RecipeServiceTest {
         recipeDto.setName("a recipe");
         recipeDtos.add(recipeDto);
 
-        when(recipeDtoMapper.map(anyListOf(Recipe.class))).thenReturn(recipeDtos);
+        when(recipeMapper.toRecipeDtos(anyListOf(Recipe.class))).thenReturn(recipeDtos);
 
         // When
         List<RecipeDto> test = recipeService.getAllRecipes();
@@ -56,7 +53,7 @@ public class RecipeServiceTest {
         // Then
         assertNotNull(test);
         assertEquals(1, test.size());
-        verify(recipeDtoMapper, times(1)).map(anyListOf(Recipe.class));
+        verify(recipeMapper, times(1)).toRecipeDtos(anyListOf(Recipe.class));
         verify(recipeRepository, times(1)).findAll();
     }
 
@@ -72,7 +69,7 @@ public class RecipeServiceTest {
         recipe.setId(recipeDto.getId());
         recipe.setName(recipeDto.getName());
 
-        when(recipeDtoMapper.map(any(Recipe.class))).thenReturn(recipeDto);
+        when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
         when(recipeRepository.findOne(anyLong())).thenReturn(recipe);
 
         // When
@@ -82,7 +79,7 @@ public class RecipeServiceTest {
         assertNotNull(test);
         assertEquals(1L, test.getId().longValue());
         verify(recipeRepository, times(1)).findOne(anyLong());
-        verify(recipeDtoMapper, times(1)).map(any(Recipe.class));
+        verify(recipeMapper, times(1)).toRecipeDto(any(Recipe.class));
     }
 
     @Test(expected = BrewsEntityNotFoundException.class)
@@ -97,7 +94,7 @@ public class RecipeServiceTest {
         recipe.setId(recipeDto.getId());
         recipe.setName(recipeDto.getName());
 
-        when(recipeDtoMapper.map(any(Recipe.class))).thenReturn(recipeDto);
+        when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
         when(recipeRepository.findOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
@@ -105,7 +102,7 @@ public class RecipeServiceTest {
 
         // Then
         verify(recipeRepository, times(1)).findOne(anyLong());
-        verify(recipeDtoMapper, times(1)).map(any(Recipe.class));
+        verify(recipeMapper, times(1)).toRecipeDto(any(Recipe.class));
     }
 
     @Test
@@ -120,8 +117,8 @@ public class RecipeServiceTest {
         recipe.setId(recipeDto.getId());
         recipe.setName(recipeDto.getName());
 
-        when(recipeDtoMapper.map(any(Recipe.class))).thenReturn(recipeDto);
-        when(recipeMapper.map(any(RecipeDto.class))).thenReturn(recipe);
+        when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
+        when(recipeMapper.toRecipe(any(RecipeDto.class))).thenReturn(recipe);
         when(recipeRepository.findOne(anyLong())).thenReturn(recipe);
 
         // When
@@ -130,10 +127,10 @@ public class RecipeServiceTest {
         // Then
         assertNotNull(test);
         assertEquals(1L, test.getId().longValue());
-        verify(recipeMapper, times(1)).map(any(RecipeDto.class));
+        verify(recipeMapper, times(1)).toRecipe(any(RecipeDto.class));
         verify(recipeRepository, times(1)).findOne(anyLong());
         verify(recipeRepository, times(1)).saveAndFlush(any(Recipe.class));
-        verify(recipeDtoMapper, times(1)).map(any(Recipe.class));
+        verify(recipeMapper, times(1)).toRecipeDto(any(Recipe.class));
 
     }
 
@@ -149,18 +146,18 @@ public class RecipeServiceTest {
         recipe.setId(recipeDto.getId());
         recipe.setName(recipeDto.getName());
 
-        when(recipeDtoMapper.map(any(Recipe.class))).thenReturn(recipeDto);
-        when(recipeMapper.map(any(RecipeDto.class))).thenReturn(recipe);
+        when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
+        when(recipeMapper.toRecipe(any(RecipeDto.class))).thenReturn(recipe);
         when(recipeRepository.findOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         RecipeDto test = recipeService.updateRecipe(1L, recipeDto);
 
         // Then
-        verify(recipeMapper, times(1)).map(any(RecipeDto.class));
+        verify(recipeMapper, times(1)).toRecipe(any(RecipeDto.class));
         verify(recipeRepository, times(1)).findOne(anyLong());
         verify(recipeRepository, times(0)).saveAndFlush(any(Recipe.class));
-        verify(recipeDtoMapper, times(0)).map(any(Recipe.class));
+        verify(recipeMapper, times(0)).toRecipeDto(any(Recipe.class));
 
     }
 

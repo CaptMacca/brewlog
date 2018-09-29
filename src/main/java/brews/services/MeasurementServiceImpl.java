@@ -6,8 +6,7 @@ import brews.domain.MeasurementType;
 import brews.domain.dto.MeasurementDto;
 import brews.domain.dto.MeasurementTypeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
-import brews.mapper.MeasurementDtoMapper;
-import brews.mapper.MeasurementMapper;
+import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +23,12 @@ public class MeasurementServiceImpl implements MeasurementService {
 
     private final MeasurementRepository measurementRepository;
     private final BrewsRepository brewsRepository;
-    private final MeasurementDtoMapper measurementDtoMapper;
     private final MeasurementMapper measurementMapper;
 
     public MeasurementServiceImpl(MeasurementRepository measurementRepository, BrewsRepository brewsRepository,
-                                  MeasurementDtoMapper measurementDtoMapper, MeasurementMapper measurementMapper) {
+                                  MeasurementMapper measurementMapper) {
         this.measurementRepository = measurementRepository;
         this.brewsRepository = brewsRepository;
-        this.measurementDtoMapper = measurementDtoMapper;
         this.measurementMapper = measurementMapper;
     }
 
@@ -62,7 +59,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         Measurement measurement = measurementRepository.findOne(id);
 
         if (measurement != null) {
-            measurementDto = measurementDtoMapper.map(measurement);
+            measurementDto = measurementMapper.toMeasurementDto(measurement);
         } else {
             throw new BrewsEntityNotFoundException(String.format("Measurement for measurement id: %d could not be found", id));
         }
@@ -78,7 +75,7 @@ public class MeasurementServiceImpl implements MeasurementService {
 
         measurements = measurementRepository.findMeasurementsByBrewId(id);
 
-        return measurementDtoMapper.map(measurements);
+        return measurementMapper.toMeasurementDtos(measurements);
     }
 
     @Override
@@ -87,7 +84,7 @@ public class MeasurementServiceImpl implements MeasurementService {
 
         log.info("Saving measurement: " + measurementDto.toString());
         Long brewId = measurementDto.getBrewId();
-        Measurement detachedMeasurement = measurementMapper.map(measurementDto);
+        Measurement detachedMeasurement = measurementMapper.toMeasurement(measurementDto);
 
         Measurement newMeasurement;
 
@@ -105,7 +102,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         newMeasurement = measurementRepository.saveAndFlush(detachedMeasurement);
 
         log.debug(String.format("Saved measurement: %s", newMeasurement.toString()));
-        return measurementDtoMapper.map(newMeasurement);
+        return measurementMapper.toMeasurementDto(newMeasurement);
     }
 
 
@@ -114,7 +111,7 @@ public class MeasurementServiceImpl implements MeasurementService {
     public MeasurementDto updateMeasurement(Long id, MeasurementDto measurementDto) {
 
         log.info("Saving measurement: " + measurementDto.toString());
-        Measurement detachedMeasurement = measurementMapper.map(measurementDto);
+        Measurement detachedMeasurement = measurementMapper.toMeasurement(measurementDto);
 
         Measurement savedMeasurement;
 
@@ -129,7 +126,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         }
 
         log.debug(String.format("Saved measurement: %s", savedMeasurement.toString()));
-        return measurementDtoMapper.map(savedMeasurement);
+        return measurementMapper.toMeasurementDto(savedMeasurement);
     }
 
 

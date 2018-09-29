@@ -5,8 +5,8 @@ import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.beerxml.ImportedRecipes;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.ImportedRecipeExistsException;
-import brews.mapper.RecipeDtoMapper;
 import brews.mapper.beerxml.BeerXMLRecipeMapper;
+import brews.mapper.domain.RecipeMapper;
 import brews.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 
 /**
- * Service to import a BeerXML recipe file and transform and map the important bits for the
+ * Service to import a BeerXML recipe file and transform and mapHop the important bits for the
  * BrewLog App.
  */
 @Slf4j
@@ -30,14 +30,14 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
     private final RecipeRepository recipeRepository;
     private final BeerXMLRecipeMapper beerXMLRecipeMapper;
     private final BeerXMLReaderService beerXMLReaderService;
-    private final RecipeDtoMapper recipeDtoMapper;
+    private final RecipeMapper recipeMapper;
 
     @Autowired
-    public ImportRecipeServiceImpl(RecipeRepository recipeRepository, BeerXMLRecipeMapper beerXMLRecipeMapper, BeerXMLReaderService beerXMLReaderService, RecipeDtoMapper recipeDtoMapper) {
+    public ImportRecipeServiceImpl(RecipeRepository recipeRepository, BeerXMLRecipeMapper beerXMLRecipeMapper, BeerXMLReaderService beerXMLReaderService, RecipeMapper recipeMapper) {
         this.recipeRepository = recipeRepository;
         this.beerXMLRecipeMapper = beerXMLRecipeMapper;
         this.beerXMLReaderService = beerXMLReaderService;
-        this.recipeDtoMapper = recipeDtoMapper;
+        this.recipeMapper = recipeMapper;
     }
 
     /**
@@ -71,7 +71,7 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
         recipeRepository.flush();
 
-        return recipeDtoMapper.map(recipes);
+        return recipeMapper.toRecipeDtos(recipes);
     }
 
 }

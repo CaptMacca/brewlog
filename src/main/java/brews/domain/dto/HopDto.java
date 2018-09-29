@@ -7,12 +7,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class HopDto {
+public class HopDto extends IngredientDto {
 
-    private Long id;
-    private String name;
     private Double alpha;
     private Double additionTime;
     private String hopUsage;
-    private Double amount;
 }

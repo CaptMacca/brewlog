@@ -50,17 +50,4 @@ public class Recipe implements Serializable {
     )
     private List<Mash> mashes;
 
-    public Recipe addIngredient(Ingredient ingredient) {
-        ingredient.setRecipe(this);
-        this.ingredients.add(ingredient);
-        return this;
-    }
-
-    public Recipe addMash(Mash mash) {
-        mash.setRecipe(this);
-        this.mashes.add(mash);
-        return this;
-    }
-
-
 }

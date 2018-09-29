@@ -5,8 +5,7 @@ import brews.domain.Recipe;
 import brews.domain.dto.BrewDto;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
-import brews.mapper.BrewDtoMapper;
-import brews.mapper.BrewMapper;
+import brews.mapper.domain.BrewMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import org.junit.Before;
@@ -31,9 +30,6 @@ public class BrewServiceTest {
     BrewsRepository brewsRepository;
 
     @Mock
-    BrewDtoMapper brewDtoMapper;
-
-    @Mock
     BrewMapper brewMapper;
 
     BrewService brewService;
@@ -42,7 +38,7 @@ public class BrewServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        brewService = new BrewServiceImpl(recipeRepository, brewsRepository, brewDtoMapper, brewMapper);
+        brewService = new BrewServiceImpl(recipeRepository, brewsRepository, brewMapper);
     }
 
     @Test
@@ -55,7 +51,7 @@ public class BrewServiceTest {
         brewDto.setBrewer("a brewer");
         brews.add(brewDto);
 
-        when(brewDtoMapper.map(anyListOf(Brew.class))).thenReturn(brews);
+        when(brewMapper.toBrewDtos(anyListOf(Brew.class))).thenReturn(brews);
 
         // When
         List<BrewDto> test = brewService.getAllBrews();
@@ -63,7 +59,7 @@ public class BrewServiceTest {
         // Then
         assertNotNull(test);
         verify(brewsRepository, times(1)).findAll();
-        verify(brewDtoMapper, times(1)).map(anyListOf(Brew.class));
+        verify(brewMapper, times(1)).toBrewDtos(anyListOf(Brew.class));
     }
 
     @Test
@@ -74,7 +70,7 @@ public class BrewServiceTest {
         brewDto.setId(1L);
         brewDto.setBrewer("a brewer");
 
-        when(brewDtoMapper.map(any(Brew.class))).thenReturn(brewDto);
+        when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
 
         // When
         BrewDto test = brewService.getBrew(1L);
@@ -83,7 +79,7 @@ public class BrewServiceTest {
         assertNotNull(test);
         assertEquals(1L, test.getId().longValue());
         verify(brewsRepository, times(1)).findOne(anyLong());
-        verify(brewDtoMapper, times(1)).map(any(Brew.class));
+        verify(brewMapper, times(1)).toBrewDto(any(Brew.class));
     }
 
     @Test
@@ -101,7 +97,7 @@ public class BrewServiceTest {
         brewDto.setRecipe(recipeDto);
         brews.add(brewDto);
 
-        when(brewDtoMapper.map(anyListOf(Brew.class))).thenReturn(brews);
+        when(brewMapper.toBrewDtos(anyListOf(Brew.class))).thenReturn(brews);
 
         // When
         List<BrewDto> test = brewService.getBrewsForRecipe(1L);
@@ -109,7 +105,7 @@ public class BrewServiceTest {
         // Then
         assertNotNull(test);
         verify(brewsRepository,times(1)).findBrewsByRecipeId(anyLong());
-        verify(brewDtoMapper, times(1)).map(anyListOf(Brew.class));
+        verify(brewMapper, times(1)).toBrewDtos(anyListOf(Brew.class));
 
     }
 
@@ -125,7 +121,7 @@ public class BrewServiceTest {
         brewDto.setBrewer("a brewer");
         brewDto.setRecipe(recipeDto);
 
-        when(brewDtoMapper.map(any(Brew.class))).thenReturn(brewDto);
+        when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
 
         // When
         BrewDto test = brewService.saveBrew(brewDto);
@@ -135,7 +131,7 @@ public class BrewServiceTest {
         assertEquals(1L, test.getId().longValue());
         verify(recipeRepository, times(1)).findOne(anyLong());
         verify(brewsRepository, times(1)).save(any(Brew.class));
-        verify(brewDtoMapper, times(1)).map(any(Brew.class));
+        verify(brewMapper, times(1)).toBrewDto(any(Brew.class));
     }
 
     @Test
@@ -157,8 +153,8 @@ public class BrewServiceTest {
         brew.setBrewer(brewDto.getBrewer());
         brew.setRecipe(recipe);
 
-        when(brewDtoMapper.map(any(Brew.class))).thenReturn(brewDto);
-        when(brewMapper.map(any(BrewDto.class))).thenReturn(brew);
+        when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
+        when(brewMapper.toBrew(any(BrewDto.class))).thenReturn(brew);
         when(brewsRepository.findOne(anyLong())).thenReturn(brew);
 
         // When
@@ -169,8 +165,8 @@ public class BrewServiceTest {
         assertEquals(1L, test.getId().longValue());
         verify(brewsRepository, times(1)).findOne(anyLong());
         verify(brewsRepository, times(1)).saveAndFlush(any(Brew.class));
-        verify(brewMapper, times(1)).map(any(BrewDto.class));
-        verify(brewDtoMapper, times(1)).map(any(Brew.class));
+        verify(brewMapper, times(1)).toBrew(any(BrewDto.class));
+        verify(brewMapper, times(1)).toBrewDto(any(Brew.class));
 
     }
 
@@ -193,7 +189,7 @@ public class BrewServiceTest {
         brew.setBrewer(brewDto.getBrewer());
         brew.setRecipe(recipe);
 
-        when(brewMapper.map(any(BrewDto.class))).thenReturn(brew);
+        when(brewMapper.toBrew(any(BrewDto.class))).thenReturn(brew);
         when(brewsRepository.findOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
@@ -202,7 +198,7 @@ public class BrewServiceTest {
         // Then
         verify(brewsRepository, times(1)).findOne(anyLong());
         verify(brewsRepository, times(0)).saveAndFlush(any(Brew.class));
-        verify(brewMapper, times(1)).map(any(BrewDto.class));
+        verify(brewMapper, times(1)).toBrew(any(BrewDto.class));
     }
 
 

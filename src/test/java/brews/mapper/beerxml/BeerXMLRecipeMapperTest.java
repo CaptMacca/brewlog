@@ -1,7 +1,6 @@
 package brews.mapper.beerxml;
 
 import brews.MockImportedRecipe;
-import brews.MockXMLRecipe;
 import brews.domain.Recipe;
 import brews.domain.beerxml.ImportedRecipe;
 import org.junit.Before;

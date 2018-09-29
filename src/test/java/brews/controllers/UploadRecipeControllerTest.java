@@ -4,7 +4,6 @@ import brews.domain.dto.RecipeDto;
 import brews.exceptions.ImportedRecipeUploadException;
 import brews.handler.BrewsControllerExceptionHandler;
 import brews.services.ImportRecipeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -45,8 +44,8 @@ public class UploadRecipeControllerTest {
     public void testUploadRecipe() throws Exception {
 
         // Given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "test.xml",
-                "text/plain", "test data".getBytes());
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "domain.xml",
+                "text/plain", "domain data".getBytes());
         List<RecipeDto> recipes = new ArrayList<>();
         RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
@@ -68,8 +67,8 @@ public class UploadRecipeControllerTest {
     public void testUploadRecipeNotXML() throws Exception {
 
         // Given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "test.txt",
-                "text/plain", "test data".getBytes());
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "domain.txt",
+                "text/plain", "domain data".getBytes());
         List<RecipeDto> recipes = new ArrayList<>();
         RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
@@ -113,7 +112,7 @@ public class UploadRecipeControllerTest {
 
         // Given
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "myrecipe.xml",
-                "text/plain", "test data".getBytes());
+                "text/plain", "domain data".getBytes());
         List<RecipeDto> recipes = new ArrayList<>();
         RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);

@@ -3,8 +3,7 @@ package brews.services;
 import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
-import brews.mapper.RecipeDtoMapper;
-import brews.mapper.RecipeMapper;
+import brews.mapper.domain.RecipeMapper;
 import brews.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -18,12 +17,10 @@ import java.util.List;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeDtoMapper recipeDtoMapper;
     private final RecipeMapper recipeMapper;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeDtoMapper recipeDtoMapper, RecipeMapper recipeMapper) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeMapper recipeMapper) {
         this.recipeRepository = recipeRepository;
-        this.recipeDtoMapper = recipeDtoMapper;
         this.recipeMapper = recipeMapper;
     }
 
@@ -33,7 +30,7 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug("Retrieving all recipes from the database");
         List<Recipe> recipes = recipeRepository.findAll();
 
-        return recipeDtoMapper.map(recipes);
+        return recipeMapper.toRecipeDtos(recipes);
     }
 
     @Override
@@ -43,7 +40,7 @@ public class RecipeServiceImpl implements RecipeService {
         Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe!=null) {
-           return recipeDtoMapper.map(recipe);
+           return recipeMapper.toRecipeDto(recipe);
         } else {
             throw new BrewsEntityNotFoundException();
         }
@@ -54,14 +51,14 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeDto updateRecipe(Long id, RecipeDto recipeDto) {
 
         log.debug(String.format("Saving recipe: %s", recipeDto.toString()));
-        Recipe detachedRecipe = recipeMapper.map(recipeDto);
+        Recipe detachedRecipe = recipeMapper.toRecipe(recipeDto);
         Recipe existingRecipe = recipeRepository.findOne(id);
 
         if (existingRecipe!=null) {
             log.debug("Updating the recipe in the repository");
             BeanUtils.copyProperties(detachedRecipe, existingRecipe);
             Recipe updatedRecipe = recipeRepository.saveAndFlush(existingRecipe);
-            return recipeDtoMapper.map(updatedRecipe);
+            return recipeMapper.toRecipeDto(updatedRecipe);
         } else {
             throw new BrewsEntityNotFoundException();
         }

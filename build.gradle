@@ -13,13 +13,13 @@ buildscript {
 }
 
 plugins {
-    id "org.sonarqube" version "2.6.2"
+    id 'net.ltgt.apt-idea' version '0.18'
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: "net.ltgt.apt-idea"
 
 group = 'steve.com'
 version = '0.0.1-SNAPSHOT'
@@ -49,6 +49,10 @@ dependencies {
     compile('org.apache.commons:commons-lang3:3.4')
     compile "io.springfox:springfox-swagger2:2.9.2"
     compile "io.springfox:springfox-swagger-ui:2.9.2"
+    compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
     runtime('mysql:mysql-connector-java')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.2.0.Final', 'org.projectlombok:lombok'
 }
+

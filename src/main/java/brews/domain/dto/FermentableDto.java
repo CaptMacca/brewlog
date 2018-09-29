@@ -7,11 +7,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FermentableDto {
+public class FermentableDto extends IngredientDto {
 
-    private Long id;
-    private Double amount;
-    private String name;
-    private String type;
 
+    private Boolean addAfterBoil;
 }

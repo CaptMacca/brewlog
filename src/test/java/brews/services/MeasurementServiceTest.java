@@ -5,8 +5,7 @@ import brews.domain.Measurement;
 import brews.domain.MeasurementType;
 import brews.domain.dto.MeasurementDto;
 import brews.domain.dto.MeasurementTypeDto;
-import brews.mapper.MeasurementDtoMapper;
-import brews.mapper.MeasurementMapper;
+import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
 import org.junit.Before;
@@ -31,8 +30,6 @@ public class MeasurementServiceTest {
     @Mock
     BrewsRepository brewsRepository;
     @Mock
-    MeasurementDtoMapper measurementDtoMapper;
-    @Mock
     MeasurementMapper measurementMapper;
 
     MeasurementService measurementService;
@@ -41,7 +38,7 @@ public class MeasurementServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        measurementService = new MeasurementServiceImpl(measurementRepository, brewsRepository, measurementDtoMapper, measurementMapper);
+        measurementService = new MeasurementServiceImpl(measurementRepository, brewsRepository, measurementMapper);
     }
 
     @Test
@@ -71,7 +68,7 @@ public class MeasurementServiceTest {
         measurement.setType(MeasurementType.FG);
 
         when(measurementRepository.findOne(anyLong())).thenReturn(measurement);
-        when(measurementDtoMapper.map(any(Measurement.class))).thenReturn(measurementDto);
+        when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
         MeasurementDto test = measurementService.getMeasurement(1L);
@@ -80,7 +77,7 @@ public class MeasurementServiceTest {
         assertNotNull(test);
         assertEquals(1L, test.getId().longValue());
         verify(measurementRepository, times(1)).findOne(anyLong());
-        verify(measurementDtoMapper, times(1)).map(any(Measurement.class));
+        verify(measurementMapper, times(1)).toMeasurementDto(any(Measurement.class));
 
     }
 
@@ -100,7 +97,7 @@ public class MeasurementServiceTest {
         measurement.setType(MeasurementType.FG);
         measurements.add(measurement);
 
-        when(measurementDtoMapper.map(anyListOf(Measurement.class))).thenReturn(measurementDtos);
+        when(measurementMapper.toMeasurementDtos(anyListOf(Measurement.class))).thenReturn(measurementDtos);
         when(measurementRepository.findMeasurementsByBrewId(anyLong())).thenReturn(measurements);
 
         // When
@@ -110,7 +107,7 @@ public class MeasurementServiceTest {
         assertNotNull(test);
         assertEquals(test.size(), 1);
         verify(measurementRepository, times(1)).findMeasurementsByBrewId(anyLong());
-        verify(measurementDtoMapper, times(1)).map(anyListOf(Measurement.class));
+        verify(measurementMapper, times(1)).toMeasurementDtos(anyListOf(Measurement.class));
     }
 
     @Test
@@ -130,10 +127,10 @@ public class MeasurementServiceTest {
         measurement.setType(MeasurementType.FG);
         measurement.setBrew(brew);
 
-        when(measurementMapper.map(any(MeasurementDto.class))).thenReturn(measurement);
+        when(measurementMapper.toMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
         when(brewsRepository.findOne(anyLong())).thenReturn(brew);
         when(measurementRepository.saveAndFlush(any(Measurement.class))).thenReturn(measurement);
-        when(measurementDtoMapper.map(any(Measurement.class))).thenReturn(measurementDto);
+        when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
         MeasurementDto fixture = measurementService.createMeasurement(measurementDto);
@@ -141,9 +138,9 @@ public class MeasurementServiceTest {
         // Then
         assertNotNull(fixture);
         assertEquals(1L, fixture.getId().longValue());
-        verify(measurementMapper, times(1)).map(any(MeasurementDto.class));
+        verify(measurementMapper, times(1)).toMeasurement(any(MeasurementDto.class));
         verify(brewsRepository, times(1)).findOne(anyLong());
-        verify(measurementDtoMapper, times(1)).map(any(Measurement.class));
+        verify(measurementMapper, times(1)).toMeasurementDto(any(Measurement.class));
     }
 
     @Test
@@ -158,10 +155,10 @@ public class MeasurementServiceTest {
         measurement.setId(measurementDto.getId());
         measurement.setType(MeasurementType.FG);
 
-        when(measurementMapper.map(any(MeasurementDto.class))).thenReturn(measurement);
+        when(measurementMapper.toMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
         when(measurementRepository.findOne(anyLong())).thenReturn(measurement);
         when(measurementRepository.save(any(Measurement.class))).thenReturn(measurement);
-        when(measurementDtoMapper.map(any(Measurement.class))).thenReturn(measurementDto);
+        when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
         MeasurementDto test = measurementService.updateMeasurement(1L, measurementDto);
@@ -169,10 +166,10 @@ public class MeasurementServiceTest {
         // Then
         assertNotNull(test);
         assertEquals(1L, test.getId().longValue());
-        verify(measurementMapper, times(1)).map(any(MeasurementDto.class));
+        verify(measurementMapper, times(1)).toMeasurement(any(MeasurementDto.class));
         verify(measurementRepository, times(1)).findOne(anyLong());
         verify(measurementRepository, times(1)).save(any(Measurement.class));
-        verify(measurementDtoMapper, times(1)).map(any(Measurement.class));
+        verify(measurementMapper, times(1)).toMeasurementDto(any(Measurement.class));
 
     }
 

@@ -7,10 +7,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class YeastDto {
+public class YeastDto extends IngredientDto {
 
-    private Long id;
-    private Double amount;
-    private String name;
+    private String productId;
+    private String laboratory;
 
 }

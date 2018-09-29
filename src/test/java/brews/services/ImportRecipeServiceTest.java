@@ -8,8 +8,8 @@ import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.beerxml.ImportedRecipes;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.ImportedRecipeExistsException;
-import brews.mapper.RecipeDtoMapper;
 import brews.mapper.beerxml.BeerXMLRecipeMapper;
+import brews.mapper.domain.RecipeMapper;
 import brews.repository.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class ImportRecipeServiceTest {
     @Mock
     BeerXMLReaderService beerXMLReaderService;
     @Mock
-    RecipeDtoMapper recipeDtoMapper;
+    RecipeMapper recipeMapper;
 
     ImportRecipeService importRecipeService;
 
@@ -43,7 +43,7 @@ public class ImportRecipeServiceTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
 
-        importRecipeService = new ImportRecipeServiceImpl(recipeRepository, beerXMLRecipeMapper, beerXMLReaderService, recipeDtoMapper);
+        importRecipeService = new ImportRecipeServiceImpl(recipeRepository, beerXMLRecipeMapper, beerXMLReaderService, recipeMapper);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ImportRecipeServiceTest {
         verify(recipeRepository, times(1)).findRecipeByName(recipeNameArgumentCaptor.capture());
         verify(recipeRepository, times(1)).save(recipeArgumentCaptor.capture());
         verify(recipeRepository, times(1)).flush();
-        verify(recipeDtoMapper, times(1)).map(anyListOf(Recipe.class));
+        verify(recipeMapper, times(1)).toRecipeDtos(anyListOf(Recipe.class));
 
     }
 
@@ -98,7 +98,7 @@ public class ImportRecipeServiceTest {
         verify(recipeRepository, times(1)).findRecipeByName(anyString());
         verify(recipeRepository, times(0)).save(any(Recipe.class));
         verify(recipeRepository, times(0)).flush();
-        verify(recipeDtoMapper, times(0)).map(anyListOf(Recipe.class));
+        verify(recipeMapper, times(0)).toRecipeDtos(anyListOf(Recipe.class));
 
     }
 
