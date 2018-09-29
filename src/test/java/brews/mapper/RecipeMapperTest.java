@@ -36,7 +36,7 @@ public class RecipeMapperTest {
 
     @Before
     public void setup() throws Exception {
-        this.recipeDtoMapping = Mappers.getMapper(RecipeMapper.class);
+
     }
 
     @Test

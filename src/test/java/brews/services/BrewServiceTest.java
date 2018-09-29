@@ -165,7 +165,7 @@ public class BrewServiceTest {
         assertEquals(1L, test.getId().longValue());
         verify(brewsRepository, times(1)).findOne(anyLong());
         verify(brewsRepository, times(1)).saveAndFlush(any(Brew.class));
-        verify(brewMapper, times(1)).toBrew(any(BrewDto.class));
+        verify(brewMapper, times(1)).updateFromBrewDto(any(BrewDto.class), any(Brew.class));
         verify(brewMapper, times(1)).toBrewDto(any(Brew.class));
 
     }
