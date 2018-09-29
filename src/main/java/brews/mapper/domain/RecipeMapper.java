@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Mapper(componentModel = "spring",
-        uses= IngredientMapper.class,
+        uses= {IngredientMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RecipeMapper {
 
