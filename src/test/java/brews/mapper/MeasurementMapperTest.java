@@ -1,5 +1,6 @@
 package brews.mapper;
 
+import brews.domain.Brew;
 import brews.domain.Measurement;
 import brews.domain.MeasurementType;
 import brews.domain.dto.MeasurementDto;
@@ -50,10 +51,15 @@ public class MeasurementMapperTest {
     @Test
     public void testListofMeasurementsToMeasurementDtoMapper() {
         // Given
+        Brew brew = new Brew();
+        brew.setId(1L);
+
         Measurement measurement1 = new Measurement();
         Measurement measurement2 = new Measurement();
         measurement1.setId(1L);
+        measurement1.setBrew(brew);
         measurement2.setId(2L);
+        measurement2.setBrew(brew);
         List<Measurement> measurements = new ArrayList<>();
         measurements.add(measurement1);
         measurements.add(measurement2);
@@ -68,6 +74,8 @@ public class MeasurementMapperTest {
         assertThat(measurementDtos.get(1), instanceOf(MeasurementDto.class));
         assertThat(1L, is(equalTo(measurementDtos.get(0).getId())));
         assertThat(2L, is(equalTo(measurementDtos.get(1).getId())));
+        assertThat(1L, is(equalTo(measurementDtos.get(0).getBrewId())));
+        assertThat(1L, is(equalTo(measurementDtos.get(1).getBrewId())));
     }
 
     @Test

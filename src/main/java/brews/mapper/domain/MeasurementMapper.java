@@ -2,10 +2,7 @@ package brews.mapper.domain;
 
 import brews.domain.Measurement;
 import brews.domain.dto.MeasurementDto;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MeasurementMapper {
 
+    @Mapping(source = "brew.id", target = "brewId")
     MeasurementDto toMeasurementDto(Measurement measurement);
 
     List<MeasurementDto> toMeasurementDtos(List<Measurement> measurements);
