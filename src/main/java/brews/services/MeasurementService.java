@@ -15,7 +15,7 @@ public interface MeasurementService {
 
     MeasurementDto createMeasurement(MeasurementDto measurementDto);
 
-    MeasurementDto updateMeasurement(Long id, MeasurementDto measurementDto);
+    MeasurementDto updateMeasurement(MeasurementDto measurementDto);
 
     void deleteMeasurement(Long measurementId);
 }

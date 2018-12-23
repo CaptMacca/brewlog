@@ -161,7 +161,7 @@ public class MeasurementServiceTest {
         when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
-        MeasurementDto test = measurementService.updateMeasurement(1L, measurementDto);
+        MeasurementDto test = measurementService.updateMeasurement(measurementDto);
 
         // Then
         assertNotNull(test);

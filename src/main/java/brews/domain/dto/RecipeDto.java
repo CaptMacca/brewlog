@@ -1,6 +1,5 @@
 package brews.domain.dto;
 
-import brews.domain.Ingredient;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,8 +25,6 @@ public class RecipeDto {
     private String notes;
 
     private List<IngredientDto> ingredients;
-//    private List<HopDto> hops;
-//    private List<FermentableDto> fermentables;
-//    private List<YeastDto> yeasts;
     private List<MashDto> mashes;
+
 }

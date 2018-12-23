@@ -65,14 +65,12 @@ public class BrewServiceImpl implements BrewService {
     @Override
     @Transactional
     public BrewDto updateBrew(Long id,BrewDto brewDto) {
-        //Brew detachedBrew = brewMapper.toBrew(brewDto);
         Brew existingBrew = brewsRepository.findOne(id);
 
         if (existingBrew == null) {
             throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id));
         }
         brewMapper.updateFromBrewDto(brewDto,existingBrew);
-        //BeanUtils.copyProperties(detachedBrew, existingBrew);
         Brew updatedBrew = brewsRepository.saveAndFlush(existingBrew);
         return brewMapper.toBrewDto(updatedBrew);
     }

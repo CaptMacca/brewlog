@@ -10,7 +10,7 @@ spring:
     username: springboot
     password: springboot
 
-#JPA-Hibernate
+  #JPA-Hibernate
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,3 +20,5 @@ spring:
     show-sql: true
     database: mysql
 
+  flyway:
+    baseline-on-migrate: true

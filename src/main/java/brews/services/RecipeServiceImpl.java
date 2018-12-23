@@ -1,9 +1,11 @@
 package brews.services;
 
+import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.RecipeMapper;
+import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -17,10 +19,12 @@ import java.util.List;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final BrewsRepository brewsRepository;
     private final RecipeMapper recipeMapper;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeMapper recipeMapper) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository, RecipeMapper recipeMapper) {
         this.recipeRepository = recipeRepository;
+        this.brewsRepository = brewsRepository;
         this.recipeMapper = recipeMapper;
     }
 
@@ -72,6 +76,12 @@ public class RecipeServiceImpl implements RecipeService {
 
         if (recipe == null) {
             throw new BrewsEntityNotFoundException();
+        }
+
+        // Find any associated brews and delete them
+        List<Brew> brews = brewsRepository.findBrewsByRecipeId(recipe.getId());
+        for(Brew brew : brews) {
+            brewsRepository.delete(brew.getId());
         }
 
         recipeRepository.delete(recipe);

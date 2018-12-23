@@ -108,18 +108,18 @@ public class MeasurementServiceImpl implements MeasurementService {
 
     @Override
     @Transactional
-    public MeasurementDto updateMeasurement(Long id, MeasurementDto measurementDto) {
+    public MeasurementDto updateMeasurement( MeasurementDto measurementDto) {
 
         log.info("Saving measurement: " + measurementDto.toString());
         Measurement detachedMeasurement = measurementMapper.toMeasurement(measurementDto);
 
         Measurement savedMeasurement;
 
-        if (id == null) {
+        if (detachedMeasurement.getId() == null) {
             throw new IllegalArgumentException("Measurement does not have a measurement id");
         } else {
             log.debug("Measurement has an id, updating measurement");
-            Measurement attachedMeasurement = measurementRepository.findOne(id);
+            Measurement attachedMeasurement = measurementRepository.findOne(detachedMeasurement.getId());
 
             BeanUtils.copyProperties(detachedMeasurement, attachedMeasurement, "brew");
             savedMeasurement = measurementRepository.save(attachedMeasurement);

@@ -22,7 +22,7 @@ import java.util.List;
 @Api(description = "API for creating, retrieving, deleting and updating measurements for a brew")
 public final class MeasurementController {
 
-    public final MeasurementService measurementService;
+    private final MeasurementService measurementService;
 
     public MeasurementController(MeasurementService measurementService) {
         this.measurementService = measurementService;
@@ -40,6 +40,12 @@ public final class MeasurementController {
         return measurementService.getMeasurement(id);
     }
 
+    @GetMapping("/brew/{id}")
+    @ApiOperation("Get a specific measurement identified by the id")
+    public List<MeasurementDto> getMeasurementsForBrew(@PathVariable Long id) {
+        return measurementService.getMeasurementsForBrew(id);
+    }
+
     @PostMapping()
     @ApiOperation("Creates a new measurement")
     public ResponseEntity<MeasurementDto> createMeasurement(@RequestBody MeasurementDto measurementDto) {
@@ -48,11 +54,11 @@ public final class MeasurementController {
         return ResponseEntity.ok(createdMeasurementDto);
     }
 
-    @PutMapping("{id}")
+    @PutMapping()
     @ApiOperation("Updates a measurement identified by the id")
-    public ResponseEntity<MeasurementDto> updateMeasurement(@PathVariable Long id, @RequestBody MeasurementDto measurementDto) {
-        log.debug(String.format("Updating measurement with id: %d", id));
-        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(id, measurementDto);
+    public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
+        log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
+        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(measurementDto);
         return ResponseEntity.ok(savedMeasurementDto);
     }
 
