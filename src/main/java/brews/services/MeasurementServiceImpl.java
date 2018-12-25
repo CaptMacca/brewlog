@@ -56,7 +56,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         log.debug(String.format("Retrieve measurement with id: %d", id));
         MeasurementDto measurementDto;
 
-        Measurement measurement = measurementRepository.findOne(id);
+        Measurement measurement = measurementRepository.getOne(id);
 
         if (measurement != null) {
             measurementDto = measurementMapper.toMeasurementDto(measurement);
@@ -91,7 +91,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         if (brewId == null) {
             throw new IllegalArgumentException("Measurement is not linked to a brew");
         } else {
-            Brew brew = brewsRepository.findOne(brewId);
+            Brew brew = brewsRepository.getOne(brewId);
             if (brew == null) {
                 throw new BrewsEntityNotFoundException(String.format("Brew could not be found for brew id: %d", brewId));
             } else {
@@ -111,17 +111,16 @@ public class MeasurementServiceImpl implements MeasurementService {
     public MeasurementDto updateMeasurement( MeasurementDto measurementDto) {
 
         log.info("Saving measurement: " + measurementDto.toString());
-        Measurement detachedMeasurement = measurementMapper.toMeasurement(measurementDto);
+//        Measurement detachedMeasurement = measurementMapper.toMeasurement(measurementDto);
 
         Measurement savedMeasurement;
 
-        if (detachedMeasurement.getId() == null) {
+        if (measurementDto.getId() == null) {
             throw new IllegalArgumentException("Measurement does not have a measurement id");
         } else {
             log.debug("Measurement has an id, updating measurement");
-            Measurement attachedMeasurement = measurementRepository.findOne(detachedMeasurement.getId());
-
-            BeanUtils.copyProperties(detachedMeasurement, attachedMeasurement, "brew");
+            Measurement attachedMeasurement = measurementRepository.getOne(measurementDto.getId());
+            measurementMapper.updateFromMeasurementDto(measurementDto, attachedMeasurement);
             savedMeasurement = measurementRepository.save(attachedMeasurement);
         }
 
@@ -133,12 +132,12 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     @Transactional
     public void deleteMeasurement(Long id) {
-        Measurement existingMeasurement = measurementRepository.findOne(id);
+        Measurement existingMeasurement = measurementRepository.getOne(id);
 
         if (existingMeasurement == null) {
             throw new BrewsEntityNotFoundException(String.format("Measurement for id: %d could not be found.", id));
         }
-        measurementRepository.delete(id);
+        measurementRepository.delete(existingMeasurement);
     }
 
 }

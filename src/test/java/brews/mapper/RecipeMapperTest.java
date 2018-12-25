@@ -9,7 +9,6 @@ import brews.mapper.domain.RecipeMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,16 +17,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RecipeMapperTest {
 
     @Autowired
-    RecipeMapper recipeDtoMapping;
+    private RecipeMapper recipeMapper;
 
     @Configuration
     @ComponentScan(basePackages = "brews.mapper")
@@ -36,7 +32,6 @@ public class RecipeMapperTest {
 
     @Before
     public void setup() throws Exception {
-
     }
 
     @Test
@@ -65,14 +60,13 @@ public class RecipeMapperTest {
         recipe.setIngredients(ingredients);
 
         // When
-        RecipeDto recipeDto = recipeDtoMapping.toRecipeDto(recipe);
+        RecipeDto recipeDto = recipeMapper.toRecipeDto(recipe);
 
         // Then
-        assertNotNull(recipeDto);
-        assertThat(1L, equalTo(recipeDto.getId().longValue()));
-        assertThat(recipeDto.getIngredients().size(), equalTo(3));
-        assertThat(recipeDto.getIngredients().get(0), instanceOf(YeastDto.class));
-        assertThat(recipeDto.getIngredients().get(1), instanceOf(HopDto.class));
-        assertThat(recipeDto.getIngredients().get(2), instanceOf(FermentableDto.class));
+        assertThat(recipeDto.getId()).isEqualTo(1L);
+        assertThat(recipeDto.getIngredients()).hasSize(3);
+        assertThat(recipeDto.getIngredients().get(0)).isInstanceOf(YeastDto.class);
+        assertThat(recipeDto.getIngredients().get(1)).isInstanceOf(HopDto.class);
+        assertThat(recipeDto.getIngredients().get(2)).isInstanceOf(FermentableDto.class);
     }
 }

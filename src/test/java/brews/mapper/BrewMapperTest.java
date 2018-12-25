@@ -18,10 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class BrewMapperTest {
@@ -92,25 +89,20 @@ public class BrewMapperTest {
         BrewDto brewDto = brewMapper.toBrewDto(brew);
 
         // Then
-        assertNotNull(brewDto);
-        assertThat(brewDto, instanceOf(BrewDto.class));
-        assertThat(brewDto.getId(), equalTo(brew.getId()));
-        assertNotNull(brewDto.getRecipe());
-        assertThat(brewDto.getId(), equalTo(1L));
-        assertThat(brewDto.getBrewer(), equalTo("brewer"));
-        assertThat(brewDto.getRecipe().getIngredients().size(), equalTo(3));
+        assertThat(brewDto).isInstanceOf(BrewDto.class);
+        assertThat(brewDto.getId()).isEqualTo(brew.getId());
+        assertThat(brewDto.getRecipe()).isNotNull();
+        assertThat(brewDto.getId()).isEqualTo(1L);
+        assertThat(brewDto.getBrewer()).isEqualTo("brewer");
+        assertThat(brewDto.getRecipe().getIngredients()).hasSize(3);
 
         String usage = ((HopDto)brewDto.getRecipe().getIngredients().get(0)).getHopUsage();
 
-        assertThat(brewDto.getRecipe().getIngredients().get(0).getClass(), equalTo(HopDto.class));
-        assertThat(brewDto.getRecipe().getIngredients().get(1).getClass(), equalTo(FermentableDto.class));
-        assertThat(brewDto.getRecipe().getIngredients().get(2).getClass(), equalTo(YeastDto.class));
-        assertThat(brewDto.getMeasurements().size(), equalTo(1));
-        assertThat(brewDto.getMeasurements().get(0).getId(), equalTo(1L));
+        assertThat(brewDto.getRecipe().getIngredients().get(0)).isInstanceOf(HopDto.class);
+        assertThat(brewDto.getRecipe().getIngredients().get(1)).isInstanceOf(FermentableDto.class);
+        assertThat(brewDto.getRecipe().getIngredients().get(2)).isInstanceOf(YeastDto.class);
+        assertThat(brewDto.getMeasurements()).hasSize(1);
+        assertThat(brewDto.getMeasurements().get(0).getId()).isEqualTo(1L);
 
     }
-
-//    @Test
-//    public void mapListofBrewDtoTest() {
-//    }
 }

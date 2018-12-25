@@ -37,7 +37,7 @@ public class BrewServiceImpl implements BrewService {
     @Override
     @Transactional
     public BrewDto getBrew(Long id) {
-        return brewMapper.toBrewDto(brewsRepository.findOne(id));
+        return brewMapper.toBrewDto(brewsRepository.getOne(id));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class BrewServiceImpl implements BrewService {
     @Override
     @Transactional
     public BrewDto saveBrew(BrewDto brewDto) {
-        Recipe recipe = recipeRepository.findOne(brewDto.getRecipe().getId());
+        Recipe recipe = recipeRepository.getOne(brewDto.getRecipe().getId());
 
         Brew newBrew = new Brew();
         newBrew.setBrewDate(new Timestamp(System.currentTimeMillis()));
@@ -65,7 +65,7 @@ public class BrewServiceImpl implements BrewService {
     @Override
     @Transactional
     public BrewDto updateBrew(Long id,BrewDto brewDto) {
-        Brew existingBrew = brewsRepository.findOne(id);
+        Brew existingBrew = brewsRepository.getOne(id);
 
         if (existingBrew == null) {
             throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id));
@@ -79,12 +79,12 @@ public class BrewServiceImpl implements BrewService {
     @Transactional
     public void deleteBrew(Long id) {
 
-        Brew existingBrew = brewsRepository.findOne(id);
+        Brew existingBrew = brewsRepository.getOne(id);
 
         if (existingBrew == null) {
             throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to delete.", id));
         }
 
-        brewsRepository.delete(id);
+        brewsRepository.delete(existingBrew);
     }
 }

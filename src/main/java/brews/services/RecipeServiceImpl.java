@@ -41,7 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public RecipeDto getRecipeById(Long id) {
         log.debug("Retrieve recipe with id:" + id);
-        Recipe recipe = recipeRepository.findOne(id);
+        Recipe recipe = recipeRepository.getOne(id);
 
         if (recipe!=null) {
            return recipeMapper.toRecipeDto(recipe);
@@ -56,7 +56,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         log.debug(String.format("Saving recipe: %s", recipeDto.toString()));
         Recipe detachedRecipe = recipeMapper.toRecipe(recipeDto);
-        Recipe existingRecipe = recipeRepository.findOne(id);
+        Recipe existingRecipe = recipeRepository.getOne(id);
 
         if (existingRecipe!=null) {
             log.debug("Updating the recipe in the repository");
@@ -72,7 +72,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public void deleteRecipe(Long id) {
         log.debug(String.format("Deleting recipe with id: %d",id));
-        Recipe recipe = recipeRepository.findOne(id);
+        Recipe recipe = recipeRepository.getOne(id);
 
         if (recipe == null) {
             throw new BrewsEntityNotFoundException();
@@ -81,7 +81,7 @@ public class RecipeServiceImpl implements RecipeService {
         // Find any associated brews and delete them
         List<Brew> brews = brewsRepository.findBrewsByRecipeId(recipe.getId());
         for(Brew brew : brews) {
-            brewsRepository.delete(brew.getId());
+            brewsRepository.delete(brew);
         }
 
         recipeRepository.delete(recipe);

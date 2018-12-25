@@ -11,15 +11,11 @@ import org.mapstruct.factory.Mappers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class HopMapperTest {
 
-    IngredientMapper hopDtoMapping;
+    private IngredientMapper hopDtoMapping;
 
     @Before
     public void setup() throws Exception {
@@ -42,13 +38,12 @@ public class HopMapperTest {
         HopDto hopDto = hopDtoMapping.toHopDto(hop);
 
         // Then
-        assertNotNull(hopDto);
-        assertEquals(1L, hopDto.getId().longValue());
-        assertThat(10.0, equalTo(hopDto.getAlpha().doubleValue()));
-        assertThat(10.0, equalTo(hopDto.getAmount().doubleValue()));
-        assertThat("Usage", equalTo(hopDto.getHopUsage()));
-        assertThat(12.0, equalTo(hopDto.getAdditionTime()));
-        assertThat("Hop name", equalTo(hopDto.getName()));
+        assertThat(hopDto.getId()).isEqualTo(1L);
+        assertThat(hopDto.getAlpha()).isEqualTo(10.0);
+        assertThat(hopDto.getAmount()).isEqualTo(10.0);
+        assertThat(hopDto.getHopUsage()).isEqualTo("Usage");
+        assertThat(hopDto.getAdditionTime()).isEqualTo(12.0);
+        assertThat(hopDto.getName()).isEqualTo("Hop name");
     }
 
     @Test
@@ -66,11 +61,10 @@ public class HopMapperTest {
         List<HopDto> hopDtos = hopDtoMapping.toHopDtos(hops);
 
         // Then
-        assertNotNull(hopDtos);
-        assertThat(2, equalTo(hopDtos.size()));
-        assertThat(hopDtos.get(0), instanceOf(HopDto.class));
-        assertThat(hopDtos.get(1), instanceOf(HopDto.class));
-        assertThat(1L, equalTo(hopDtos.get(0).getId()));
-        assertThat(2L, equalTo(hopDtos.get(1).getId()));
+        assertThat(hopDtos).hasSize(2);
+        assertThat(hopDtos.get(0)).isInstanceOf(HopDto.class);
+        assertThat(hopDtos.get(1)).isInstanceOf(HopDto.class);
+        assertThat(hopDtos.get(0).getId()).isEqualTo(1L);
+        assertThat(hopDtos.get(1).getId()).isEqualTo(2L);
     }
 }

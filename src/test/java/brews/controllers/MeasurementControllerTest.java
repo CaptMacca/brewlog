@@ -180,7 +180,7 @@ public class MeasurementControllerTest {
         when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
 
         // When
-        mockMvc.perform(put("/api/measurement/1")
+        mockMvc.perform(put("/api/measurement")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(measurement))
                 .accept(MediaType.APPLICATION_JSON_UTF8))
@@ -206,7 +206,7 @@ public class MeasurementControllerTest {
         when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());
 
         // When
-        mockMvc.perform(put("/api/measurement/1")
+        mockMvc.perform(put("/api/measurement")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(measurement))
                 .accept(MediaType.APPLICATION_JSON_UTF8))

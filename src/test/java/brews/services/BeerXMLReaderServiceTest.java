@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.io.InputStream;
 
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BeerXMLReaderServiceTest {
 
@@ -20,7 +20,7 @@ public class BeerXMLReaderServiceTest {
 
 
     @Test
-    public void readBeerXML() {
+    public void canReadBeerXML() {
 
         // Given
         InputStream xmlRecipe = MockXMLRecipe.getMockedXMLRecipe();
@@ -29,6 +29,6 @@ public class BeerXMLReaderServiceTest {
         ImportedRecipes importedRecipes = beerXMLReaderService.readBeerXML(xmlRecipe);
 
         // Then
-        assertNotNull(importedRecipes);
+        assertThat(importedRecipes.getImportedRecipes()).isNotEmpty();
     }
 }

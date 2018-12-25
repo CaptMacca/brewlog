@@ -54,7 +54,7 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
         log.debug("Saving recipes in database");
         List<ImportedRecipe> candidateRecipes = importedRecipes.getImportedRecipes();
-
+        // TODO I dont like this code it needs a rethink
         for (ImportedRecipe importedRecipe : candidateRecipes) {
 
             Recipe candidateRecipe = beerXMLRecipeMapper.map(importedRecipe);

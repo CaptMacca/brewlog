@@ -10,18 +10,15 @@ import org.mapstruct.factory.Mappers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FermentableMapperTest {
 
     private IngredientMapper fermentableMapper;
 
-    public static final Long FERMENTABLE_ID_VAL = new Long(1L);
-    public static final Double FERMENTABLE_AMOUNT = new Double(1.0d);
-    public static final String FERMENTABLE_NAME = "Maris Otter Pale Malt";
+    private static final Long FERMENTABLE_ID_VAL = new Long(1L);
+    private static final Double FERMENTABLE_AMOUNT = new Double(1.0d);
+    private static final String FERMENTABLE_NAME = "Maris Otter Pale Malt";
 
 
     @Before
@@ -41,10 +38,9 @@ public class FermentableMapperTest {
         Fermentable fermentable = fermentableMapper.toFermentable(fermentableDto);
 
         // Then
-        assertNotNull(fermentable);
-        assertThat(FERMENTABLE_ID_VAL, equalTo(fermentable.getId()));
-        assertThat(FERMENTABLE_NAME, equalTo(fermentable.getName()));
-        assertThat(FERMENTABLE_AMOUNT, equalTo(fermentable.getAmount()));
+        assertThat(fermentable.getId()).isEqualTo(FERMENTABLE_ID_VAL);
+        assertThat(fermentable.getName()).isEqualTo(FERMENTABLE_NAME);
+        assertThat(fermentable.getAmount()).isEqualTo(FERMENTABLE_AMOUNT);
     }
 
     @Test
@@ -62,11 +58,10 @@ public class FermentableMapperTest {
         List<Fermentable> fermentables = fermentableMapper.toFermentables(fermentableDtos);
 
         // Then
-        assertNotNull(fermentables);
-        assertThat(1, equalTo(fermentables.size()));
-        assertThat(FERMENTABLE_ID_VAL, equalTo(fermentables.get(0).getId()));
-        assertThat(FERMENTABLE_NAME, equalTo(fermentables.get(0).getName()));
-        assertThat(FERMENTABLE_AMOUNT, equalTo(fermentables.get(0).getAmount()));
+        assertThat(fermentables).hasSize(1);
+        assertThat(fermentables.get(0).getId()).isEqualTo(FERMENTABLE_ID_VAL);
+        assertThat(fermentables.get(0).getName()).isEqualTo(FERMENTABLE_NAME);
+        assertThat(fermentables.get(0).getAmount()).isEqualTo(FERMENTABLE_AMOUNT);
     }
 
     @Test
@@ -83,11 +78,10 @@ public class FermentableMapperTest {
         FermentableDto fermentableDto = fermentableMapper.toFermentableDto(fermentable);
 
         //Then
-        assertNotNull(fermentableDto);
-        assertThat(FERMENTABLE_ID_VAL, equalTo(fermentableDto.getId()));
-        assertThat(FERMENTABLE_NAME, equalTo(fermentableDto.getName()));
-        assertThat(FERMENTABLE_AMOUNT,  equalTo(fermentableDto.getAmount()));
-        assertThat(Boolean.FALSE, equalTo(fermentableDto.getAddAfterBoil()));
+        assertThat(fermentableDto.getId()).isEqualTo(FERMENTABLE_ID_VAL);
+        assertThat(fermentableDto.getName()).isEqualTo(FERMENTABLE_NAME);
+        assertThat(fermentableDto.getAmount()).isEqualTo(FERMENTABLE_AMOUNT);
+        assertThat(fermentableDto.getAddAfterBoil()).isFalse();
     }
 
     @Test
@@ -104,11 +98,10 @@ public class FermentableMapperTest {
         List<FermentableDto> fermentableDtos = fermentableMapper.toFermentableDtos(fermentables);
 
         //Then
-        assertNotNull(fermentableDtos);
-        assertThat(1, equalTo(fermentableDtos.size()));
-        assertThat(fermentableDtos.get(0), instanceOf(FermentableDto.class));
-        assertThat(FERMENTABLE_ID_VAL, equalTo(fermentableDtos.get(0).getId()));
-        assertThat(FERMENTABLE_NAME, equalTo(fermentableDtos.get(0).getName()));
-        assertThat(FERMENTABLE_AMOUNT, equalTo(fermentableDtos.get(0).getAmount()));
+        assertThat(fermentableDtos).hasSize(1);
+        assertThat(fermentableDtos.get(0)).isInstanceOf(FermentableDto.class);
+        assertThat(fermentableDtos.get(0).getId()).isEqualTo(FERMENTABLE_ID_VAL);
+        assertThat(fermentableDtos.get(0).getName()).isEqualTo(FERMENTABLE_NAME);
+        assertThat(fermentableDtos.get(0).getAmount()).isEqualTo(FERMENTABLE_AMOUNT);
     }
 }
