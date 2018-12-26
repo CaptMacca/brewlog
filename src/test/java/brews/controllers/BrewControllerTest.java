@@ -27,17 +27,15 @@ public class BrewControllerTest {
     @Mock
     BrewService brewService;
 
-    BrewController brewController;
+    private MockMvc mockMvc;
 
-    MockMvc mockMvc;
-
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        brewController = new BrewController(brewService);
+        BrewController brewController = new BrewController(brewService);
 
         objectMapper = new ObjectMapper();
 
@@ -178,7 +176,7 @@ public class BrewControllerTest {
         BrewDto brew = new BrewDto();
         brew.setRecipe(recipe);
 
-        when(brewService.saveBrew(anyObject())).thenReturn(brew);
+        when(brewService.saveBrew(any(BrewDto.class))).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -202,7 +200,7 @@ public class BrewControllerTest {
         brew.setId(1L);
         brew.setRecipe(recipe);
 
-        when(brewService.updateBrew(anyLong(), anyObject())).thenReturn(brew);
+        when(brewService.updateBrew(anyLong(), any(BrewDto.class))).thenReturn(brew);
 
         // When
         mockMvc.perform(put("/api/brews/1")
@@ -215,7 +213,7 @@ public class BrewControllerTest {
                 .andExpect(jsonPath("$.recipe.name", is("mock")));
 
         // Then
-        verify(brewService, times(1)).updateBrew(anyLong(), anyObject());
+        verify(brewService, times(1)).updateBrew(anyLong(), any(BrewDto.class));
 
     }
 
@@ -230,7 +228,7 @@ public class BrewControllerTest {
         brew.setId(1L);
         brew.setRecipe(recipe);
 
-        when(brewService.updateBrew(anyLong(), anyObject())).thenThrow(new BrewsEntityNotFoundException());
+        when(brewService.updateBrew(anyLong(), any(BrewDto.class))).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         mockMvc.perform(put("/api/brews/1")
@@ -240,7 +238,7 @@ public class BrewControllerTest {
                 .andExpect(status().isNotFound());
 
         // Then
-        verify(brewService, times(1)).updateBrew(anyLong(), anyObject());
+        verify(brewService, times(1)).updateBrew(anyLong(), any(BrewDto.class));
     }
 
     @Test

@@ -14,8 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,13 +71,13 @@ public class BrewMapperTest {
 
         Measurement measurement = new Measurement();
         measurement.setId(1L);
-        measurement.setMeasurementDate(new Date());
+        measurement.setMeasurementDate(LocalDate.now());
         List<Measurement> measurements = new ArrayList<>();
         measurements.add(measurement);
 
         Brew brew = new Brew();
         brew.setId(1L);
-        brew.setBrewDate(new Date());
+        brew.setBrewDate(LocalDate.now());
         brew.setBrewer("brewer");
         brew.setRecipe(recipe);
 

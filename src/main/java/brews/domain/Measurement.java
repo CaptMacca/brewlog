@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by Steve on 1/07/2017.
@@ -28,7 +28,7 @@ public class Measurement implements Serializable {
     @JoinColumn(name = "brew_id")
     private Brew brew;
 
-    private Date measurementDate;
+    private LocalDate measurementDate;
     private MeasurementType type;
     private Double value;
 

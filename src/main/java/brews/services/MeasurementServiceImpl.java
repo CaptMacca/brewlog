@@ -10,7 +10,6 @@ import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

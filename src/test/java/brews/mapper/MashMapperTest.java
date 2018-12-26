@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MashMapperTest {
 
-    MashMapper mashDtoMapping;
+    private MashMapper mashDtoMapping;
 
     @Before
     public void setup() throws Exception {

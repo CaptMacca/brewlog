@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -52,7 +52,7 @@ public class BrewServiceImpl implements BrewService {
         Recipe recipe = recipeRepository.getOne(brewDto.getRecipe().getId());
 
         Brew newBrew = new Brew();
-        newBrew.setBrewDate(new Timestamp(System.currentTimeMillis()));
+        newBrew.setBrewDate(LocalDate.now());
         newBrew.setBrewer(brewDto.getBrewer());
         newBrew.setRecipe(recipe);
         newBrew.setMeasurements(null);

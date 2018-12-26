@@ -6,7 +6,6 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-
 @Mapper(componentModel = "spring",
         uses= {IngredientMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)

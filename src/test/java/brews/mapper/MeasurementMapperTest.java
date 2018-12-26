@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MeasurementMapperTest {
 
-    MeasurementMapper measurementMapper;
+    private MeasurementMapper measurementMapper;
 
     @Before
     public void setup() {
@@ -28,7 +29,7 @@ public class MeasurementMapperTest {
     @Test
     public void testMeasurementToMeasurementDtoMapper() {
         // Given
-        Date currentDate = new Date();
+        LocalDate currentDate = LocalDate.now();
         Measurement measurement = new Measurement();
         measurement.setId(1L);
         measurement.setType(MeasurementType.FG);
@@ -122,7 +123,7 @@ public class MeasurementMapperTest {
     @Test
     public void testUpdateMeasurementFromMeasurementDto() {
         // Given
-        Date currentDate = new Date();
+        LocalDate currentDate = LocalDate.now();
         Measurement measurement = new Measurement();
         measurement.setId(1L);
         measurement.setType(MeasurementType.FG);

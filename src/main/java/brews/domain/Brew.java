@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ public class Brew implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date brewDate;
+    private LocalDate brewDate;
     private String brewer;
 
     @ManyToOne(fetch = FetchType.LAZY)
