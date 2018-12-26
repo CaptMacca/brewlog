@@ -19,7 +19,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,17 +29,15 @@ public class MeasurementControllerTest {
     @Mock
     MeasurementService measurementService;
 
-    MeasurementController measurementController;
+    private MockMvc mockMvc;
 
-    MockMvc mockMvc;
-
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        measurementController = new MeasurementController(measurementService);
+        MeasurementController measurementController = new MeasurementController(measurementService);
         objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(measurementController)
                 .setControllerAdvice(new BrewsControllerExceptionHandler())
@@ -180,7 +177,7 @@ public class MeasurementControllerTest {
         when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
 
         // When
-        mockMvc.perform(put("/api/measurement/1")
+        mockMvc.perform(put("/api/measurement")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(measurement))
                 .accept(MediaType.APPLICATION_JSON_UTF8))
@@ -206,7 +203,7 @@ public class MeasurementControllerTest {
         when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());
 
         // When
-        mockMvc.perform(put("/api/measurement/1")
+        mockMvc.perform(put("/api/measurement")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(measurement))
                 .accept(MediaType.APPLICATION_JSON_UTF8))

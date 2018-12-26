@@ -21,9 +21,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class ImportRecipeServiceTest {
@@ -37,7 +35,7 @@ public class ImportRecipeServiceTest {
     @Mock
     RecipeMapper recipeMapper;
 
-    ImportRecipeService importRecipeService;
+    private ImportRecipeService importRecipeService;
 
     @Before
     public void init() {
@@ -56,7 +54,7 @@ public class ImportRecipeServiceTest {
 
         when(beerXMLReaderService.readBeerXML(any(InputStream.class))).thenReturn(mockImportedRecipes);
         when(beerXMLRecipeMapper.map(any(ImportedRecipe.class))).thenReturn(mockRecipe);
-        when(recipeRepository.findRecipeByName(anyString())).thenReturn(Optional.ofNullable(null)); // Force save of recipe
+        when(recipeRepository.findRecipeByName(anyString())).thenReturn(Optional.empty()); // Force save of recipe
 
         ArgumentCaptor<Recipe> recipeArgumentCaptor = ArgumentCaptor.forClass(Recipe.class);
         ArgumentCaptor<String> recipeNameArgumentCaptor = ArgumentCaptor.forClass(String.class);
@@ -66,13 +64,13 @@ public class ImportRecipeServiceTest {
         List<RecipeDto> recipes = importRecipeService.importBeerXml(mockedFile);
 
         // Then
-        assertNotNull(recipes);
+        assertThat(recipes).isNotEmpty();
         verify(beerXMLReaderService, times(1)).readBeerXML(any(InputStream.class));
         verify(beerXMLRecipeMapper, times(1)).map(importedRecipeArgumentCaptor.capture());
         verify(recipeRepository, times(1)).findRecipeByName(recipeNameArgumentCaptor.capture());
         verify(recipeRepository, times(1)).save(recipeArgumentCaptor.capture());
         verify(recipeRepository, times(1)).flush();
-        verify(recipeMapper, times(1)).toRecipeDtos(anyListOf(Recipe.class));
+        verify(recipeMapper, times(1)).toRecipeDtos(anyList());
 
     }
 
@@ -98,7 +96,7 @@ public class ImportRecipeServiceTest {
         verify(recipeRepository, times(1)).findRecipeByName(anyString());
         verify(recipeRepository, times(0)).save(any(Recipe.class));
         verify(recipeRepository, times(0)).flush();
-        verify(recipeMapper, times(0)).toRecipeDtos(anyListOf(Recipe.class));
+        verify(recipeMapper, times(0)).toRecipeDtos(anyList());
 
     }
 

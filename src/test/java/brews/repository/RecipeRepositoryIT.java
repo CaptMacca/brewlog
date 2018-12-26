@@ -10,8 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -24,12 +23,12 @@ public class RecipeRepositoryIT {
     @Test
     public void testFindAllRecipes() {
         List<Recipe> recipes = recipeRepository.findAll();
-        assertThat(recipes.size(),is(greaterThanOrEqualTo(0)));
+        assertThat(recipes.size()).isGreaterThanOrEqualTo(0);
     }
 
     @Test
     public void testFindOneRecipe() {
         Recipe recipe = recipeRepository.getOne(1L);
-        assertThat(recipe.getId(), equalTo(1L));
+        assertThat(recipe.getId()).isEqualTo(1L);
     }
 }

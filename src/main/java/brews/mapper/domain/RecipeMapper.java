@@ -6,7 +6,6 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-
 @Mapper(componentModel = "spring",
         uses= {IngredientMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -25,4 +24,6 @@ public interface RecipeMapper {
 
     @InheritInverseConfiguration
     List<Recipe> toRecipes(List<RecipeDto> recipeDtos);
+
+    void updateFromRecipeDto(RecipeDto recipeDto, @MappingTarget Recipe recipe);
 }

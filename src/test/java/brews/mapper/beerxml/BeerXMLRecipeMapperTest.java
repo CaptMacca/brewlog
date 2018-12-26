@@ -1,28 +1,24 @@
 package brews.mapper.beerxml;
 
 import brews.MockImportedRecipe;
-import brews.domain.Recipe;
+import brews.domain.*;
 import brews.domain.beerxml.ImportedRecipe;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BeerXMLRecipeMapperTest {
 
-    private ImportFermentablesMapper importFermentablesMapper;
-    private ImportHopMapper importHopMapper;
-    private ImportMashMapper importMashMapper;
-    private ImportYeastMapper importYeastMapper;
     private BeerXMLRecipeMapper beerXMLRecipeMapper;
 
     @Before
     public void setUp() throws Exception {
 
-        this.importFermentablesMapper = new ImportFermentablesMapper();
-        this.importHopMapper = new ImportHopMapper();
-        this.importMashMapper = new ImportMashMapper();
-        this.importYeastMapper = new ImportYeastMapper();
+        ImportFermentablesMapper importFermentablesMapper = new ImportFermentablesMapper();
+        ImportHopMapper importHopMapper = new ImportHopMapper();
+        ImportMashMapper importMashMapper = new ImportMashMapper();
+        ImportYeastMapper importYeastMapper = new ImportYeastMapper();
 
         this.beerXMLRecipeMapper = new BeerXMLRecipeMapper(importFermentablesMapper,importHopMapper,importYeastMapper,importMashMapper);
     }
@@ -31,7 +27,13 @@ public class BeerXMLRecipeMapperTest {
     public void testRecipeMapper() {
 
         Recipe recipe = beerXMLRecipeMapper.map(MockImportedRecipe.getImportedRecipe());
-        assertNotNull(recipe);
+        assertThat(recipe).isNotNull();
+        assertThat(recipe.getMashes()).isNotEmpty();
+        assertThat(recipe.getIngredients()).isNotEmpty();
+        assertThat(recipe.getMashes()).hasAtLeastOneElementOfType(Mash.class);
+        assertThat(recipe.getIngredients()).hasAtLeastOneElementOfType(Fermentable.class);
+        assertThat(recipe.getIngredients()).hasAtLeastOneElementOfType(Hop.class);
+        assertThat(recipe.getIngredients()).hasAtLeastOneElementOfType(Yeast.class);
     }
 
     @Test
@@ -40,7 +42,8 @@ public class BeerXMLRecipeMapperTest {
         mockImportedRecipe.setImportedMash(null);
 
         Recipe recipe = beerXMLRecipeMapper.map(mockImportedRecipe);
-        assertNotNull(recipe);
+        assertThat(recipe).isNotNull();
+        assertThat(recipe.getMashes()).isEmpty();
     }
 
     @Test
@@ -49,7 +52,24 @@ public class BeerXMLRecipeMapperTest {
         mockImportedRecipe.setImportedYeasts(null);
 
         Recipe recipe = beerXMLRecipeMapper.map(mockImportedRecipe);
-        assertNotNull(recipe);
+        assertThat(recipe).isNotNull();
+        assertThat(recipe.getIngredients()).isNotEmpty();
+        assertThat(recipe.getIngredients()
+                .stream()
+                .filter(i -> i instanceof Yeast)).isEmpty();
+    }
+
+    @Test
+    public void testNullHops() {
+        ImportedRecipe mockImportedRecipe = MockImportedRecipe.getImportedRecipe();
+        mockImportedRecipe.setImportedHops(null);
+
+        Recipe recipe = beerXMLRecipeMapper.map(mockImportedRecipe);
+        assertThat(recipe).isNotNull();
+        assertThat(recipe.getIngredients()).isNotEmpty();
+        assertThat(recipe.getIngredients()
+                .stream()
+                .filter(i -> i instanceof Hop)).isEmpty();
     }
 
     @Test
@@ -58,7 +78,11 @@ public class BeerXMLRecipeMapperTest {
         mockImportedRecipe.setImportedFermentables(null);
 
         Recipe recipe = beerXMLRecipeMapper.map(mockImportedRecipe);
-        assertNotNull(recipe);
+        assertThat(recipe).isNotNull();
+        assertThat(recipe.getIngredients()).isNotEmpty();
+        assertThat(recipe.getIngredients()
+                         .stream()
+                         .filter(i -> i instanceof Fermentable)).isEmpty();
     }
 
     @Test
@@ -67,6 +91,6 @@ public class BeerXMLRecipeMapperTest {
         mockImportedRecipe.setImportedStyle(null);
 
         Recipe recipe = beerXMLRecipeMapper.map(mockImportedRecipe);
-        assertNotNull(recipe);
+        assertThat(recipe).isNotNull();
     }
 }

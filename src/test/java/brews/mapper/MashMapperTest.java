@@ -10,13 +10,12 @@ import org.mapstruct.factory.Mappers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class MashMapperTest {
 
-    MashMapper mashDtoMapping;
+    private MashMapper mashDtoMapping;
 
     @Before
     public void setup() throws Exception {
@@ -36,11 +35,10 @@ public class MashMapperTest {
         MashDto mashDto = mashDtoMapping.toMashDto(mash);
 
         // Then
-        assertNotNull(mashDto);
-        assertThat(1L, equalTo(mashDto.getId().longValue()));
-        assertThat(13.0, equalTo(mashDto.getStepTemp()));
-        assertThat("My Mash Step", equalTo(mashDto.getName()));
-        assertThat(12.0, equalTo(mashDto.getStepTime()));
+        assertThat(mashDto.getId()).isEqualTo(1L);
+        assertThat(mashDto.getStepTemp()).isEqualTo(13.0);
+        assertThat(mashDto.getName()).isEqualTo("My Mash Step");
+        assertThat(mashDto.getStepTime()).isEqualTo(12.0);
     }
 
     @Test
@@ -58,9 +56,8 @@ public class MashMapperTest {
         List<MashDto> mashDtos = mashDtoMapping.toMashDtos(mashes);
 
         //Then
-        assertThat(2, equalTo(mashDtos.size()));
-        assertThat(mashDtos.get(0).getId(), equalTo(1L));
-        assertThat(mashDtos.get(1).getId(), equalTo(2L));
-
+        assertThat(mashDtos).hasSize(2);
+        assertThat(mashDtos.get(0).getId()).isEqualTo(1L);
+        assertThat(mashDtos.get(1).getId()).isEqualTo(2L);
     }
 }
