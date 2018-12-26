@@ -24,4 +24,6 @@ public interface RecipeMapper {
 
     @InheritInverseConfiguration
     List<Recipe> toRecipes(List<RecipeDto> recipeDtos);
+
+    void updateFromRecipeDto(RecipeDto recipeDto, @MappingTarget Recipe recipe);
 }

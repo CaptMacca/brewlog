@@ -110,7 +110,6 @@ public class MeasurementServiceImpl implements MeasurementService {
     public MeasurementDto updateMeasurement( MeasurementDto measurementDto) {
 
         log.info("Saving measurement: " + measurementDto.toString());
-//        Measurement detachedMeasurement = measurementMapper.toMeasurement(measurementDto);
 
         Measurement savedMeasurement;
 

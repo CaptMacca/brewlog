@@ -55,12 +55,11 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeDto updateRecipe(Long id, RecipeDto recipeDto) {
 
         log.debug(String.format("Saving recipe: %s", recipeDto.toString()));
-        Recipe detachedRecipe = recipeMapper.toRecipe(recipeDto);
         Recipe existingRecipe = recipeRepository.getOne(id);
 
         if (existingRecipe!=null) {
             log.debug("Updating the recipe in the repository");
-            BeanUtils.copyProperties(detachedRecipe, existingRecipe);
+            recipeMapper.updateFromRecipeDto(recipeDto, existingRecipe);
             Recipe updatedRecipe = recipeRepository.saveAndFlush(existingRecipe);
             return recipeMapper.toRecipeDto(updatedRecipe);
         } else {
