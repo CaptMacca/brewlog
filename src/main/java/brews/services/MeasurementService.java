@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MeasurementService {
 
-    List<MeasurementTypeDto> getMeasurementTypes();
+//    List<MeasurementTypeDto> getMeasurementTypes();
 
     MeasurementDto getMeasurement(Long id);
 

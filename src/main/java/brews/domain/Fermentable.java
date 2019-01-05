@@ -19,6 +19,8 @@ import javax.persistence.Entity;
 @DiscriminatorValue("fermentable")
 public class Fermentable extends Ingredient {
 
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Boolean addAfterBoil;
 
     public Fermentable() {

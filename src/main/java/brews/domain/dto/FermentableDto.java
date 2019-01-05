@@ -9,6 +9,5 @@ import lombok.ToString;
 @ToString
 public class FermentableDto extends IngredientDto {
 
-
     private Boolean addAfterBoil;
 }

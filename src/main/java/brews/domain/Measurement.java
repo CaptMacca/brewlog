@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 /**
  * Created by Steve on 1/07/2017.
@@ -15,8 +15,8 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@EqualsAndHashCode()
-@ToString(exclude = "brew")
+@EqualsAndHashCode
+@ToString
 @Entity
 public class Measurement implements Serializable {
 
@@ -26,10 +26,11 @@ public class Measurement implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brew_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Brew brew;
 
-    private LocalDate measurementDate;
-    private MeasurementType type;
+    private OffsetDateTime measurementDate;
     private Double value;
 
 }

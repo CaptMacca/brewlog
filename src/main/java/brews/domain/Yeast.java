@@ -18,7 +18,7 @@ import javax.persistence.Entity;
 @ToString
 @Entity
 @DiscriminatorValue("yeast")
-public class Yeast extends Ingredient {
+public final class Yeast extends Ingredient {
 
     private String productId;
     private String laboratory;

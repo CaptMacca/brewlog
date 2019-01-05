@@ -21,7 +21,7 @@ create table if not exists brew
 (
 	id bigint auto_increment
 		primary key,
-	brew_date datetime null,
+	brew_date date null,
 	brewer varchar(255) null,
 	recipe_id bigint null,
 	constraint FKf0mv8607tqc9t1sw4o997gcgi

@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -49,29 +48,32 @@ public class BrewServiceImpl implements BrewService {
     @Override
     @Transactional
     public BrewDto saveBrew(BrewDto brewDto) {
-        Recipe recipe = recipeRepository.getOne(brewDto.getRecipe().getId());
 
-        Brew newBrew = new Brew();
-        newBrew.setBrewDate(LocalDate.now());
-        newBrew.setBrewer(brewDto.getBrewer());
-        newBrew.setRecipe(recipe);
-        newBrew.setMeasurements(null);
+        Brew brew = brewMapper.toBrew(brewDto);
 
-        newBrew = brewsRepository.save(newBrew);
+        Recipe recipe = recipeRepository.getOne(brew.getRecipe().getId());
+        brew.setRecipe(recipe);
+        brew.setMeasurements(null);
 
-        return brewMapper.toBrewDto(newBrew);
+        brew = brewsRepository.save(brew);
+
+        return brewMapper.toBrewDto(brew);
     }
 
     @Override
     @Transactional
-    public BrewDto updateBrew(Long id,BrewDto brewDto) {
-        Brew existingBrew = brewsRepository.getOne(id);
+    public BrewDto updateBrew(BrewDto brewDto) {
 
-        if (existingBrew == null) {
+        Long id = brewDto.getId();
+
+        Brew brew = brewsRepository.getOne(id);
+
+        if (brew == null) {
             throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id));
         }
-        brewMapper.updateFromBrewDto(brewDto,existingBrew);
-        Brew updatedBrew = brewsRepository.saveAndFlush(existingBrew);
+
+        brewMapper.updateFromBrewDto(brewDto,brew);
+        Brew updatedBrew = brewsRepository.saveAndFlush(brew);
         return brewMapper.toBrewDto(updatedBrew);
     }
 

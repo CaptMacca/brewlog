@@ -126,7 +126,7 @@ public class RecipeServiceTest {
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(recipeMapper, times(1)).toRecipe(any(RecipeDto.class));
+        verify(recipeMapper, times(1)).updateFromRecipeDto(any(RecipeDto.class),any(Recipe.class));
         verify(recipeRepository, times(1)).getOne(anyLong());
         verify(recipeRepository, times(1)).saveAndFlush(any(Recipe.class));
         verify(recipeMapper, times(1)).toRecipeDto(any(Recipe.class));

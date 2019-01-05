@@ -2,9 +2,7 @@ package brews.services;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.MeasurementType;
 import brews.domain.dto.MeasurementDto;
-import brews.domain.dto.MeasurementTypeDto;
 import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
@@ -38,28 +36,14 @@ public class MeasurementServiceTest {
     }
 
     @Test
-    public void testGetMeasurementTypes() {
-
-        // Given
-
-        // When
-        List<MeasurementTypeDto> test = measurementService.getMeasurementTypes();
-
-        // Then
-        assertThat(test).hasSize(MeasurementType.values().length);
-    }
-
-    @Test
     public void testGetMeasurement() {
 
         // Given
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(1L);
-        measurementDto.setType(MeasurementType.FG.toString());
 
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
-        measurement.setType(MeasurementType.FG);
 
         when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
         when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
@@ -81,13 +65,11 @@ public class MeasurementServiceTest {
         List<MeasurementDto> measurementDtos = new ArrayList<>();
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(1L);
-        measurementDto.setType(MeasurementType.FG.toString());
         measurementDtos.add(measurementDto);
 
         List<Measurement> measurements = new ArrayList<>();
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
-        measurement.setType(MeasurementType.FG);
         measurements.add(measurement);
 
         when(measurementMapper.toMeasurementDtos(anyList())).thenReturn(measurementDtos);
@@ -111,12 +93,10 @@ public class MeasurementServiceTest {
 
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(1L);
-        measurementDto.setType(MeasurementType.FG.toString());
         measurementDto.setBrewId(1L);
 
         Measurement measurement = new Measurement();
         measurement.setId(1L);
-        measurement.setType(MeasurementType.FG);
         measurement.setBrew(brew);
 
         when(measurementMapper.toMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
@@ -140,11 +120,9 @@ public class MeasurementServiceTest {
         // Given
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(1L);
-        measurementDto.setType(MeasurementType.FG.toString());
 
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
-        measurement.setType(MeasurementType.FG);
 
         doNothing().when(measurementMapper).updateFromMeasurementDto(measurementDto,measurement);
         when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
@@ -169,11 +147,9 @@ public class MeasurementServiceTest {
         // Given
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(1L);
-        measurementDto.setType(MeasurementType.FG.toString());
 
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
-        measurement.setType(MeasurementType.FG);
 
         when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
 

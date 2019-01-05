@@ -9,11 +9,12 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @ToString
-public class MeasurementDto {
+public class BrewerDto {
 
     private Long id;
-    private Long brewId;
-    private OffsetDateTime measurementDate;
-    private Double value;
-
+    private String givenName;
+    private String surname;
+    private String email;
+    private Boolean enabled;
+    private OffsetDateTime createdOn;
 }

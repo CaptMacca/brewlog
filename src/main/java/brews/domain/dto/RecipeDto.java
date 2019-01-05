@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,8 +23,8 @@ public class RecipeDto {
     private String finalGravity;
     private String boilTime;
     private String notes;
-
-    private List<IngredientDto> ingredients;
-    private List<MashDto> mashes;
+    private BrewerDto brewer;
+    private Set<IngredientDto> ingredients;
+    private Set<MashDto> mashes;
 
 }
