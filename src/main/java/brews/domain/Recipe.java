@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Domain class that represents a particular recipe
@@ -38,16 +38,25 @@ public class Recipe implements Serializable {
 
     @OneToMany(
             mappedBy = "recipe",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY
     )
-    private List<Ingredient> ingredients;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Ingredient> ingredients;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brewer_id")
+    @EqualsAndHashCode.Exclude
+    private Brewer brewer;
 
     @OneToMany(
             mappedBy = "recipe",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY
     )
-    private List<Mash> mashes;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Mash> mashes;
 
 }

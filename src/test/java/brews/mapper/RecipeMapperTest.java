@@ -14,8 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +46,7 @@ public class RecipeMapperTest {
         Fermentable fermentable = new Fermentable();
         fermentable.setId(1L);
 
-        List<Ingredient> ingredients = new ArrayList<>();
+        Set<Ingredient> ingredients = new HashSet<>();
         ingredients.add(yeast);
         ingredients.add(hop);
         ingredients.add(fermentable);
@@ -65,8 +65,6 @@ public class RecipeMapperTest {
         // Then
         assertThat(recipeDto.getId()).isEqualTo(1L);
         assertThat(recipeDto.getIngredients()).hasSize(3);
-        assertThat(recipeDto.getIngredients().get(0)).isInstanceOf(YeastDto.class);
-        assertThat(recipeDto.getIngredients().get(1)).isInstanceOf(HopDto.class);
-        assertThat(recipeDto.getIngredients().get(2)).isInstanceOf(FermentableDto.class);
+        assertThat(recipeDto.getIngredients()).extracting("class").contains(YeastDto.class,HopDto.class,FermentableDto.class);
     }
 }

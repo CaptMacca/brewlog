@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@EqualsAndHashCode()
+@EqualsAndHashCode
 @ToString
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -24,8 +24,14 @@ public class Ingredient implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private String name;
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Double amount;
 
     private transient String type;
@@ -33,6 +39,8 @@ public class Ingredient implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Recipe recipe;
 
 }

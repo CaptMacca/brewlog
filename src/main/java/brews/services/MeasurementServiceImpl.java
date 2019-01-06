@@ -2,9 +2,7 @@ package brews.services;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.MeasurementType;
 import brews.domain.dto.MeasurementDto;
-import brews.domain.dto.MeasurementTypeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
@@ -13,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -29,23 +26,6 @@ public class MeasurementServiceImpl implements MeasurementService {
         this.measurementRepository = measurementRepository;
         this.brewsRepository = brewsRepository;
         this.measurementMapper = measurementMapper;
-    }
-
-    @Override
-    @Transactional
-    public List<MeasurementTypeDto> getMeasurementTypes() {
-        // Transform the Enum of Measurement Types into a list for angular consumption
-        List<MeasurementTypeDto> measurementTypeDtos = new ArrayList<>();
-        MeasurementType[] measurementTypes = MeasurementType.values();
-
-        for (MeasurementType measurementType : measurementTypes) {
-            MeasurementTypeDto temp = new MeasurementTypeDto();
-            temp.setDescription(measurementType.toString());
-            temp.setCode(measurementType.name());
-
-            measurementTypeDtos.add(temp);
-        }
-        return measurementTypeDtos;
     }
 
     @Override

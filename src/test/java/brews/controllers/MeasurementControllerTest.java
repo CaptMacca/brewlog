@@ -44,37 +44,37 @@ public class MeasurementControllerTest {
                 .build();
     }
 
-    @Test
-    public void testGetMeasurementTypes() throws Exception {
-
-        // Given
-        List<MeasurementTypeDto> measurements = new ArrayList<>();
-
-        MeasurementTypeDto measurementType1 = new MeasurementTypeDto();
-        measurementType1.setCode("Code1");
-        measurementType1.setDescription("Description1");
-        MeasurementTypeDto measurementType2 = new MeasurementTypeDto();
-        measurementType2.setCode("Code2");
-        measurementType2.setDescription("Description2");
-
-        measurements.add(measurementType1);
-        measurements.add(measurementType2);
-
-        when(measurementService.getMeasurementTypes()).thenReturn(measurements);
-
-        // When
-        mockMvc.perform(get("/api/measurement/types")
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].code", is("Code1")))
-                .andExpect(jsonPath("$[1].code", is("Code2")));
-
-        // Then
-        verify(measurementService, times(1)).getMeasurementTypes();
-
-    }
+//    @Test
+//    public void testGetMeasurementTypes() throws Exception {
+//
+//        // Given
+//        List<MeasurementTypeDto> measurements = new ArrayList<>();
+//
+//        MeasurementTypeDto measurementType1 = new MeasurementTypeDto();
+//        measurementType1.setCode("Code1");
+//        measurementType1.setDescription("Description1");
+//        MeasurementTypeDto measurementType2 = new MeasurementTypeDto();
+//        measurementType2.setCode("Code2");
+//        measurementType2.setDescription("Description2");
+//
+//        measurements.add(measurementType1);
+//        measurements.add(measurementType2);
+//
+//        when(measurementService.getMeasurementTypes()).thenReturn(measurements);
+//
+//        // When
+//        mockMvc.perform(get("/api/measurement/types")
+//                .contentType(MediaType.APPLICATION_JSON_UTF8))
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+//                .andExpect(jsonPath("$", hasSize(2)))
+//                .andExpect(jsonPath("$[0].code", is("Code1")))
+//                .andExpect(jsonPath("$[1].code", is("Code2")));
+//
+//        // Then
+//        verify(measurementService, times(1)).getMeasurementTypes();
+//
+//    }
 
     @Test
     public void testGetMeasurement() throws Exception {
@@ -82,7 +82,6 @@ public class MeasurementControllerTest {
         MeasurementDto measurement = new MeasurementDto();
         measurement.setId(1L);
         measurement.setBrewId(1L);
-        measurement.setType("type");
         measurement.setValue(123.00);
 
         when(measurementService.getMeasurement(anyLong())).thenReturn(measurement);
@@ -93,7 +92,6 @@ public class MeasurementControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.brewId", is(1)))
-                .andExpect(jsonPath("$.type", is("type")))
                 .andExpect(jsonPath("$.value", is(123.0)));
 
         // Then
@@ -106,7 +104,6 @@ public class MeasurementControllerTest {
         MeasurementDto measurement = new MeasurementDto();
         measurement.setId(1L);
         measurement.setBrewId(1L);
-        measurement.setType("type");
         measurement.setValue(123.00);
 
         when(measurementService.createMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
@@ -130,7 +127,6 @@ public class MeasurementControllerTest {
         // Given
         MeasurementDto measurement = new MeasurementDto();
         measurement.setId(1L);
-        measurement.setType("type");
         measurement.setValue(123.00);
 
         when(measurementService.createMeasurement(any(MeasurementDto.class))).thenThrow(new IllegalArgumentException());
@@ -150,7 +146,6 @@ public class MeasurementControllerTest {
         // Given
         MeasurementDto measurement = new MeasurementDto();
         measurement.setId(1L);
-        measurement.setType("type");
         measurement.setValue(123.00);
 
         when(measurementService.createMeasurement(any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());
@@ -171,7 +166,6 @@ public class MeasurementControllerTest {
         MeasurementDto measurement = new MeasurementDto();
         measurement.setId(1L);
         measurement.setBrewId(1L);
-        measurement.setType("type");
         measurement.setValue(123.00);
 
         when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
@@ -197,7 +191,6 @@ public class MeasurementControllerTest {
         MeasurementDto measurement = new MeasurementDto();
         measurement.setId(1L);
         measurement.setBrewId(1L);
-        measurement.setType("type");
         measurement.setValue(123.00);
 
         when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());

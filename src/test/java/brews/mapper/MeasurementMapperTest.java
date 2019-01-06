@@ -2,16 +2,14 @@ package brews.mapper;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.MeasurementType;
 import brews.domain.dto.MeasurementDto;
 import brews.mapper.domain.MeasurementMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,10 +27,9 @@ public class MeasurementMapperTest {
     @Test
     public void testMeasurementToMeasurementDtoMapper() {
         // Given
-        LocalDate currentDate = LocalDate.now();
+        OffsetDateTime currentDate = OffsetDateTime.now();
         Measurement measurement = new Measurement();
         measurement.setId(1L);
-        measurement.setType(MeasurementType.FG);
         measurement.setMeasurementDate(currentDate);
         measurement.setValue(1050.0);
 
@@ -43,7 +40,6 @@ public class MeasurementMapperTest {
         assertThat(measurementDto).isNotNull();
         assertThat(measurementDto).isInstanceOf(MeasurementDto.class);
         assertThat(measurementDto.getId()).isEqualTo(1L);
-        assertThat(measurementDto.getType()).isEqualTo("FG");
         assertThat(measurementDto.getMeasurementDate()).isEqualTo(currentDate);
         assertThat(measurementDto.getValue()).isEqualTo(1050.0);
     }
@@ -80,10 +76,9 @@ public class MeasurementMapperTest {
     @Test
     public void testMeasurementDtoToMeasurementMapper() {
         // Given
-        Date currentDate = new Date();
+        OffsetDateTime currentDate = OffsetDateTime.now();
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(1L);
-        measurementDto.setType("FG");
         measurementDto.setMeasurementDate(currentDate);
         measurementDto.setValue(1010.0);
 
@@ -93,13 +88,12 @@ public class MeasurementMapperTest {
         // Then
         assertThat(measurement).isInstanceOf(Measurement.class);
         assertThat(measurement.getId()).isEqualTo(1L);
-        assertThat(measurement.getType()).isEqualTo(MeasurementType.FG);
         assertThat(measurement.getMeasurementDate()).isEqualTo(currentDate);
         assertThat(measurement.getValue()).isEqualTo(1010.0);
     }
 
     @Test
-    public void testMeasurementDtosToMeasurementsMapper(){
+    public void testMeasurementDtosToMeasurementsMapper() {
         // Given
         MeasurementDto measurementDto1 = new MeasurementDto();
         MeasurementDto measurementDto2 = new MeasurementDto();
@@ -123,10 +117,9 @@ public class MeasurementMapperTest {
     @Test
     public void testUpdateMeasurementFromMeasurementDto() {
         // Given
-        LocalDate currentDate = LocalDate.now();
+        OffsetDateTime currentDate = OffsetDateTime.now();
         Measurement measurement = new Measurement();
         measurement.setId(1L);
-        measurement.setType(MeasurementType.FG);
         measurement.setMeasurementDate(currentDate);
         measurement.setValue(1050.0);
 
@@ -138,7 +131,6 @@ public class MeasurementMapperTest {
 
         // Then
         assertThat(measurement.getId()).isEqualTo(1L);
-        assertThat(measurement.getType()).isEqualTo(MeasurementType.FG);
         assertThat(measurement.getMeasurementDate()).isEqualTo(currentDate);
         assertThat(measurement.getValue()).isEqualTo(1040.0);
     }

@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,8 +13,24 @@ import java.util.List;
 public class BrewDto {
 
     private Long id;
-    private Date brewDate;
+    private OffsetDateTime brewDate;
+    private Integer score;
+    private Double spargeVol;
+    private Double totalWater;
+    private Double fermenterVol;
+    private Double estimatedOriginalGravity;
+    private Double measuredOriginalGravity;
+    private Double estimatedPreboilGravity;
+    private Double measuredPreboilGravity;
+    private Double estimatedFinalGravity;
+    private Double measuredFinalGravity;
+    private Double estimatedFermentVolume;
+    private Double measuredFermentVolume;
+    private Double estimatedBottleVolume;
+    private Double measuredBottleVolume;
+    private String notes;
+    private String tastingNotes;
     private RecipeDto recipe;
-    private String brewer;
-    private List<MeasurementDto> measurements;
+    private BrewerDto brewer;
+    private Set<MeasurementDto> measurements;
 }

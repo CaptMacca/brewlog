@@ -1,7 +1,6 @@
 package brews.controllers;
 
 import brews.domain.dto.MeasurementDto;
-import brews.domain.dto.MeasurementTypeDto;
 import brews.services.MeasurementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,12 +25,6 @@ public final class MeasurementController {
 
     public MeasurementController(MeasurementService measurementService) {
         this.measurementService = measurementService;
-    }
-
-    @GetMapping("/types")
-    @ApiOperation("Returns all measurement types for which a value can be recorded")
-    public List<MeasurementTypeDto> getMeasurementTypes() {
-        return measurementService.getMeasurementTypes();
     }
 
     @GetMapping("{id}")

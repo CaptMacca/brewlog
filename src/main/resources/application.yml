@@ -13,12 +13,9 @@ spring:
   #JPA-Hibernate
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
     show-sql: true
     database: mysql
-
-  flyway:
-    baseline-on-migrate: true

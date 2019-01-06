@@ -7,8 +7,7 @@ import brews.domain.beerxml.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Maps the deserialise beer xml domain to the brew log domain
@@ -56,6 +55,7 @@ public class BeerXMLRecipeMapper {
         List<ImportedYeast> _yeasts = source.getImportedYeasts();
         ImportedMash _mashes = source.getImportedMash();
 
+
         if (_fermentables != null) {
             ingredients.addAll(importFermentablesMapper.map(_fermentables, recipe));
         }
@@ -72,8 +72,12 @@ public class BeerXMLRecipeMapper {
             mashes.addAll(importMashMapper.map(_mashes, recipe));
         }
 
-        recipe.setIngredients(ingredients);
-        recipe.setMashes(mashes);
+        Set<Ingredient> importedIngredients = new HashSet<>(ingredients);
+
+        Set<Mash> importedMashes = new HashSet<>(mashes);
+
+        recipe.setIngredients(importedIngredients);
+        recipe.setMashes(importedMashes);
 
         return recipe;
     }

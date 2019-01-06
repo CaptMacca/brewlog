@@ -1,8 +1,10 @@
 package brews.services;
 
 import brews.domain.Brew;
+import brews.domain.Brewer;
 import brews.domain.Recipe;
 import brews.domain.dto.BrewDto;
+import brews.domain.dto.BrewerDto;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.BrewMapper;
@@ -43,10 +45,13 @@ public class BrewServiceTest {
     public void testGetAllBrews() {
 
         // Given
+        BrewerDto brewerDto = new BrewerDto();
+        brewerDto.setId(1L);
+
         List<BrewDto> brews = new ArrayList<>();
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setBrewer("a brewer");
+        brewDto.setBrewer(brewerDto);
         brews.add(brewDto);
 
         when(brewMapper.toBrewDtos(anyList())).thenReturn(brews);
@@ -64,13 +69,19 @@ public class BrewServiceTest {
     public void testGetBrew() {
 
         // Given
+        BrewerDto brewerDto = new BrewerDto();
+        brewerDto.setId(1L);
+
+        Brewer brewer = new Brewer();
+        brewer.setId(1L);
+
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setBrewer("a brewer");
+        brewDto.setBrewer(brewerDto);
 
         Brew brew = new Brew();
         brew.setId(1L);
-        brew.setBrewer("a brewer");
+        brew.setBrewer(brewer);
 
         when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
@@ -93,9 +104,12 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
+        BrewerDto brewerDto = new BrewerDto();
+        brewerDto.setId(1L);
+
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setBrewer("a brewer");
+        brewDto.setBrewer(brewerDto);
         brewDto.setRecipe(recipeDto);
         brews.add(brewDto);
 
@@ -116,22 +130,28 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
+        BrewerDto brewerDto = new BrewerDto();
+        brewerDto.setId(1L);
+
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setBrewer("a brewer");
+        brewDto.setBrewer(brewerDto);
         brewDto.setRecipe(recipeDto);
 
         Recipe recipe = new Recipe();
         recipe.setId(1L);
 
+        Brewer brewer = new Brewer();
+        brewer.setId(1L);
+
         Brew brew = new Brew();
         brew.setId(1L);
-        brew.setBrewer("a brewer");
+        brew.setBrewer(brewer);
         brew.setRecipe(recipe);
 
+        when(brewMapper.toBrew(any(BrewDto.class))).thenReturn(brew);
         when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
         when(brewsRepository.save(any())).thenReturn(brew);
-
 
         // When
         BrewDto test = brewService.saveBrew(brewDto);
@@ -149,26 +169,31 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
+        BrewerDto brewerDto = new BrewerDto();
+        brewerDto.setId(1L);
+
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setBrewer("a brewer");
+        brewDto.setBrewer(brewerDto);
         brewDto.setRecipe(recipeDto);
 
         Recipe recipe = new Recipe();
         recipe.setId(recipeDto.getId());
 
+        Brewer brewer = new Brewer();
+        brewer.setId(1L);
+
         Brew brew = new Brew();
         brew.setId(brewDto.getId());
-        brew.setBrewer(brewDto.getBrewer());
+        brew.setBrewer(brewer);
         brew.setRecipe(recipe);
 
         when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
-        when(brewMapper.toBrew(any(BrewDto.class))).thenReturn(brew);
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
         when(brewsRepository.saveAndFlush(any(Brew.class))).thenReturn(brew);
 
         // When
-        BrewDto test = brewService.updateBrew(1L,brewDto);
+        BrewDto test = brewService.updateBrew(brewDto);
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
@@ -185,24 +210,30 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
+        BrewerDto brewerDto = new BrewerDto();
+        brewerDto.setId(1L);
+
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setBrewer("a brewer");
+        brewDto.setBrewer(brewerDto);
         brewDto.setRecipe(recipeDto);
 
         Recipe recipe = new Recipe();
         recipe.setId(recipeDto.getId());
 
+        Brewer brewer = new Brewer();
+        brewer.setId(1L);
+
         Brew brew = new Brew();
         brew.setId(brewDto.getId());
-        brew.setBrewer(brewDto.getBrewer());
+        brew.setBrewer(brewer);
         brew.setRecipe(recipe);
 
         when(brewMapper.toBrew(any(BrewDto.class))).thenReturn(brew);
         when(brewsRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
-        brewService.updateBrew(1L,brewDto);
+        brewService.updateBrew(brewDto);
 
         // Then
         verify(brewsRepository, times(1)).getOne(anyLong());
@@ -218,9 +249,13 @@ public class BrewServiceTest {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
 
+        Brewer brewer = new Brewer();
+        brewer.setId(1L);
+
+
         Brew brew = new Brew();
         brew.setId(1L);
-        brew.setBrewer("a brewer");
+        brew.setBrewer(brewer);
         brew.setRecipe(recipe);
 
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);

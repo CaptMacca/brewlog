@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,10 +52,13 @@ public class ImportRecipeServiceTest {
         InputStream mockedFile = MockXMLRecipe.getMockedXMLRecipe();
         ImportedRecipes mockImportedRecipes = MockImportedRecipes.getImportedRecipes();
         Recipe mockRecipe = MockRecipe.getRecipe();
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
 
         when(beerXMLReaderService.readBeerXML(any(InputStream.class))).thenReturn(mockImportedRecipes);
         when(beerXMLRecipeMapper.map(any(ImportedRecipe.class))).thenReturn(mockRecipe);
         when(recipeRepository.findRecipeByName(anyString())).thenReturn(Optional.empty()); // Force save of recipe
+        when(recipeMapper.toRecipeDtos(anyList())).thenReturn(Arrays.asList(recipeDto));
 
         ArgumentCaptor<Recipe> recipeArgumentCaptor = ArgumentCaptor.forClass(Recipe.class);
         ArgumentCaptor<String> recipeNameArgumentCaptor = ArgumentCaptor.forClass(String.class);

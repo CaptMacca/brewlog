@@ -20,8 +20,14 @@ import javax.persistence.Entity;
 @DiscriminatorValue("hop")
 public class Hop extends Ingredient {
 
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Double alpha;
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Double additionTime;
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private String hopUsage;
 
     public Hop() {
