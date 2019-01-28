@@ -10,6 +10,7 @@ import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.BrewMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
+import brews.services.impl.BrewServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

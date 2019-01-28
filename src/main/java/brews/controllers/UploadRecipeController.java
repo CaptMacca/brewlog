@@ -31,7 +31,7 @@ public final class UploadRecipeController {
 
     @PostMapping("upload")
     @ApiOperation("Handles the upload of a beer.xml file, will fail if a recipe with the same name already exists in the repository")
-    public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("file") MultipartFile uploadfile) {
+    public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("file") MultipartFile uploadfile, @RequestParam("user") String user) {
 
         log.debug("File upload requested.");
         if (uploadfile.isEmpty()) {
@@ -42,11 +42,15 @@ public final class UploadRecipeController {
             throw new IllegalArgumentException("File is not a beer xml file.");
         }
 
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User has not been supplied.");
+        }
+
         try {
             List<RecipeDto> recipes = new ArrayList<>();
             InputStream fileContents = uploadfile.getInputStream();
             if (fileContents != null) {
-                recipes = importRecipeService.importBeerXml(fileContents);
+                recipes = importRecipeService.importBeerXml(fileContents, user);
             }
 
             return new ResponseEntity<>(recipes, HttpStatus.CREATED);

@@ -1,5 +1,6 @@
-package brews.services;
+package brews.services.impl;
 
+import brews.domain.Brewer;
 import brews.domain.Recipe;
 import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.beerxml.ImportedRecipes;
@@ -7,7 +8,10 @@ import brews.domain.dto.RecipeDto;
 import brews.exceptions.ImportedRecipeExistsException;
 import brews.mapper.beerxml.BeerXMLRecipeMapper;
 import brews.mapper.domain.RecipeMapper;
+import brews.repository.BrewerRepository;
 import brews.repository.RecipeRepository;
+import brews.services.BeerXMLReaderService;
+import brews.services.ImportRecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,16 +32,18 @@ import java.util.Optional;
 public class ImportRecipeServiceImpl implements ImportRecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final BrewerRepository brewerRepository;
     private final BeerXMLRecipeMapper beerXMLRecipeMapper;
     private final BeerXMLReaderService beerXMLReaderService;
     private final RecipeMapper recipeMapper;
 
     @Autowired
-    public ImportRecipeServiceImpl(RecipeRepository recipeRepository, BeerXMLRecipeMapper beerXMLRecipeMapper, BeerXMLReaderService beerXMLReaderService, RecipeMapper recipeMapper) {
+    public ImportRecipeServiceImpl(RecipeRepository recipeRepository, BeerXMLRecipeMapper beerXMLRecipeMapper, BeerXMLReaderService beerXMLReaderService, RecipeMapper recipeMapper, BrewerRepository brewerRepository) {
         this.recipeRepository = recipeRepository;
         this.beerXMLRecipeMapper = beerXMLRecipeMapper;
         this.beerXMLReaderService = beerXMLReaderService;
         this.recipeMapper = recipeMapper;
+        this.brewerRepository = brewerRepository;
     }
 
     /**
@@ -45,7 +51,10 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
      */
     @Override
     @Transactional
-    public List<RecipeDto> importBeerXml(InputStream contents) {
+    public List<RecipeDto> importBeerXml(InputStream contents, String userid) {
+
+        log.debug("Retrieving user");
+        Brewer brewer = brewerRepository.findOneByUserid(userid);
 
         log.debug("Importing beerxml file ");
         ImportedRecipes importedRecipes = beerXMLReaderService.readBeerXML(contents);
@@ -54,20 +63,17 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
         log.debug("Saving recipes in database");
         List<ImportedRecipe> candidateRecipes = importedRecipes.getImportedRecipes();
-        // TODO I dont like this code it needs a rethink
-        for (ImportedRecipe importedRecipe : candidateRecipes) {
-
-            Recipe candidateRecipe = beerXMLRecipeMapper.map(importedRecipe);
-
+        candidateRecipes.stream().map(beerXMLRecipeMapper::map).forEach(candidateRecipe -> {
+            candidateRecipe.setBrewer(brewer);
             Optional<Recipe> existingRecipe = recipeRepository.findRecipeByName(candidateRecipe.getName());
             if (existingRecipe.isPresent()) {
                 throw new ImportedRecipeExistsException("Recipe of same name already exists in recipe database");
             } else {
-                log.debug(String.format("Saving recipe: %s",candidateRecipe.getName()));
+                log.debug(String.format("Saving recipe: %s", candidateRecipe.getName()));
                 recipeRepository.save(candidateRecipe);
             }
             recipes.add(candidateRecipe);
-        }
+        });
 
         recipeRepository.flush();
 

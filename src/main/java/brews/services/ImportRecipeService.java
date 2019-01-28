@@ -6,6 +6,6 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface ImportRecipeService {
-    List<RecipeDto> importBeerXml(InputStream contents);
+    List<RecipeDto> importBeerXml(InputStream contents, String user);
 }
 

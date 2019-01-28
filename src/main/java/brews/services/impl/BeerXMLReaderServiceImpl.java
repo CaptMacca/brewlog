@@ -1,6 +1,7 @@
-package brews.services;
+package brews.services.impl;
 
 import brews.domain.beerxml.ImportedRecipes;
+import brews.services.BeerXMLReaderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

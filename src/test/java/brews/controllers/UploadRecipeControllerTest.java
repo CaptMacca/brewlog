@@ -50,9 +50,9 @@ public class UploadRecipeControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        when(importRecipeService.importBeerXml(any(InputStream.class))).thenReturn(recipes);
+        when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenReturn(recipes);
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload")
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
                 .file(mockMultipartFile);
 
         // When
@@ -60,7 +60,7 @@ public class UploadRecipeControllerTest {
                .andExpect(status().isCreated());
 
         // Then
-        verify(importRecipeService, times(1)).importBeerXml(any(InputStream.class));
+        verify(importRecipeService, times(1)).importBeerXml(any(InputStream.class), anyString());
     }
 
 
@@ -75,7 +75,7 @@ public class UploadRecipeControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload")
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
                 .file(mockMultipartFile);
 
         // When
@@ -83,7 +83,7 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(importRecipeService, times(0)).importBeerXml(any(InputStream.class));
+        verify(importRecipeService, times(0)).importBeerXml(any(InputStream.class), anyString());
     }
 
 
@@ -98,9 +98,9 @@ public class UploadRecipeControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        when(importRecipeService.importBeerXml(any(InputStream.class))).thenReturn(recipes);
+        when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenReturn(recipes);
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload")
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
                 .file(mockMultipartFile);
 
         // When
@@ -108,7 +108,7 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(importRecipeService, times(0)).importBeerXml(any(InputStream.class));
+        verify(importRecipeService, times(0)).importBeerXml(any(InputStream.class), anyString());
 
     }
 
@@ -123,9 +123,9 @@ public class UploadRecipeControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        when(importRecipeService.importBeerXml(any(InputStream.class))).thenThrow(new ImportedRecipeUploadException());
+        when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenThrow(new ImportedRecipeUploadException());
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload")
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
                 .file(mockMultipartFile);
 
         // When
@@ -133,7 +133,7 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(importRecipeService, times(1)).importBeerXml(any(InputStream.class));
+        verify(importRecipeService, times(1)).importBeerXml(any(InputStream.class), anyString());
     }
 
 }

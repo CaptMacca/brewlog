@@ -6,6 +6,7 @@ import brews.domain.dto.MeasurementDto;
 import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
+import brews.services.impl.MeasurementServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

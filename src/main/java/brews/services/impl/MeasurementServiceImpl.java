@@ -1,4 +1,4 @@
-package brews.services;
+package brews.services.impl;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
@@ -7,6 +7,7 @@ import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
+import brews.services.MeasurementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

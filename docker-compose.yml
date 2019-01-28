@@ -2,29 +2,29 @@ version: "3"
 
 services:
 
-  brews-frontend:
+  frontend:
     build:
         context: ../brewlog-ui/
         dockerfile: Dockerfile
     image: brewlog-ui:latest
     depends_on:
-      - brews-backend
+      - backend
     links:
-      - brews-backend
+      - backend
     ports:
       - "4200:80"
 
-  brews-backend:
+  backend:
     build:
           context: .
           dockerfile: Dockerfile
     image: brewlog:latest
     depends_on:
-      - brews-db
+      - db
     ports:
       - "8080:8080"
 
-  brews-db:
+  db:
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=password

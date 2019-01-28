@@ -15,6 +15,7 @@ public class BrewerDto {
     private String givenName;
     private String surname;
     private String email;
+    private String userid;
     private Boolean enabled;
     private OffsetDateTime createdOn;
 }

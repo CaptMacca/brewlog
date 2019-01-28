@@ -2,6 +2,7 @@ package brews.services;
 
 import brews.MockXMLRecipe;
 import brews.domain.beerxml.ImportedRecipes;
+import brews.services.impl.BeerXMLReaderServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 
