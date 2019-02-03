@@ -18,4 +18,5 @@ public class BrewerDto {
     private String userid;
     private Boolean enabled;
     private OffsetDateTime createdOn;
+    private Long versionId;
 }

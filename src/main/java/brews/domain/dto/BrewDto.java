@@ -33,4 +33,5 @@ public class BrewDto {
     private RecipeDto recipe;
     private BrewerDto brewer;
     private Set<MeasurementDto> measurements;
+    private Long versionId;
 }

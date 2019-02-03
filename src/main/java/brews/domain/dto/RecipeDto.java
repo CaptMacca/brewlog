@@ -26,5 +26,5 @@ public class RecipeDto {
     private BrewerDto brewer;
     private Set<IngredientDto> ingredients;
     private Set<MashDto> mashes;
-
+    private Long versionId;
 }

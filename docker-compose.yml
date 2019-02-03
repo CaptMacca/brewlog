@@ -17,6 +17,8 @@ services:
   backend:
     build:
           context: .
+          args:
+            BUILD_VERSION: 0.0.1-SNAPSHOT
           dockerfile: Dockerfile
     image: brewlog:latest
     depends_on:

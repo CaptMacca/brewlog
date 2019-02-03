@@ -1,11 +1,14 @@
+FROM gradle:4.3.0-jdk8-alpine as BUILD
+
+ADD src src
+ADD build.gradle .
+ADD gradle.properties .
+
+RUN gradle build
+
 FROM openjdk:8-jdk-alpine
+ARG BUILD_VERSION
+EXPOSE 8080 8080
+COPY --from=BUILD /home/gradle/build/libs/gradle-${BUILD_VERSION}.jar app.jar
 
-VOLUME /tmp
-
-RUN mkdir /app
-
-ADD ./build/libs/brewlog-**.jar /app/app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/app.jar"]
+ENTRYPOINT exec java $JAVA_OPTS -jar /app.jar

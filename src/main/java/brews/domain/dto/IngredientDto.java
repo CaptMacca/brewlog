@@ -23,4 +23,5 @@ public abstract class IngredientDto {
     private Double amount;
     private String name;
     private String type;
+    private Long versionId;
 }

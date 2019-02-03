@@ -15,5 +15,5 @@ public class MeasurementDto {
     private Long brewId;
     private OffsetDateTime measurementDate;
     private Double value;
-
+    private Long versionId;
 }

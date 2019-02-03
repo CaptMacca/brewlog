@@ -59,4 +59,7 @@ public class Recipe implements Serializable {
     @ToString.Exclude
     private Set<Mash> mashes;
 
+    @Version
+    private Long versionId;
+
 }

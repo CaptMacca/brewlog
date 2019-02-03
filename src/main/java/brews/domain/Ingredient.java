@@ -43,4 +43,6 @@ public class Ingredient implements Serializable {
     @ToString.Exclude
     private Recipe recipe;
 
+    @Version
+    private Long versionId;
 }

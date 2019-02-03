@@ -33,4 +33,7 @@ public class Measurement implements Serializable {
     private OffsetDateTime measurementDate;
     private Double value;
 
+    @Version
+    private Long versionId;
+
 }

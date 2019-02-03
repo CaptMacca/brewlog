@@ -66,10 +66,6 @@ public class Brew implements Serializable {
     @ToString.Exclude
     private Set<Measurement> measurements;
 
-    public Brew addMeasurement(Measurement measurement) {
-        measurement.setBrew(this);
-        this.measurements.add(measurement);
-        return this;
-    }
-
+    @Version
+    private Long versionId;
 }

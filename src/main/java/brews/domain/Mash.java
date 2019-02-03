@@ -38,4 +38,6 @@ public class Mash {
     @ToString.Exclude
     private Recipe recipe;
 
+    @Version
+    private Long versionId;
 }

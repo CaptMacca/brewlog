@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -26,4 +23,6 @@ public class Brewer {
     private String email;
     private Boolean enabled;
     private OffsetDateTime createdOn;
+    @Version
+    private Long versionId;
 }
