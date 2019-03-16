@@ -56,7 +56,7 @@ public class RecipeControllerTest {
         when(recipeService.getAllRecipes()).thenReturn(recipes);
 
         // When
-        mockMvc.perform(get("/api/recipes"))
+        mockMvc.perform(get("/api/recipes/all"))
                 .andExpect(status().isOk());
 
         verify(recipeService, times(1)).getAllRecipes();
@@ -68,10 +68,31 @@ public class RecipeControllerTest {
         when(recipeService.getAllRecipes()).thenThrow(new NullPointerException());
 
         // When
-        mockMvc.perform(get("/api/recipes"))
+        mockMvc.perform(get("/api/recipes/all"))
                 .andExpect(status().is5xxServerError());
 
         verify(recipeService, times(1)).getAllRecipes();
+    }
+
+    @Test
+    public void testGetAllRecipesForUser() throws Exception {
+        // Given
+        // Given
+        List<RecipeDto> recipes = new ArrayList<>();
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+        recipeDto.setName("mock");
+        recipes.add(recipeDto);
+
+        when(recipeService.getAllRecipesForUser(anyString())).thenReturn(recipes);
+
+        // When
+        mockMvc.perform(get("/api/recipes")
+                .param("username","anyuser"))
+                .andExpect(status().isOk());
+
+        verify(recipeService, times(1)).getAllRecipesForUser(anyString());
+
     }
 
     @Test

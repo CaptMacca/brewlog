@@ -23,7 +23,7 @@ public class RecipeDto {
     private String finalGravity;
     private String boilTime;
     private String notes;
-    private BrewerDto brewer;
+    private UserDto user;
     private Set<IngredientDto> ingredients;
     private Set<MashDto> mashes;
     private Long versionId;

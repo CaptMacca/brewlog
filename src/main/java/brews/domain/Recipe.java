@@ -46,9 +46,9 @@ public class Recipe implements Serializable {
     private Set<Ingredient> ingredients;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brewer_id")
+    @JoinColumn(name = "user_id")
     @EqualsAndHashCode.Exclude
-    private Brewer brewer;
+    private User user;
 
     @OneToMany(
             mappedBy = "recipe",

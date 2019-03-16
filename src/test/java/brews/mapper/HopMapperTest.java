@@ -31,7 +31,7 @@ public class HopMapperTest {
         hop.setAmount(10.0);
         hop.setHopUsage("Usage");
         hop.setAdditionTime(12.0);
-        hop.setName("Hop name");
+        hop.setName("Hop roleName");
         hop.setType(Ingredient.INGREDIENT_TYPE_HOP);
 
         // When
@@ -43,7 +43,7 @@ public class HopMapperTest {
         assertThat(hopDto.getAmount()).isEqualTo(10.0);
         assertThat(hopDto.getHopUsage()).isEqualTo("Usage");
         assertThat(hopDto.getAdditionTime()).isEqualTo(12.0);
-        assertThat(hopDto.getName()).isEqualTo("Hop name");
+        assertThat(hopDto.getName()).isEqualTo("Hop roleName");
     }
 
     @Test

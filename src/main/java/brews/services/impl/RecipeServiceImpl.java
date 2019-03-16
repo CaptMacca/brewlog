@@ -39,8 +39,17 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
+    public List<RecipeDto> getAllRecipesForUser(String username) {
+        log.debug("Retrieve recipes for user: {}", username);
+        List<Recipe> recipes = recipeRepository.findRecipesByUserUsername(username);
+
+        return recipeMapper.toRecipeDtos(recipes);
+    }
+
+    @Override
+    @Transactional
     public RecipeDto getRecipeById(Long id) {
-        log.debug("Retrieve recipe with id:" + id);
+        log.debug("Retrieve recipe with id: {}", id);
         Recipe recipe = recipeRepository.getOne(id);
 
         if (recipe!=null) {

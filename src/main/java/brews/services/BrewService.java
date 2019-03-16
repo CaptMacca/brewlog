@@ -7,11 +7,13 @@ import java.util.List;
 public interface BrewService {
     List<BrewDto> getAllBrews();
 
+    List<BrewDto> getAllBrewsForUser(String username);
+
     BrewDto getBrew(Long id);
 
     List<BrewDto> getBrewsForRecipe(Long recipeId);
 
-    BrewDto saveBrew(BrewDto brewDto);
+    BrewDto saveBrew(BrewDto brewDto, String username);
 
     BrewDto updateBrew(BrewDto brewDto);
 
