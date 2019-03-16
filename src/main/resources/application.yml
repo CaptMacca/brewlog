@@ -19,3 +19,8 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
     show-sql: true
     database: mysql
+
+brews:
+  app:
+    jwtSecret: jwtSecretKeyThatNoOneMustKnow
+    jwtExpiration: 86400

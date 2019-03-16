@@ -1,8 +1,6 @@
 package brews.controllers;
 
-import brews.domain.dto.BrewDto;
-import brews.domain.dto.BrewerDto;
-import brews.domain.dto.RecipeDto;
+import brews.domain.dto.*;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.handler.BrewsControllerExceptionHandler;
 import brews.services.BrewService;
@@ -49,48 +47,50 @@ public class BrewControllerTest {
     public void testGetBrews() throws Exception {
 
         // Given
-        BrewerDto brewer = new BrewerDto();
+        UserDto brewer = new UserDto();
         brewer.setId(1L);
 
         List<BrewDto> brews = new ArrayList<>();
         BrewDto brew = new BrewDto();
         brew.setId(1L);
-        brew.setBrewer(brewer);
+        brew.setUser(brewer);
         brews.add(brew);
 
-        when(brewService.getAllBrews()).thenReturn(brews);
+        when(brewService.getAllBrewsForUser(anyString())).thenReturn(brews);
 
         // When
-        mockMvc.perform(get("/api/brews"))
+        mockMvc.perform(get("/api/brews")
+                .param("username","anyuser"))
                 .andExpect(status().isOk());
 
         // Then
-        verify(brewService, times(1)).getAllBrews();
+        verify(brewService, times(1)).getAllBrewsForUser(anyString());
     }
 
     @Test
     public void testGetBrewsFatal() throws Exception {
 
         // Given
-        when(brewService.getAllBrews()).thenThrow(new NullPointerException());
+        when(brewService.getAllBrewsForUser(anyString())).thenThrow(new NullPointerException());
 
         // When
-        mockMvc.perform(get("/api/brews"))
+        mockMvc.perform(get("/api/brews")
+                .param("username", anyString()))
                 .andExpect(status().is5xxServerError());
 
         // Then
-        verify(brewService, times(1)).getAllBrews();
+        verify(brewService, times(1)).getAllBrewsForUser(anyString());
     }
 
     @Test
     public void testGetBrew() throws Exception {
 
         // Given
-        BrewerDto brewer = new BrewerDto();
-        brewer.setId(1L);
+        UserDto user = new UserDto();
+        user.setId(1L);
 
         BrewDto brew = new BrewDto();
-        brew.setBrewer(brewer);
+        brew.setUser(user);
         brew.setId(1L);
 
         when(brewService.getBrew(anyLong())).thenReturn(brew);
@@ -105,11 +105,11 @@ public class BrewControllerTest {
     @Test
     public void testGetBrewUnknownId() throws Exception {
         // Given
-        BrewerDto brewer = new BrewerDto();
-        brewer.setId(1L);
+        UserDto user = new UserDto();
+        user.setId(1L);
 
         BrewDto brew = new BrewDto();
-        brew.setBrewer(brewer);
+        brew.setUser(user);
         brew.setId(1L);
 
         when(brewService.getBrew(anyLong())).thenThrow(new BrewsEntityNotFoundException());
@@ -129,29 +129,34 @@ public class BrewControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        BrewerDto brewer = new BrewerDto();
-        brewer.setId(1L);
+        UserDto user = new UserDto();
+        user.setId(1L);
+        user.setUsername("joe");
 
         BrewDto brew = new BrewDto();
         brew.setId(1L);
-        brew.setBrewer(brewer);
+        brew.setUser(user);
         brew.setRecipe(recipe);
 
-        when(brewService.saveBrew(any(BrewDto.class))).thenReturn(brew);
+        CreateBrewDto createBrew = new CreateBrewDto();
+        createBrew.setBrew(brew);
+        createBrew.setUsername("joe");
+
+        when(brewService.saveBrew(any(BrewDto.class), anyString())).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         // When
         mockMvc.perform(post("/api/brews").contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(brew)))
+                .content(objectMapper.writeValueAsString(createBrew)))
                 .andExpect(status().isAccepted())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.brewer.id", is(1)));
+                .andExpect(jsonPath("$.user.id", is(1)));
 
         // Then
-        verify(brewService, times(1)).saveBrew(any(BrewDto.class));
+        verify(brewService, times(1)).saveBrew(any(BrewDto.class), anyString());
     }
 
     @Test
@@ -161,29 +166,33 @@ public class BrewControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        BrewerDto brewer = new BrewerDto();
-        brewer.setId(1L);
+        UserDto user = new UserDto();
+        user.setId(1L);
 
         BrewDto brew = new BrewDto();
         brew.setId(1L);
-        brew.setBrewer(brewer);
+        brew.setUser(user);
 
-        when(brewService.saveBrew(any(BrewDto.class))).thenReturn(brew);
+        CreateBrewDto createBrew = new CreateBrewDto();
+        createBrew.setBrew(brew);
+        createBrew.setUsername("joe");
+
+        when(brewService.saveBrew(any(BrewDto.class), anyString())).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         // When
         mockMvc.perform(post("/api/brews").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(brew)))
+                .content(objectMapper.writeValueAsString(createBrew)))
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(brewService,times(0)).saveBrew(any(BrewDto.class));
+        verify(brewService,times(0)).saveBrew(any(BrewDto.class), anyString());
 
     }
 
     @Test
-    public void testCreateNewBrewNoBrewer() throws Exception {
+    public void testCreateNewBrewNoUsername() throws Exception {
         // Given
         RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
@@ -192,14 +201,17 @@ public class BrewControllerTest {
         BrewDto brew = new BrewDto();
         brew.setRecipe(recipe);
 
-        when(brewService.saveBrew(any(BrewDto.class))).thenReturn(brew);
+        CreateBrewDto createBrew = new CreateBrewDto();
+        createBrew.setBrew(brew);
+
+        when(brewService.saveBrew(any(BrewDto.class), anyString())).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         // When
         mockMvc.perform(post("/api/brews")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(brew)))
+                .content(objectMapper.writeValueAsString(createBrew)))
                 .andExpect(status().isBadRequest());
 
         // Then

@@ -8,6 +8,8 @@ public interface RecipeService {
 
     List<RecipeDto> getAllRecipes();
 
+    List<RecipeDto> getAllRecipesForUser(String username);
+
     RecipeDto getRecipeById(Long id);
 
     RecipeDto updateRecipe(Long id, RecipeDto recipeDto);

@@ -28,16 +28,22 @@ services:
 
   db:
     image: mysql:latest
+    command: "--default-authentication-plugin=mysql_native_password"
     environment:
-      - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=brews
+      - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=springboot
       - MYSQL_PASSWORD=springboot
-    volumes:
-      - mysqldata:/var/lib/mysql
+#    volumes:
+#      - /home/docker/data/MYSQL/data:/var/lib/mysql
+#      - /home/docker/data/MYSQL/init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
 
-volumes:
-  mysqldata:
-    driver: "local"
+#volumes:
+#
+#  d/data/MYSQL/data:
+#    driver: "local"
+#
+#  d/data/MYSQL/init:
+#    driver: "local"

@@ -75,7 +75,7 @@ public class YeastMapperTest {
         yeastDto.setName("My yeast");
         yeastDto.setAmount(10.0);
         yeastDto.setProductId("Product Id");
-        yeastDto.setLaboratory("Lab name");
+        yeastDto.setLaboratory("Lab roleName");
 
         // When
         Yeast yeast = yeastDtoMapping.toYeast(yeastDto);
@@ -85,7 +85,7 @@ public class YeastMapperTest {
         assertThat(yeast.getName()).isEqualTo("My yeast");
         assertThat(yeast.getAmount()).isEqualTo(10.0);
         assertThat(yeast.getProductId()).isEqualTo("Product Id");
-        assertThat(yeast.getLaboratory()).isEqualTo("Lab name");
+        assertThat(yeast.getLaboratory()).isEqualTo("Lab roleName");
     }
 
     @Test

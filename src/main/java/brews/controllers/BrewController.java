@@ -1,6 +1,7 @@
 package brews.controllers;
 
 import brews.domain.dto.BrewDto;
+import brews.domain.dto.CreateBrewDto;
 import brews.services.BrewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 /**
@@ -27,10 +29,17 @@ public final class BrewController {
         this.brewService = brewService;
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     @ApiOperation("Returns all brews in the repository")
-    public List<BrewDto> getBrews() {
+    @RolesAllowed("ROLE_ADMIN")
+    public List<BrewDto> getAllBrews() {
         return brewService.getAllBrews();
+    }
+
+    @GetMapping()
+    @ApiOperation("Returns all brews in the repository for a given username")
+    public List<BrewDto> getBrews(@RequestParam String username) {
+        return brewService.getAllBrewsForUser(username);
     }
 
     @GetMapping("{id}")
@@ -41,24 +50,27 @@ public final class BrewController {
 
     @PostMapping()
     @ApiOperation("Creates a new brew")
-    public ResponseEntity<BrewDto> create(@RequestBody BrewDto brewDto) {
+    public ResponseEntity<BrewDto> create(@RequestBody CreateBrewDto createBrewDto) {
+
+        String username = createBrewDto.getUsername();
+        BrewDto brewDto = createBrewDto.getBrew();
 
         if (brewDto.getRecipe() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (brewDto.getBrewer() == null) {
+        if (brewDto.getUser() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        BrewDto newBrew = brewService.saveBrew(brewDto);
+        BrewDto newBrew = brewService.saveBrew(brewDto, "joe");
 
         return new ResponseEntity<>(newBrew, HttpStatus.ACCEPTED);
     }
 
     @PutMapping()
     @ApiOperation("Updates a brew identified by the id")
-    public ResponseEntity<BrewDto> update( @RequestBody BrewDto brewDto) {
+    public ResponseEntity<BrewDto> update(@RequestBody BrewDto brewDto) {
         BrewDto updatedBrewDto = brewService.updateBrew(brewDto);
         return ResponseEntity.ok(updatedBrewDto);
     }

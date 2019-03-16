@@ -10,4 +10,5 @@ import java.util.List;
 public interface BrewsRepository extends JpaRepository<Brew, Long> {
 
     List<Brew> findBrewsByRecipeId(Long id);
+    List<Brew> findBrewsByUserUsername(String username);
 }

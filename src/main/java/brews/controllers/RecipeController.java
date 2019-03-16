@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 /**
@@ -26,11 +27,19 @@ public final class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     @ApiOperation("Returns all recipes stored in the repository")
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<RecipeDto>> getAll() {
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
+
+    @GetMapping()
+    @ApiOperation("Returns all recipes stored in the repository for a user")
+    public ResponseEntity<List<RecipeDto>> getAllRecipesForUser(@RequestParam String username) {
+        return ResponseEntity.ok(recipeService.getAllRecipesForUser(username));
+    }
+
 
     @GetMapping("{id}")
     @ApiOperation("Returns a recipe identified by the id")

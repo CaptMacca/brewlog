@@ -14,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -76,18 +75,16 @@ public class BrewMapperTest {
         Set<Measurement> measurements = new HashSet<>();
         measurements.add(measurement);
 
-        Brewer brewer = new Brewer();
-        brewer.setId(1L);
-        brewer.setGivenName("A");
-        brewer.setSurname("Brewer");
-        brewer.setEmail("brewer@brewer.org");
-        brewer.setCreatedOn(OffsetDateTime.now());
-        brewer.setEnabled(true);
+        User user = new User();
+        user.setId(1L);
+        user.setFirstName("A");
+        user.setSurname("Brewer");
+        user.setEmail("brewer@brewer.org");
 
         Brew brew = new Brew();
         brew.setId(1L);
         brew.setBrewDate(OffsetDateTime.now());
-        brew.setBrewer(brewer);
+        brew.setUser(user);
         brew.setRecipe(recipe);
 
         measurement.setBrew(brew);
@@ -102,7 +99,7 @@ public class BrewMapperTest {
         assertThat(brewDto.getId()).isEqualTo(brew.getId());
         assertThat(brewDto.getRecipe()).isNotNull();
         assertThat(brewDto.getId()).isEqualTo(1L);
-        assertThat(brewDto.getBrewer().getId()).isEqualTo(1L);
+        assertThat(brewDto.getUser().getId()).isEqualTo(1L);
         assertThat(brewDto.getRecipe().getIngredients()).hasSize(3);
 
         assertThat(brewDto.getRecipe().getIngredients()).extracting("class").contains(HopDto.class,FermentableDto.class, YeastDto.class);

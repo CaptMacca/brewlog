@@ -30,7 +30,7 @@ public final class UploadRecipeController {
     }
 
     @PostMapping("upload")
-    @ApiOperation("Handles the upload of a beer.xml file, will fail if a recipe with the same name already exists in the repository")
+    @ApiOperation("Handles the upload of a beer.xml file, will fail if a recipe with the same roleName already exists in the repository")
     public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("file") MultipartFile uploadfile, @RequestParam("user") String user) {
 
         log.debug("File upload requested.");
