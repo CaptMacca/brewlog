@@ -1,6 +1,3 @@
-alter table brewer
-  add column version_id bigint default 1 not null;
-
 alter table brew
   add column version_id bigint default 1 not null;
 

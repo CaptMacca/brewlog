@@ -6,7 +6,7 @@ spring:
   application:
     name: brewlog
   datasource:
-    url: jdbc:mysql://192.168.99.100:3306/brews
+    url: jdbc:mysql://10.1.1.79:3306/brews
     username: springboot
     password: springboot
 
