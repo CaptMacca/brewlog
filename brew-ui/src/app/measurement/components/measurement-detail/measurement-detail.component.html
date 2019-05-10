@@ -1,0 +1,90 @@
+<section id="MeasurementForm">
+  <div class="container mt-2">
+    <div class="form-row">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="card-header"><h5>Edit Measurement</h5></div>
+          <div class="card-body">
+            <form
+              [formGroup]="form"
+              class="needs-validation"
+              novalidate
+              (ngSubmit)="save()"
+            >
+              <div class="form-group">
+                <label class="col-form-label">Measurement Date</label><br />
+                <p-calendar
+                  formControlName="measurementDate"
+                  showIcon="true"
+                  id="measurementDate"
+                  dateFormat="dd/mm/yy"
+                  showButtonBar="true"
+                  [ngClass]="{
+                    'is-invalid':
+                      measurementDate.invalid &&
+                      (measurementDate.dirty || measurementDate.touched)
+                  }"
+                ></p-calendar>
+                <div class="invalid-feedback">
+                  <div
+                    *ngFor="
+                      let validation of form_validation_messages.measurementDate
+                    "
+                  >
+                    <span *ngIf="measurementDate.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Measurement Value</label>
+                <input
+                  formControlName="measurementValue"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      measurementValue.invalid &&
+                      (measurementValue.dirty || measurementValue.touched)
+                  }"
+                  id="measurementValue"
+                  type="text"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.measurementValue">
+                    <span *ngIf="measurementValue.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div>
+                  <button
+                    class="btn btn-primary btn-sm "
+                    name="submit"
+                    type="submit"
+                    [disabled]="form.invalid && submitted"
+                  >
+                    <fa-icon [icon]="['fas', 'save']"></fa-icon>&nbsp; Save
+                    Measurement
+                  </button>
+                  <button
+                    class="btn btn-light btn-sm"
+                    type="button"
+                    (click)="backToMeasurements()"
+                  >
+                    <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon
+                    >&nbsp;Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,153 @@
+
+<section id="RegistrationForm">
+  <div class="container mt-2">
+    <div class="form-row">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="card-header"><h5>Register a New Account</h5></div>
+          <div class="card-body">
+            <form
+              [formGroup]="form"
+              class="needs-validation"
+              novalidate
+              (ngSubmit)="register()"
+            >
+              <div class="form-group">
+                <label class="col-form-label">First Name</label>
+                <input
+                  formControlName="firstName"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      firstName.invalid &&
+                      (firstName.dirty || firstName.touched)
+                  }"
+                  id="firstName"
+                  type="text"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.firstName">
+                    <span *ngIf="firstName.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Surname</label>
+                <input
+                  formControlName="surname"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      surname.invalid &&
+                      (surname.dirty || surname.touched)
+                  }"
+                  id="surname"
+                  type="text"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.surname">
+                    <span *ngIf="surname.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Username</label>
+                <input
+                  formControlName="username"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      username.invalid &&
+                      (username.dirty || username.touched)
+                  }"
+                  id="username"
+                  type="text"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.username">
+                    <span *ngIf="username.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Email</label>
+                <input
+                  formControlName="email"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      email.invalid &&
+                      (email.dirty || email.touched)
+                  }"
+                  id="email"
+                  type="email"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.email">
+                    <span *ngIf="email.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Password</label>
+                <input
+                  formControlName="password"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      password.invalid &&
+                      (password.dirty || password.touched)
+                  }"
+                  id="password"
+                  type="password"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.password">
+                    <span *ngIf="password.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div>
+                  <button
+                    class="btn btn-primary btn-sm "
+                    name="Register"
+                    type="submit"
+                    [disabled]="form.invalid && submitted"
+                  >
+                    <fa-icon [icon]="['fas', 'save']"></fa-icon>&nbsp; Register
+                  </button>
+                  <button
+                    class="btn btn-light btn-sm"
+                    type="button"
+                    (click)="backToWelcome()"
+                  >
+                    <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon
+                    >&nbsp;Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

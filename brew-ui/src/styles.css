@@ -1,0 +1,12 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import '~ngx-toastr/toastr.css';
+@import "~ngx-simple-modal/dist/styles/simple-modal.css";
+@import "~primeicons/primeicons.css";
+@import "~primeng/resources/themes/nova-light/theme.css";
+@import "~primeng/resources/primeng.min.css";
+
+
+/* Add application styles & imports to this file! */
+#toast-container > div {
+  opacity:1;
+}

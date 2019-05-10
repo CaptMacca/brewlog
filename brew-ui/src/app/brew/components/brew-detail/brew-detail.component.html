@@ -1,0 +1,305 @@
+<section id="edit-brew" class="p-5">
+  <div *ngIf="(brew$ | async) as brew">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card w-100">
+            <div class="card-header"><h5>Edit Brew</h5></div>
+            <div class="card-body">
+              <form
+                [formGroup]="brewForm"
+                ngxsForm="brews.brewForm"
+                class="needs-validation"
+                novalidate
+                (ngSubmit)="save()"
+              >
+                <div class="form-group">
+                  <label class="col-form-label">Brew Date</label><br />
+                  <p-calendar
+                    formControlName="brewDate"
+                    showIcon="true"
+                    id="brewDate"
+                    dateFormat="dd/mm/yy"
+                    showButtonBar="true"
+                    [ngClass]="{
+                      'is-invalid':
+                        brewDate.invalid &&
+                        (brewDate.dirty || brewDate.touched)
+                    }"
+                  ></p-calendar>
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-lable">Score</label>
+                  <input
+                    formControlName="score"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        score.invalid &&
+                        (score.dirty || score.touched)
+                    }"
+                    id="score"
+                    type="text"
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Sparge Water</label>
+                  <input
+                    formControlName="spargeVol"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        spargeVol.invalid &&
+                        (spargeVol.dirty || spargeVol.touched)
+                    }"
+                    id="spargeVol"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Total Water Required</label>
+                  <input
+                    formControlName="totalWater"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        totalWater.invalid &&
+                        (totalWater.dirty || totalWater.touched)
+                    }"
+                    id="totalWater"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Fermenter Volume</label>
+                  <input
+                    formControlName="fermenterVol"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        fermenterVol.invalid &&
+                        (fermenterVol.dirty || fermenterVol.touched)
+                    }"
+                    id="fermenterVol"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Estimated Pre Boil Gravity</label>
+                  <input
+                    formControlName="estimatedPreboilGravity"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        estimatedPreboilGravity.invalid &&
+                        (estimatedPreboilGravity.dirty || estimatedPreboilGravity.touched)
+                    }"
+                    id="estimatedPreboilGravity"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Measured Pre Boil Gravity</label>
+                  <input
+                    formControlName="measuredPreboilGravity"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        measuredPreboilGravity.invalid &&
+                        (measuredPreboilGravity.dirty || measureddPreboilGravity.touched)
+                    }"
+                    id="measuredPreboilGravity"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Estimated Original Gravity</label>
+                  <input
+                    formControlName="estimatedOriginalGravity"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        estimatedOriginalGravity.invalid &&
+                        (estimatedOriginalGravity.dirty || estimatedOriginalGravity.touched)
+                    }"
+                    id="estimatedOriginalGravity"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Measured Original Gravity</label>
+                  <input
+                    formControlName="measuredOriginalGravity"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        measuredOriginalGravity.invalid &&
+                        (measuredOriginalGravity.dirty || measureddOriginalGravity.touched)
+                    }"
+                    id="measuredOriginalGravity"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Estimated Final Gravity</label>
+                  <input
+                    formControlName="estimatedFinalGravity"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        estimatedFinalGravity.invalid &&
+                        (estimatedFinalGravity.dirty || estimatedFinalGravity.touched)
+                    }"
+                    id="estimatedFinalGravity"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Measured Final Gravity</label>
+                  <input
+                    formControlName="measuredFinalGravity"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        measuredFinalGravity.invalid &&
+                        (measuredFinalGravity.dirty || measuredFinalGravity.touched)
+                    }"
+                    id="measuredFinalGravity"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Estimated Fermenter Volume</label>
+                  <input
+                    formControlName="estimatedFermentVolume"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        estimatedFermentVolume.invalid &&
+                        (estimatedFermentVolume.dirty || estimatedFermentVolume.touched)
+                    }"
+                    id="estimatedFermentVolume"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Measured Fermenter Volume</label>
+                  <input
+                    formControlName="measuredFermentVolume"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        measuredFermentVolume.invalid &&
+                        (measuredFermentVolume.dirty || measuredFermentVolume.touched)
+                    }"
+                    id="measuredFermenterVolume"
+                    type="text"
+                  />
+                  <div class="invalid-feedback">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label">Estimated Bottle Volume</label>
+                    <input
+                      formControlName="estimatedBottleVolume"
+                      class="form-control"
+                      [ngClass]="{
+                        'is-invalid':
+                          estimatedBottleVolume.invalid &&
+                          (estimatedBottleVolume.dirty || estimatedBottleVolume.touched)
+                      }"
+                      id="estimatedBottleVolume"
+                      type="text"
+                    />
+                    <div class="invalid-feedback">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label">Measured Bottle Volume</label>
+                    <input
+                      formControlName="measuredBottleVolume"
+                      class="form-control"
+                      [ngClass]="{
+                        'is-invalid':
+                          measuredBottleVolume.invalid &&
+                          (measuredBottleVolume.dirty || measuredBottleVolume.touched)
+                      }"
+                      id="measuredBottleVolume"
+                      type="text"
+                    />
+                    <div class="invalid-feedback">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label">Brewing Notes</label>
+                    <textarea
+                      formControlName="notes"
+                      rows="10"
+                      class="form-control"
+                      [ngClass]="{
+                        'is-invalid':
+                          notes.invalid &&
+                          (notes.dirty || notes.touched)
+                      }"
+                      id="notes"
+                      type="text"
+                    ></textarea>
+                    <div class="invalid-feedback">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label">Tasting Notes</label>
+                    <textarea
+                      formControlName="tastingNotes"
+                      rows="10"
+                      class="form-control"
+                      [ngClass]="{
+                        'is-invalid':
+                          tastingNotes.invalid &&
+                          (tastingNotes.dirty || tastingNotes.touched)
+                      }"
+                      id="tastingNotes"
+                      type="text"
+                    ></textarea>
+                    <div class="invalid-feedback">
+                    </div>
+                  </div>
+              </form>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm attach-left" (click)="save()" [disabled]="!brewForm.valid || !brewForm.dirty">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>&nbsp;Save
+              </button>&nbsp;
+              <button class="btn btn-secondary btn-sm attach-left" (click)="gotoMeasurements()" [disabled]="brewId === 0">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>&nbsp;Measurements
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

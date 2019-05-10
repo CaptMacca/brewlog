@@ -4,7 +4,7 @@ services:
 
   frontend:
     build:
-      context: ../brewlog-ui/
+      context: ./brew-ui/
       dockerfile: Dockerfile
     image: brewlog-ui:latest
     depends_on:
@@ -16,7 +16,8 @@ services:
 
   backend:
     build:
-      context: .
+      context: ./brew-server
+      dockerfile: Dockerfile
       args:
         BUILD_VERSION: 0.0.1-SNAPSHOT
         dockerfile: Dockerfile

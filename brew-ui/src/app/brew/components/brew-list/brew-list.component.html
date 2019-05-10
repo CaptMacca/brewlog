@@ -1,0 +1,55 @@
+<section id="brew-list">
+  <div class="container">
+    <div class="table-responsive mt-3">
+      <div *ngIf="(brews$ | async) as brews">
+        <div *ngIf="brews.length">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Recipe Name</th>
+                <th>Brew Date</th>
+                <th>Brewer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let brew of brews">
+                <td>
+                  <button class="btn btn-success btn-sm" (click)="editBrew(brew.id)">
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>&nbsp;Edit
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="confirmDelete(brew.id)">
+                    <fa-icon [icon]="['fas', 'eraser']"></fa-icon>&nbsp;Delete
+                  </button>
+                </td>
+                <td>{{ brew.recipe.name }}</td>
+                <td>{{ brew.brewDate | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ brew.brewer?.givenName }} {{ brew.brewer?.surname }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!brews.length">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Recipe Name</th>
+                <th>Brew Date</th>
+                <th>Brewer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4">No Brews found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" (click)="addBrew()">
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>&nbsp;Add Brew
+      </button>
+    </div>
+  </div>
+</section>

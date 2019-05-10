@@ -1,0 +1,76 @@
+<!-- Showcase slider -->
+<section id="showcase">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item carousel-image-1 active">
+        <div class="container">
+          <div class="carousel-caption d-none d-sm-block text-right mb-5">
+            <h2 class="display-3">Record a Brew</h2>
+            <p class="lead">
+              Record your brewing effort, keep a log of the vital numbers to improve and make your
+              brew day more repeatable and efficient
+            </p>
+            <a class="btn btn-lg btn-primary" [routerLink]="['/brews']" role="button"
+              >Record Brew</a
+            >
+            &nbsp;
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item carousel-image-2">
+        <div class="container">
+          <div class="carousel-caption d-none d-sm-block mb-5">
+            <h2 class="display-3">View Recipes</h2>
+            <p class="lead">View your stored recipes to choose your next brew.</p>
+            <a class="btn btn-lg btn-primary" [routerLink]="['/recipes']" role="button">
+              View Recipes
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item carousel-image-3">
+        <div class="container">
+          <div class="carousel-caption d-none d-sm-block text-right mb-5">
+            <h2 class="display-3">Import Recipes</h2>
+            <p class="lead">
+              Import an exported beersmith recipe into the brewlog database to use and record when
+              you brew.
+            </p>
+            <a class="btn btn-lg btn-primary" [routerLink]="['/import']" role="button"
+              >Import Recipe</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#myCarousel" data-slide="prev" class="carousel-control-prev">
+      <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a href="#myCarousel" data-slide="next" class="carousel-control-next">
+      <span class="carousel-control-next-icon"></span>
+    </a>
+  </div>
+</section>
+
+<!-- Ad Section -->
+<section id="ad" class="p-5">
+  <div>
+    <div class="row">
+      <div class="col">
+        <div class="container pt-5">
+          <h1>Welcome to Brew Log</h1>
+          <p class="d-none d-md-block">
+            A little app to record your home brewing efforts and track vital stats on the brew day
+            and whilst your latest tasty brew is fermenting. Accurate recording of stats will
+            allowing you to repeat success and perhaps determine why a brew failed.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

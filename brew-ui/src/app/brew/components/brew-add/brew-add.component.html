@@ -1,0 +1,46 @@
+<section id="brew">
+  <div class="container">
+    <div class="table-responsive mt-3">
+      <div *ngIf="(recipes$ | async) as recipes">
+        <div *ngIf="recipes.length">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Recipe Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let recipe of recipes">
+                <td>
+                  <button class="btn btn-success bt-sm" (click)="saveBrew(recipe)">
+                    <fa-icon [icon]="['fas', 'beer']"></fa-icon>&nbsp; Brew It
+                  </button>
+                </td>
+                <td>{{ recipe.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!recipes.length">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Recipe Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="3">No Recipes found, import some to brew</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" (click)="backToBrewsList()">
+        <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>&nbsp; Return to Brews
+      </button>
+    </div>
+  </div>
+</section>
