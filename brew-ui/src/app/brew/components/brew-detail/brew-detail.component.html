@@ -6,284 +6,182 @@
           <div class="card w-100">
             <div class="card-header"><h5>Edit Brew</h5></div>
             <div class="card-body">
-              <form
-                [formGroup]="brewForm"
-                ngxsForm="brews.brewForm"
-                class="needs-validation"
-                novalidate
-                (ngSubmit)="save()"
-              >
+              <form [formGroup]="brewForm" ngxsForm="brews.brewForm" class="needs-validation" novalidate
+                (ngSubmit)="save()">
                 <div class="form-group">
                   <label class="col-form-label">Brew Date</label><br />
-                  <p-calendar
-                    formControlName="brewDate"
-                    showIcon="true"
-                    id="brewDate"
-                    dateFormat="dd/mm/yy"
-                    showButtonBar="true"
+                  <p-calendar formControlName="brewDate" showIcon="true" id="brewDate" dateFormat="dd/mm/yy" showButtonBar="true"
                     [ngClass]="{
                       'is-invalid':
-                        brewDate.invalid &&
-                        (brewDate.dirty || brewDate.touched)
-                    }"
-                  ></p-calendar>
+                        brewDate.dirty && brewDate.touched && brewDate.invalid
+                    }"></p-calendar>
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-lable">Score</label>
-                  <input
-                    formControlName="score"
-                    class="form-control"
+                  <input formControlName="score" class="form-control" id="score" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        score.invalid &&
-                        (score.dirty || score.touched)
-                    }"
-                    id="score"
-                    type="text"
-                  />
+                        score.dirty && score.touched && score.invalid
+                    }"/>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Sparge Water</label>
-                  <input
-                    formControlName="spargeVol"
-                    class="form-control"
+                  <input formControlName="spargeVol" class="form-control" id="spargeVol" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        spargeVol.invalid &&
-                        (spargeVol.dirty || spargeVol.touched)
-                    }"
-                    id="spargeVol"
-                    type="text"
-                  />
+                        spargeVol.dirty && spargeVol.touched && spargeVol.invalid
+                    }"/>
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Total Water Required</label>
-                  <input
-                    formControlName="totalWater"
-                    class="form-control"
+                  <input formControlName="totalWater" class="form-control" id="totalWater" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        totalWater.invalid &&
-                        (totalWater.dirty || totalWater.touched)
-                    }"
-                    id="totalWater"
-                    type="text"
-                  />
+                        totalWater.dirty && totalWater.touched && totalWater.invalid
+                    }"/>
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Fermenter Volume</label>
-                  <input
-                    formControlName="fermenterVol"
-                    class="form-control"
+                  <input formControlName="fermenterVol" class="form-control" id="fermenterVol" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        fermenterVol.invalid &&
-                        (fermenterVol.dirty || fermenterVol.touched)
-                    }"
-                    id="fermenterVol"
-                    type="text"
-                  />
+                        fermenterVol.dirty && fermenterVol.touched && fermenterVol.invalid
+                    }"/>
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Estimated Pre Boil Gravity</label>
-                  <input
-                    formControlName="estimatedPreboilGravity"
-                    class="form-control"
+                  <input id="estimatedPreboilGravity" type="text" formControlName="estimatedPreboilGravity" class="form-control"
                     [ngClass]="{
                       'is-invalid':
-                        estimatedPreboilGravity.invalid &&
-                        (estimatedPreboilGravity.dirty || estimatedPreboilGravity.touched)
-                    }"
-                    id="estimatedPreboilGravity"
-                    type="text"
-                  />
+                        estimatedPreboilGravity.dirty && estimatedPreboilGravity.touched && estimatedPreboilGravity.invalid
+                    }"/>
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Measured Pre Boil Gravity</label>
-                  <input
-                    formControlName="measuredPreboilGravity"
-                    class="form-control"
+                  <input formControlName="measuredPreboilGravity" class="form-control" id="measuredPreboilGravity" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        measuredPreboilGravity.invalid &&
-                        (measuredPreboilGravity.dirty || measureddPreboilGravity.touched)
+                        measuredPreboilGravity.dirty && measureddPreboilGravity.touched && measuredPreboilGravity.invalid
                     }"
-                    id="measuredPreboilGravity"
-                    type="text"
                   />
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Estimated Original Gravity</label>
-                  <input
-                    formControlName="estimatedOriginalGravity"
-                    class="form-control"
+                  <input formControlName="estimatedOriginalGravity" class="form-control" id="estimatedOriginalGravity" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        estimatedOriginalGravity.invalid &&
-                        (estimatedOriginalGravity.dirty || estimatedOriginalGravity.touched)
+                        estimatedOriginalGravity.dirty && estimatedOriginalGravity.touched && estimatedOriginalGravity.invalid
                     }"
-                    id="estimatedOriginalGravity"
-                    type="text"
                   />
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Measured Original Gravity</label>
-                  <input
-                    formControlName="measuredOriginalGravity"
-                    class="form-control"
+                  <input formControlName="measuredOriginalGravity" class="form-control" id="measuredOriginalGravity" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        measuredOriginalGravity.invalid &&
-                        (measuredOriginalGravity.dirty || measureddOriginalGravity.touched)
+                        measuredOriginalGravity.dirty && measureddOriginalGravity.touched && measuredOriginalGravity.invalid
                     }"
-                    id="measuredOriginalGravity"
-                    type="text"
                   />
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Estimated Final Gravity</label>
-                  <input
-                    formControlName="estimatedFinalGravity"
-                    class="form-control"
+                  <input formControlName="estimatedFinalGravity" class="form-control" id="estimatedFinalGravity" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        estimatedFinalGravity.invalid &&
-                        (estimatedFinalGravity.dirty || estimatedFinalGravity.touched)
+                        estimatedFinalGravity.dirty && estimatedFinalGravity.touched && estimatedFinalGravity.invalid
                     }"
-                    id="estimatedFinalGravity"
-                    type="text"
                   />
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Measured Final Gravity</label>
-                  <input
-                    formControlName="measuredFinalGravity"
-                    class="form-control"
+                  <input formControlName="measuredFinalGravity" class="form-control" id="measuredFinalGravity" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        measuredFinalGravity.invalid &&
-                        (measuredFinalGravity.dirty || measuredFinalGravity.touched)
+                        measuredFinalGravity.dirty && measuredFinalGravity.touched && measuredFinalGravity.invalid
                     }"
-                    id="measuredFinalGravity"
-                    type="text"
                   />
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Estimated Fermenter Volume</label>
-                  <input
-                    formControlName="estimatedFermentVolume"
-                    class="form-control"
+                  <input formControlName="estimatedFermentVolume" class="form-control" id="estimatedFermentVolume" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        estimatedFermentVolume.invalid &&
-                        (estimatedFermentVolume.dirty || estimatedFermentVolume.touched)
+                        estimatedFermentVolume.dirty && estimatedFermentVolume.touched && estimatedFermentVolume.invalid
                     }"
-                    id="estimatedFermentVolume"
-                    type="text"
                   />
                   <div class="invalid-feedback">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Measured Fermenter Volume</label>
-                  <input
-                    formControlName="measuredFermentVolume"
-                    class="form-control"
+                  <input formControlName="measuredFermentVolume" class="form-control" id="measuredFermenterVolume" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        measuredFermentVolume.invalid &&
-                        (measuredFermentVolume.dirty || measuredFermentVolume.touched)
+                        measuredFermentVolume.dirty && measuredFermentVolume.touched && measuredFermentVolume.invalid
                     }"
-                    id="measuredFermenterVolume"
-                    type="text"
                   />
                   <div class="invalid-feedback">
                   </div>
                 </div>
-
                 <div class="form-group">
                     <label class="col-form-label">Estimated Bottle Volume</label>
-                    <input
-                      formControlName="estimatedBottleVolume"
-                      class="form-control"
+                    <input formControlName="estimatedBottleVolume" class="form-control" id="estimatedBottleVolume" type="text"
                       [ngClass]="{
                         'is-invalid':
-                          estimatedBottleVolume.invalid &&
-                          (estimatedBottleVolume.dirty || estimatedBottleVolume.touched)
+                          estimatedBottleVolume.dirty && estimatedBottleVolume.touched && estimatedBottleVolume.invalid
                       }"
-                      id="estimatedBottleVolume"
-                      type="text"
                     />
                     <div class="invalid-feedback">
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-form-label">Measured Bottle Volume</label>
-                    <input
-                      formControlName="measuredBottleVolume"
-                      class="form-control"
+                    <input formControlName="measuredBottleVolume" class="form-control" id="measuredBottleVolume" type="text"
                       [ngClass]="{
                         'is-invalid':
-                          measuredBottleVolume.invalid &&
-                          (measuredBottleVolume.dirty || measuredBottleVolume.touched)
+                          measuredBottleVolume.dirty && measuredBottleVolume.touched && measuredBottleVolume.invalid
                       }"
-                      id="measuredBottleVolume"
-                      type="text"
                     />
                     <div class="invalid-feedback">
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-form-label">Brewing Notes</label>
-                    <textarea
-                      formControlName="notes"
-                      rows="10"
-                      class="form-control"
+                    <textarea formControlName="notes" rows="10" class="form-control" id="notes" type="text"
                       [ngClass]="{
                         'is-invalid':
-                          notes.invalid &&
-                          (notes.dirty || notes.touched)
-                      }"
-                      id="notes"
-                      type="text"
-                    ></textarea>
+                          notes.dirty && notes.touched && notes.invalid
+                      }"></textarea>
                     <div class="invalid-feedback">
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-form-label">Tasting Notes</label>
-                    <textarea
-                      formControlName="tastingNotes"
-                      rows="10"
-                      class="form-control"
+                    <textarea formControlName="tastingNotes" rows="10" class="form-control" id="tastingNotes" type="text"
                       [ngClass]="{
                         'is-invalid':
-                          tastingNotes.invalid &&
-                          (tastingNotes.dirty || tastingNotes.touched)
-                      }"
-                      id="tastingNotes"
-                      type="text"
-                    ></textarea>
+                          tastingNotes.dirty && tastingNotes.touched && tastingNotes.invalid
+                      }"></textarea>
                     <div class="invalid-feedback">
                     </div>
                   </div>

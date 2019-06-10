@@ -5,25 +5,15 @@
           <div class="card">
             <div class="card-header"><h5>Login</h5></div>
             <div class="card-body">
-              <form
-                [formGroup]="form"
-                class="needs-validation"
-                novalidate
-                (ngSubmit)="login()"
+              <form [formGroup]="form" class="needs-validation" novalidate (ngSubmit)="login()"
               >
                 <div class="form-group">
                   <label class="col-form-label">Username</label>
                   <input
-                    formControlName="username"
-                    class="form-control"
+                    formControlName="username" class="form-control" id="username" type="text"
                     [ngClass]="{
                       'is-invalid':
-                        username.invalid &&
-                        (username.dirty || username.touched)
-                    }"
-                    id="username"
-                    type="text"
-                  />
+                        username.dirty && username.touched && username.invalid}"/>
                   <div class="invalid-feedback">
                     <div *ngFor="let validation of form_validation_messages.username">
                       <span *ngIf="username.hasError(validation.type)">
@@ -32,20 +22,14 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="form-group">
                   <label class="col-form-label">Password</label>
                   <input
-                    formControlName="password"
-                    class="form-control"
+                    formControlName="password" class="form-control" id="password" type="password"
                     [ngClass]="{
                       'is-invalid':
-                        password.invalid &&
-                        (password.dirty || password.touched)
-                    }"
-                    id="password"
-                    type="password"
-                  />
+                        password.dirty && password.touched && password.invalid
+                    }"/>
                   <div class="invalid-feedback">
                     <div *ngFor="let validation of form_validation_messages.password">
                       <span *ngIf="password.hasError(validation.type)">
@@ -54,22 +38,13 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="form-group">
                   <div>
-                    <button
-                      class="btn btn-primary btn-sm "
-                      name="Register"
-                      type="submit"
-                      [disabled]="form.invalid && submitted"
-                    >
+                    <button class="btn btn-primary btn-sm" name="Register" type="submit"
+                     [disabled]="form.invalid && submitted">
                       <fa-icon [icon]="['fas', 'save']"></fa-icon>&nbsp; Login
                     </button>
-                    <button
-                      class="btn btn-light btn-sm"
-                      type="button"
-                      (click)="signUp()"
-                    >
+                    <button class="btn btn-light btn-sm" type="button" (click)="signUp()"                    >
                       <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>&nbsp;Sign up
                     </button>
                   </div>

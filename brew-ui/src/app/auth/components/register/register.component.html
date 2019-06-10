@@ -6,25 +6,14 @@
         <div class="card">
           <div class="card-header"><h5>Register a New Account</h5></div>
           <div class="card-body">
-            <form
-              [formGroup]="form"
-              class="needs-validation"
-              novalidate
-              (ngSubmit)="register()"
-            >
+            <form [formGroup]="form" class="needs-validation" novalidate (ngSubmit)="register()">
               <div class="form-group">
                 <label class="col-form-label">First Name</label>
-                <input
-                  formControlName="firstName"
-                  class="form-control"
+                <input formControlName="firstName" class="form-control" id="firstName" type="text"
                   [ngClass]="{
                     'is-invalid':
-                      firstName.invalid &&
-                      (firstName.dirty || firstName.touched)
-                  }"
-                  id="firstName"
-                  type="text"
-                />
+                      firstName.dirty && firstName.touched && firstName.invalid
+                  }"/>
                 <div class="invalid-feedback">
                   <div *ngFor="let validation of form_validation_messages.firstName">
                     <span *ngIf="firstName.hasError(validation.type)">
@@ -33,20 +22,13 @@
                   </div>
                 </div>
               </div>
-
               <div class="form-group">
                 <label class="col-form-label">Surname</label>
-                <input
-                  formControlName="surname"
-                  class="form-control"
+                <input formControlName="surname" class="form-control" id="surname" type="text"
                   [ngClass]="{
                     'is-invalid':
-                      surname.invalid &&
-                      (surname.dirty || surname.touched)
-                  }"
-                  id="surname"
-                  type="text"
-                />
+                      surname.dirty && surname.touched && surname.invalid
+                  }"/>
                 <div class="invalid-feedback">
                   <div *ngFor="let validation of form_validation_messages.surname">
                     <span *ngIf="surname.hasError(validation.type)">
@@ -54,21 +36,14 @@
                     </span>
                   </div>
                 </div>
-
               </div>
-
               <div class="form-group">
                 <label class="col-form-label">Username</label>
-                <input
-                  formControlName="username"
-                  class="form-control"
+                <input formControlName="username" class="form-control" id="username" type="text"
                   [ngClass]="{
                     'is-invalid':
-                      username.invalid &&
-                      (username.dirty || username.touched)
+                      username.dirty && username.touched && username.invalid
                   }"
-                  id="username"
-                  type="text"
                 />
                 <div class="invalid-feedback">
                   <div *ngFor="let validation of form_validation_messages.username">
@@ -78,19 +53,13 @@
                   </div>
                 </div>
               </div>
-
               <div class="form-group">
                 <label class="col-form-label">Email</label>
-                <input
-                  formControlName="email"
-                  class="form-control"
+                <input formControlName="email" class="form-control" id="email" type="email"
                   [ngClass]="{
                     'is-invalid':
-                      email.invalid &&
-                      (email.dirty || email.touched)
+                      email.dirty && email.touched && email.invalid
                   }"
-                  id="email"
-                  type="email"
                 />
                 <div class="invalid-feedback">
                   <div *ngFor="let validation of form_validation_messages.email">
@@ -103,16 +72,11 @@
 
               <div class="form-group">
                 <label class="col-form-label">Password</label>
-                <input
-                  formControlName="password"
-                  class="form-control"
+                <input formControlName="password" class="form-control" id="password" type="password"
                   [ngClass]="{
                     'is-invalid':
-                      password.invalid &&
-                      (password.dirty || password.touched)
+                      password.dirty && password.touched && password.invalid
                   }"
-                  id="password"
-                  type="password"
                 />
                 <div class="invalid-feedback">
                   <div *ngFor="let validation of form_validation_messages.password">
@@ -122,24 +86,14 @@
                   </div>
                 </div>
               </div>
-
               <div class="form-group">
                 <div>
-                  <button
-                    class="btn btn-primary btn-sm "
-                    name="Register"
-                    type="submit"
-                    [disabled]="form.invalid && submitted"
-                  >
+                  <button class="btn btn-primary btn-sm" name="Register" type="submit"
+                   [disabled]="form.invalid && submitted">
                     <fa-icon [icon]="['fas', 'save']"></fa-icon>&nbsp; Register
                   </button>
-                  <button
-                    class="btn btn-light btn-sm"
-                    type="button"
-                    (click)="backToWelcome()"
-                  >
-                    <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon
-                    >&nbsp;Cancel
+                  <button class="btn btn-light btn-sm" type="button" (click)="backToWelcome()">
+                    <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>&nbsp;Cancel
                   </button>
                 </div>
               </div>

@@ -99,4 +99,8 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  backToWelcome() {
+    this.router.navigate(['/welcome']);
+  }
+
 }
