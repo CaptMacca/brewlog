@@ -1,0 +1,51 @@
+<section id="list-measurements" class="p-5">
+  <div class="container">
+    <div class="table-responsive mt-3">
+      <div *ngIf="(measurements$ | async) as measurements">
+        <div *ngIf="measurements.length">
+          <table class="table table-bordered">
+            <thead>
+              <th>Action</th>
+              <th>Date</th>
+              <th>Value</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let measurement of measurements">
+                <td>
+                  <button
+                    class="btn btn-success btn-sm"
+                    (click)="editMeasurement(measurement.id)"
+                  >
+                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>&nbsp;Edit
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="confirmDelete(measurement)">
+                    <fa-icon [icon]="['fas', 'eraser']"></fa-icon>&nbsp;Delete
+                  </button>
+                </td>
+                <td>{{ measurement.measurementDate | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ measurement.value }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!measurements.length">
+          <table class="table table-bordered">
+            <thead>
+              <th>Action</th>
+              <th>Date</th>
+              <th>Value</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4">No Measurements Recorded</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn btn-primary btn-sm attach-left" (click)="addMeasurement()">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>&nbsp;Add Measurement
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

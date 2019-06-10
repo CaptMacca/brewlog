@@ -1,0 +1,107 @@
+
+<section id="RegistrationForm">
+  <div class="container mt-2">
+    <div class="form-row">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="card-header"><h5>Register a New Account</h5></div>
+          <div class="card-body">
+            <form [formGroup]="form" class="needs-validation" novalidate (ngSubmit)="register()">
+              <div class="form-group">
+                <label class="col-form-label">First Name</label>
+                <input formControlName="firstName" class="form-control" id="firstName" type="text"
+                  [ngClass]="{
+                    'is-invalid':
+                      firstName.dirty && firstName.touched && firstName.invalid
+                  }"/>
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.firstName">
+                    <span *ngIf="firstName.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Surname</label>
+                <input formControlName="surname" class="form-control" id="surname" type="text"
+                  [ngClass]="{
+                    'is-invalid':
+                      surname.dirty && surname.touched && surname.invalid
+                  }"/>
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.surname">
+                    <span *ngIf="surname.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Username</label>
+                <input formControlName="username" class="form-control" id="username" type="text"
+                  [ngClass]="{
+                    'is-invalid':
+                      username.dirty && username.touched && username.invalid
+                  }"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.username">
+                    <span *ngIf="username.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Email</label>
+                <input formControlName="email" class="form-control" id="email" type="email"
+                  [ngClass]="{
+                    'is-invalid':
+                      email.dirty && email.touched && email.invalid
+                  }"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.email">
+                    <span *ngIf="email.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Password</label>
+                <input formControlName="password" class="form-control" id="password" type="password"
+                  [ngClass]="{
+                    'is-invalid':
+                      password.dirty && password.touched && password.invalid
+                  }"
+                />
+                <div class="invalid-feedback">
+                  <div *ngFor="let validation of form_validation_messages.password">
+                    <span *ngIf="password.hasError(validation.type)">
+                      {{ validation.message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div>
+                  <button class="btn btn-primary btn-sm" name="Register" type="submit"
+                   [disabled]="form.invalid && submitted">
+                    <fa-icon [icon]="['fas', 'save']"></fa-icon>&nbsp; Register
+                  </button>
+                  <button class="btn btn-light btn-sm" type="button" (click)="backToWelcome()">
+                    <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>&nbsp;Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

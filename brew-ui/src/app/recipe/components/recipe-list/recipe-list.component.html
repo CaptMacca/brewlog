@@ -1,0 +1,62 @@
+<!-- Recipe List Section -->
+<section id="recipe-list">
+  <div class="container mt-3">
+    <div class="table-responsive">
+      <div *ngIf="(recipes$ | async) as recipes">
+        <div *ngIf="recipes.length">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Recipe Name</th>
+                <th>Type</th>
+                <th>Estimated ABV</th>
+                <th>Batch Size</th>
+                <th>Estimated Colour</th>
+                <th>Estimated IBU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let recipe of recipes">
+                <td>
+                  <button class="btn btn-success btn-sm" (click)="viewRecipe(recipe)">
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>&nbsp;View
+                  </button>
+                </td>
+                <td>{{ recipe.name }}</td>
+                <td>{{ recipe.type }}</td>
+                <td>{{ recipe.estimatedAbv }}</td>
+                <td>{{ recipe.batchSize }}</td>
+                <td>{{ recipe.estimatedColour }}</td>
+                <td>{{ recipe.estimatedIbu }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!recipes.length">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Recipe Name</th>
+                <th>Type</th>
+                <th>Estimated ABV</th>
+                <th>Batch Size</th>
+                <th>Estimated Colour</th>
+                <th>Estimated IBU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="7">No Recipes found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-sm" (click)="importRecipes()">
+      <fa-icon [icon]="['fas', 'database']"></fa-icon>&nbsp;Import Recipes
+    </button>
+  </div>
+</section>
