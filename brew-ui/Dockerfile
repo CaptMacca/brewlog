@@ -1,10 +1,11 @@
 # FROM johnpapa/angular-cli as angular-built
 # Using the above image allows us toskip the angular-cli install
-FROM node:8.9-alpine as angular-built
+FROM node:10.16 as angular-built
 WORKDIR /usr/src/app
-RUN npm i -g @angular/cli
 COPY package.json package.json
-RUN npm install --silent
+COPY package-lock.json package-lock.json
+RUN npm i -g @angular/cli@7.3.6
+RUN npm ci --production
 COPY . .
 RUN ng build --prod --build-optimizer
 

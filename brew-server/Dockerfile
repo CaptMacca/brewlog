@@ -4,7 +4,7 @@ ADD src src
 ADD build.gradle .
 ADD gradle.properties .
 
-RUN gradle build
+RUN gradle build -x test
 
 FROM openjdk:8-jdk-alpine
 ARG BUILD_VERSION
