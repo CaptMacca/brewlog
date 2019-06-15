@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 
 
 export class AuthStateModel {
-  loggedIn: boolean;
+  loggedIn: any;
   accessToken: string;
   username: string;
   authorities: string[];

@@ -33,8 +33,8 @@ export class RecipeDetailComponent implements OnInit {
     this.router.navigate(['/recipes']);
   }
 
-  deleteRecipe(id: number) {
-    this.store.dispatch(new RemoveRecipe(id)).subscribe(
+  deleteRecipe(recipe: Recipe) {
+    this.store.dispatch(new RemoveRecipe(recipe)).subscribe(
       () => {
         this.toastr.success('Recipe has been deleted.', 'Recipe');
         this.gotoRecipes();
@@ -43,7 +43,7 @@ export class RecipeDetailComponent implements OnInit {
     );
   }
 
-  confirmDelete(id: number) {
+  confirmDelete(recipe: Recipe) {
     const disposable = this.simpleModalService
       .addModal(ConfirmComponent, {
         title: 'Confirm Delete',
@@ -52,7 +52,7 @@ export class RecipeDetailComponent implements OnInit {
       })
       .subscribe(isConfirmed => {
         if (isConfirmed) {
-          this.deleteRecipe(id);
+          this.deleteRecipe(recipe);
         }
       });
     setTimeout(() => {

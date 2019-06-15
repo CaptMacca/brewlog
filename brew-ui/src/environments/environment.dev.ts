@@ -6,9 +6,9 @@
 export const environment = {
   production: false,
   // apiUrl: 'http://localhost:8080/'
-  apiUrl: 'http://192.168.99.100:8080/',
-  recipeApiUrl: 'http://192.168.99.100:8080/api/recipes',
-  brewsApiUrl: 'http://192.168.99.100:8080/api/brews',
-  measurementApiUrl: 'http://192.168.99.100:8080/api/measurement',
-  recipeUploadApiUrl: 'http://192.168.99.100:8080/api/recipes/upload'
+  apiUrl: 'http://10.1.1.79:8080/',
+  recipeApiUrl: 'http://10.1.1.79:8080/api/recipes',
+  brewsApiUrl: 'http://10.1.1.79:8080/api/brews',
+  measurementApiUrl: 'http://10.1.1.79:8080/api/measurement',
+  recipeUploadApiUrl: 'http://10.1.1.79.100:8080/api/recipes/upload'
 };
