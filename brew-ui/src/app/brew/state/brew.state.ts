@@ -66,7 +66,7 @@ export class BrewState {
 
   @Action(RemoveBrew)
   RemoveBrew(ctx: StateContext<BrewStateModel>, { payload }: RemoveBrew) {
-    return this.brewService.deleteBrew(+payload).pipe(
+    return this.brewService.deleteBrew(+payload.id).pipe(
       tap(() => ctx.setState(
         patch({
           brew: new Brew(),

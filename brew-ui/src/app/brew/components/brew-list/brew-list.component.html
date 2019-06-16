@@ -15,10 +15,10 @@
             <tbody>
               <tr *ngFor="let brew of brews">
                 <td>
-                  <button class="btn btn-success btn-sm" (click)="editBrew(brew.id)">
+                  <button class="btn btn-success btn-sm" (click)="editBrew(brew)">
                     <fa-icon [icon]="['fas', 'edit']"></fa-icon>&nbsp;Edit
                   </button>
-                  <button class="btn btn-danger btn-sm" (click)="confirmDelete(brew.id)">
+                  <button class="btn btn-danger btn-sm" (click)="confirmDelete(brew)">
                     <fa-icon [icon]="['fas', 'eraser']"></fa-icon>&nbsp;Delete
                   </button>
                 </td>

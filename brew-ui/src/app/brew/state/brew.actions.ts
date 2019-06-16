@@ -21,7 +21,7 @@ export class NewBrew {
 
 export class RemoveBrew {
   static readonly type = '[Brew] Remove Brew';
-  constructor(public payload: number) {}
+  constructor(public payload: Brew) {}
 }
 
 export class SaveBrew {

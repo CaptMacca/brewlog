@@ -2,7 +2,7 @@ import { Recipe } from '@app/model';
 
 export class RemoveRecipe {
   static readonly type = '[Recipe] Remove Recipe';
-  constructor(public payload: number) {}
+  constructor(public payload: Recipe) {}
 }
 
 export class LoadRecipe {

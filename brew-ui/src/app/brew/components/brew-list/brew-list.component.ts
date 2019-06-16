@@ -30,27 +30,27 @@ export class BrewListComponent implements OnInit {
     this.store.dispatch(new LoadBrews(username));
   }
 
-  editBrew(id: number): void {
-    this.store.dispatch(new LoadBrew(id)).subscribe(
+  editBrew(brew: Brew): void {
+    this.store.dispatch(new LoadBrew(brew.id)).subscribe(
       () => {
-        this.router.navigate(['/brews/' + id]);
+        this.router.navigate(['/brews/' + brew.id]);
       });
   }
 
-  private deleteBrew(id: number): void {
-    this.store.dispatch(new RemoveBrew(id));
+  private deleteBrew(brew: Brew): void {
+    this.store.dispatch(new RemoveBrew(brew));
   }
 
   addBrew(): void {
     this.router.navigate(['/brews/add']);
   }
 
-  confirmDelete(id: number) {
+  confirmDelete(brew: Brew) {
     this.simpleModalService.addModal(ConfirmComponent, {
         title: 'Confirm Delete',
         message: 'Are you sure you wish to delete this brew.'
       }).subscribe(
-        isConfirmed => isConfirmed ? this.deleteBrew(id) : null
+        isConfirmed => isConfirmed ? this.deleteBrew(brew) : null
       );
   }
 }
