@@ -12,6 +12,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @ToString
 @Entity
+@Table(name="mash", schema="brews")
 public class Mash {
 
     @Id

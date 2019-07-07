@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { Brew, Recipe, User, NewBrewRequest } from '@app/model';
+import { Brew, Recipe, User, CreateBrew } from '@app/model';
 import { LoadRecipes } from '@app/recipe/state/recipe.actions';
 import { RecipeState } from '@app/recipe/state/recipe.state';
 import { SaveBrew } from '@app/brew/state/brew.actions';
@@ -36,12 +36,13 @@ export class BrewAddComponent implements OnInit {
     if (recipe) {
       const brew = this.newBrew(recipe);
       const username: string = this.store.selectSnapshot(AuthState.getUsername);
-      const newBrew: NewBrewRequest = {
+      const createBrew: CreateBrew = {
         username: username,
-        brew: brew
+        brew: brew,
+        recipe
       };
 
-      this.store.dispatch([new SaveBrew(newBrew)]).subscribe(
+      this.store.dispatch([new SaveBrew(createBrew)]).subscribe(
         () => {
           const createdBrew = this.store.selectSnapshot(BrewState.getBrew);
           this.toastr.success('A new brew session has been created', 'Success');
@@ -57,10 +58,9 @@ export class BrewAddComponent implements OnInit {
   private newBrew(recipe: Recipe): Brew {
     const brew = new Brew();
     brew.id = 0;
-    brew.recipe = recipe;
     brew.brewDate = new Date();
     brew.score = 0;
-    brew.user = new User();
+    brew.recipe = recipe;
     return brew;
   }
 }

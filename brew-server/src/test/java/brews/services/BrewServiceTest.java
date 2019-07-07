@@ -5,10 +5,10 @@ import brews.domain.Recipe;
 import brews.domain.User;
 import brews.domain.dto.BrewDto;
 import brews.domain.dto.RecipeDto;
+import brews.domain.dto.UpdateBrewDto;
 import brews.domain.dto.UserDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.BrewMapper;
-import brews.mapper.domain.UserMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import brews.repository.UserRepository;
@@ -18,9 +18,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -121,12 +119,13 @@ public class BrewServiceTest {
         brews.add(brewDto);
 
         when(brewMapper.toBrewDtos(anyList())).thenReturn(brews);
+        when(brewService.getBrewsForRecipe(any(Recipe.class))).thenReturn(brews);
 
         // When
-        brewService.getBrewsForRecipe(1L);
+        List<BrewDto> dtos = brewService.getBrewsForRecipe(new Recipe());
 
         // Then
-        verify(brewsRepository,times(1)).findBrewsByRecipeId(anyLong());
+        verify(brewsRepository,times(1)).findBrewsByRecipe(any(Recipe.class));
         verify(brewMapper, times(1)).toBrewDtos(anyList());
     }
 
@@ -182,10 +181,11 @@ public class BrewServiceTest {
         UserDto UserDto = new UserDto();
         UserDto.setId(1L);
 
+        UpdateBrewDto updateBrewDto = new UpdateBrewDto();
+        updateBrewDto.setId(1L);
+
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(UserDto);
-        brewDto.setRecipe(recipeDto);
 
         Recipe recipe = new Recipe();
         recipe.setId(recipeDto.getId());
@@ -194,22 +194,23 @@ public class BrewServiceTest {
         user.setId(1L);
 
         Brew brew = new Brew();
-        brew.setId(brewDto.getId());
+        brew.setId(1L);
         brew.setUser(user);
         brew.setRecipe(recipe);
 
+        when(brewMapper.toUpdateBrewDto(any(Brew.class))).thenReturn(updateBrewDto);
         when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
-        when(brewsRepository.saveAndFlush(any(Brew.class))).thenReturn(brew);
+        when(brewsRepository.save(any(Brew.class))).thenReturn(brew);
 
         // When
-        BrewDto test = brewService.updateBrew(brewDto);
+        BrewDto test = brewService.updateBrew(updateBrewDto);
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
         verify(brewsRepository, times(1)).getOne(anyLong());
-        verify(brewsRepository, times(1)).saveAndFlush(any(Brew.class));
-        verify(brewMapper, times(1)).updateFromBrewDto(any(BrewDto.class), any(Brew.class));
+        verify(brewsRepository, times(1)).save(any(Brew.class));
+        verify(brewMapper, times(1)).updateFromBrewDto(any(UpdateBrewDto.class), any(Brew.class));
         verify(brewMapper, times(1)).toBrewDto(any(Brew.class));
 
     }
@@ -223,10 +224,8 @@ public class BrewServiceTest {
         UserDto UserDto = new UserDto();
         UserDto.setId(1L);
 
-        BrewDto brewDto = new BrewDto();
+        UpdateBrewDto brewDto = new UpdateBrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(UserDto);
-        brewDto.setRecipe(recipeDto);
 
         Recipe recipe = new Recipe();
         recipe.setId(recipeDto.getId());
@@ -262,11 +261,15 @@ public class BrewServiceTest {
         User User = new User();
         User.setId(1L);
 
-
         Brew brew = new Brew();
         brew.setId(1L);
         brew.setUser(User);
         brew.setRecipe(recipe);
+
+        Set<Brew> brews = new HashSet<>();
+        brews.add(brew);
+
+        recipe.setBrews(brews);
 
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
 

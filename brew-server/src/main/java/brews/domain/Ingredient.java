@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
+@Table(name="ingredient", schema="brews")
 public class Ingredient implements Serializable {
 
     public static final String INGREDIENT_TYPE_FERMENTABLE = "Fermentable";
@@ -27,16 +28,18 @@ public class Ingredient implements Serializable {
     @EqualsAndHashCode.Include
     @ToString.Include
     private Long id;
+
     @EqualsAndHashCode.Include
     @ToString.Include
     private String name;
+
     @EqualsAndHashCode.Include
     @ToString.Include
     private Double amount;
 
     private transient String type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "recipe_id")
     @JsonIgnore
     @EqualsAndHashCode.Exclude

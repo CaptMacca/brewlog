@@ -63,7 +63,7 @@ export class RecipeState {
 
   @Action(RemoveRecipe)
   RemoveRecipe(ctx: StateContext<RecipeStateModel>, { payload }: RemoveRecipe) {
-    return this.recipeService.deleteRecipe(+payload).pipe(
+    return this.recipeService.deleteRecipe(payload).pipe(
       tap(() => ctx.setState(patch({
         recipe: new Recipe(),
         recipes: removeItem(id => id === payload)

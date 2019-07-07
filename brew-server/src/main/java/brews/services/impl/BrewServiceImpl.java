@@ -4,6 +4,7 @@ import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
 import brews.domain.dto.BrewDto;
+import brews.domain.dto.UpdateBrewDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.BrewMapper;
 import brews.repository.BrewsRepository;
@@ -55,8 +56,8 @@ public class BrewServiceImpl implements BrewService {
 
     @Override
     @Transactional
-    public List<BrewDto> getBrewsForRecipe(Long recipeId) {
-        return brewMapper.toBrewDtos(brewsRepository.findBrewsByRecipeId(recipeId));
+    public List<BrewDto> getBrewsForRecipe(Recipe recipe) {
+        return brewMapper.toBrewDtos(brewsRepository.findBrewsByRecipe(recipe));
     }
 
     @Override
@@ -81,9 +82,9 @@ public class BrewServiceImpl implements BrewService {
 
     @Override
     @Transactional
-    public BrewDto updateBrew(BrewDto brewDto) {
+    public BrewDto updateBrew(UpdateBrewDto updateBrewDto) {
 
-        Long id = brewDto.getId();
+        Long id = updateBrewDto.getId();
 
         Brew brew = brewsRepository.getOne(id);
 
@@ -91,8 +92,8 @@ public class BrewServiceImpl implements BrewService {
             throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id));
         }
 
-        brewMapper.updateFromBrewDto(brewDto,brew);
-        Brew updatedBrew = brewsRepository.saveAndFlush(brew);
+        brewMapper.updateFromBrewDto(updateBrewDto,brew);
+        Brew updatedBrew = brewsRepository.save(brew);
         return brewMapper.toBrewDto(updatedBrew);
     }
 

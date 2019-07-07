@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Set;
 
@@ -20,6 +19,7 @@ import java.util.Set;
 @EqualsAndHashCode()
 @ToString
 @Entity
+@Table(name="brew", schema="brews")
 public class Brew implements Serializable {
 
     @Id
@@ -46,21 +46,25 @@ public class Brew implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String tastingNotes;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.MERGE
+    )
     @JoinColumn(name = "user_id")
     @EqualsAndHashCode.Exclude
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(
+      fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Recipe recipe;
 
     @OneToMany(
-            mappedBy = "brew",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
+      mappedBy = "brew",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY
     )
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

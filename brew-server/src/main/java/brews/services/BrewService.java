@@ -1,6 +1,8 @@
 package brews.services;
 
+import brews.domain.Recipe;
 import brews.domain.dto.BrewDto;
+import brews.domain.dto.UpdateBrewDto;
 
 import java.util.List;
 
@@ -11,11 +13,11 @@ public interface BrewService {
 
     BrewDto getBrew(Long id);
 
-    List<BrewDto> getBrewsForRecipe(Long recipeId);
+    List<BrewDto> getBrewsForRecipe(Recipe recipe);
 
     BrewDto saveBrew(BrewDto brewDto, String username);
 
-    BrewDto updateBrew(BrewDto brewDto);
+    BrewDto updateBrew(UpdateBrewDto updateBrewDto);
 
     void deleteBrew(Long id);
 }

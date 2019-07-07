@@ -1,5 +1,6 @@
 export * from './brew';
-export * from './new-brew-request';
+export * from './create-brew';
+export * from './update-brew';
 export * from './fermentable';
 export * from './hop';
 export * from './mash';
