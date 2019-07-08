@@ -1,13 +1,14 @@
-alter table recipe
-  add column user_id bigint NOT NULL;
+ALTER TABLE brews.recipe
+  ADD COLUMN user_id BIGINT NOT NULL;
 
-alter table recipe
-  add constraint FKddfdfgg33fcvv76vvbndgga
-    foreign key (user_id) references users (id);
+ALTER TABLE brews.recipe
+  ADD CONSTRAINT users_recipe_fk
+    FOREIGN KEY (user_id) REFERENCES brews.users (id);
 
-alter table brew
-  add column user_id bigint NOT NULL;
+ALTER TABLE brews.brew
+  ADD COLUMN user_id BIGINT NOT NULL;
 
-alter table brew
-  add constraint Fdfdfdfhhh6676vvb9uu9
-    foreign key (user_id) references users (id);
+ALTER TABLE brews.brew
+  ADD CONSTRAINT users_brew_fk
+    FOREIGN KEY (user_id) REFERENCES brews.users (id);
+

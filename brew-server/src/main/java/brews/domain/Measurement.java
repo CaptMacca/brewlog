@@ -18,6 +18,7 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
+@Table(name="measurement", schema="brews")
 public class Measurement implements Serializable {
 
     @Id

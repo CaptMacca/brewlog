@@ -1,11 +1,15 @@
 package brews.services.impl;
 
 import brews.domain.Brew;
+import brews.domain.Ingredient;
+import brews.domain.Mash;
 import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.RecipeMapper;
 import brews.repository.BrewsRepository;
+import brews.repository.IngredientRepository;
+import brews.repository.MashRepository;
 import brews.repository.RecipeRepository;
 import brews.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +24,17 @@ public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final BrewsRepository brewsRepository;
+    private final IngredientRepository ingredientRepository;
+    private final MashRepository mashRepository;
     private final RecipeMapper recipeMapper;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository, RecipeMapper recipeMapper) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository,
+                             IngredientRepository ingredientRepository, MashRepository mashRepository,
+                             RecipeMapper recipeMapper) {
         this.recipeRepository = recipeRepository;
         this.brewsRepository = brewsRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.mashRepository = mashRepository;
         this.recipeMapper = recipeMapper;
     }
 
@@ -87,7 +97,7 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         // Find any associated brews and delete them
-        List<Brew> brews = brewsRepository.findBrewsByRecipeId(recipe.getId());
+        List<Brew> brews = brewsRepository.findBrewsByRecipe(recipe);
         for(Brew brew : brews) {
             brewsRepository.delete(brew);
         }

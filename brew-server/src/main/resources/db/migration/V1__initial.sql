@@ -1,72 +1,69 @@
-create schema if not exists brews collate latin1_swedish_ci;
+CREATE SCHEMA IF NOT EXISTS brews;
 
-create table if not exists recipe
+CREATE TABLE IF NOT EXISTS brews.recipe
 (
-	id bigint auto_increment
-		primary key,
-	batch_size varchar(255) null,
-	boil_time varchar(255) null,
-	estimatedabv varchar(255) null,
-	estimated_colour varchar(255) null,
-	final_gravity varchar(255) null,
-	ibu varchar(255) null,
-	name varchar(255) null,
-	notes longtext null,
-	original_gravity varchar(255) null,
-	style varchar(255) null,
-	type varchar(255) null
+	id BIGSERIAL PRIMARY KEY,
+	batch_size VARCHAR(255) NULL,
+	boil_time VARCHAR(255) NULL,
+	estimatedabv VARCHAR(255) NULL,
+	estimated_colour VARCHAR(255) NULL,
+	final_gravity VARCHAR(255) NULL,
+	ibu VARCHAR(255) NULL,
+	name VARCHAR(255) NULL,
+	notes TEXT NULL,
+	original_gravity VARCHAR(255) NULL,
+	style VARCHAR(255) NULL,
+	type VARCHAR(255) NULL
 );
 
-create table if not exists brew
+CREATE INDEX recipe_name_idx ON brews.recipe(name);
+
+CREATE TABLE IF NOT EXISTS brews.brew
 (
-	id bigint auto_increment
-		primary key,
-	brew_date date null,
-	brewer varchar(255) null,
-	recipe_id bigint null,
-	constraint FKf0mv8607tqc9t1sw4o997gcgi
-		foreign key (recipe_id) references recipe (id)
+	id BIGSERIAL PRIMARY KEY,
+	brew_date TIMESTAMP NULL,
+	brewer VARCHAR(255) NULL,
+	recipe_id BIGINT NULL,
+	CONSTRAINT brew_recipe_fk
+		FOREIGN KEY (recipe_id) REFERENCES brews.recipe (id)
 );
 
-create table if not exists ingredient
+CREATE TABLE IF NOT EXISTS brews.ingredient
 (
-	type varchar(31) not null,
-	id bigint auto_increment
-		primary key,
-	amount double null,
-	name varchar(255) null,
-	addition_time double null,
-	alpha double null,
-	hop_usage varchar(255) null,
-	laboratory varchar(255) null,
-	product_id varchar(255) null,
-	add_after_boil bit null,
-	recipe_id bigint null,
-	constraint FKj0s4ywmqqqw4h5iommigh5yja
-		foreign key (recipe_id) references recipe (id)
+	id BIGSERIAL	PRIMARY KEY,
+  type VARCHAR(31) NOT NULL,
+	amount DOUBLE PRECISION NULL,
+	name VARCHAR(255) NULL,
+	addition_time DOUBLE PRECISION NULL,
+	alpha DOUBLE PRECISION NULL,
+	hop_usage VARCHAR(255) NULL,
+	laboratory VARCHAR(255) NULL,
+	product_id VARCHAR(255) NULL,
+	add_after_boil BOOLEAN NULL,
+	recipe_id BIGINT NULL,
+	CONSTRAINT ingredient_recipe_fk
+		FOREIGN KEY (recipe_id) REFERENCES brews.recipe (id)
 );
 
-create table if not exists mash
+CREATE TABLE IF NOT EXISTS brews.mash
 (
-	id bigint auto_increment
-		primary key,
-	name varchar(255) null,
-	step_temp double null,
-	step_time double null,
-	recipe_id bigint null,
-	constraint FK94b26ql4hso7wd8dnnaea5c4p
-		foreign key (recipe_id) references recipe (id)
+	id BIGSERIAL	PRIMARY KEY,
+	name VARCHAR(255) NULL,
+	step_temp DOUBLE PRECISION NULL,
+	step_time DOUBLE PRECISION NULL,
+	recipe_id BIGINT NULL,
+	CONSTRAINT mash_recipe_fk
+		FOREIGN KEY (recipe_id) REFERENCES brews.recipe (id)
 );
 
-create table if not exists measurement
+create table if not exists brews.measurement
 (
-	id bigint auto_increment
-		primary key,
-	measurement_date date null,
-	type int null,
-	value double null,
-	brew_id bigint null,
-	constraint FKms0rxxek1rcu66bvo7fdutuw9
-		foreign key (brew_id) references brew (id)
+	id BIGSERIAL PRIMARY KEY,
+	measurement_date TIMESTAMP NULL,
+	type INT NULL,
+	value DOUBLE PRECISION NULL,
+	brew_id BIGINT NULL,
+	CONSTRAINT measurement_brew_fk
+		FOREIGN KEY (brew_id) REFERENCES brews.brew (id)
 );
 

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
 
-import { Brew, NewBrewRequest } from '@app/model';
+import { Brew, CreateBrew } from '@app/model';
 
 @Injectable()
 export class BrewService {
@@ -38,13 +38,13 @@ export class BrewService {
     return this.http.delete<Brew[]>(this.brewsApi + '/' + id);
   }
 
-  public saveBrew(newBrew: NewBrewRequest): Observable<Brew> {
+  public saveBrew(createBrew: CreateBrew): Observable<Brew> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<Brew>(this.brewsApi, newBrew, httpOptions);
+    return this.http.post<Brew>(this.brewsApi, createBrew, httpOptions);
   }
 
   public updateBrew(brew: Brew): Observable<Brew> {

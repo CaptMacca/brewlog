@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { ToastrService } from 'ngx-toastr';
 
-import { Brew, Measurement, NewBrewRequest } from '@app/model';
+import { Brew, Measurement, CreateBrew, Recipe } from '@app/model';
 import { BrewState } from '@app/brew/state/brew.state';
 import { LoadMeasurements } from '@app/measurement/state/measurement.actions';
 import { MeasurementState } from '@app/measurement/state/measurement.state';
@@ -206,16 +206,17 @@ export class BrewDetailComponent implements OnInit {
       brew.tastingNotes = this.tastingNotes.value;
 
       if (brew.id === 0) {
-        const username = this.store.selectSnapshot(AuthState.getUsername);
-        const newBrew: NewBrewRequest = {
-          username: username,
-          brew: brew
-        };
-        this.store.dispatch(new SaveBrew(newBrew)).subscribe(
-          () => {
-            this.toastr.success('Saved the brew', 'Success');
-            this.router.navigate(['/brews']);
-          });
+        // const username = this.store.selectSnapshot(AuthState.getUsername);
+        // const newBrew: CreateBrew = {
+        //   username: username,
+        //   brew: brew,
+        //   recipe: brew
+        // };
+        // this.store.dispatch(new SaveBrew(newBrew)).subscribe(
+        //   () => {
+        //     this.toastr.success('Saved the brew', 'Success');
+        //     this.router.navigate(['/brews']);
+        //   });
       } else {
         this.store.dispatch(new UpdateBrew(brew)).subscribe(
           () => {

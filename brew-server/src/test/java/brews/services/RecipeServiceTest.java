@@ -5,6 +5,8 @@ import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.RecipeMapper;
 import brews.repository.BrewsRepository;
+import brews.repository.IngredientRepository;
+import brews.repository.MashRepository;
 import brews.repository.RecipeRepository;
 import brews.services.impl.RecipeServiceImpl;
 import org.junit.Before;
@@ -29,13 +31,19 @@ public class RecipeServiceTest {
     @Mock
     RecipeMapper recipeMapper;
 
+    @Mock
+    IngredientRepository ingredientRepository;
+
+    @Mock
+    MashRepository mashRepository;
+
     RecipeService recipeService;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        recipeService = new RecipeServiceImpl(recipeRepository, brewsRepository, recipeMapper);
+        recipeService = new RecipeServiceImpl(recipeRepository, brewsRepository, ingredientRepository, mashRepository, recipeMapper);
     }
 
     @Test

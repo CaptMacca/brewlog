@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import java.util.Set;
 @EqualsAndHashCode()
 @ToString
 @Entity
+@Table(name="recipe", schema="brews")
 public class Recipe implements Serializable {
 
     @Id
@@ -37,9 +39,9 @@ public class Recipe implements Serializable {
     private String notes;
 
     @OneToMany(
-            mappedBy = "recipe",
-            cascade = CascadeType.REMOVE,
-            fetch = FetchType.LAZY
+      mappedBy = "recipe",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY
     )
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -51,13 +53,22 @@ public class Recipe implements Serializable {
     private User user;
 
     @OneToMany(
-            mappedBy = "recipe",
-            cascade = CascadeType.REMOVE,
-            fetch = FetchType.LAZY
+      mappedBy = "recipe",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY
     )
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Mash> mashes;
+
+    @OneToMany(
+      mappedBy = "recipe",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY
+    )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Brew> brews;
 
     @Version
     private Long versionId;

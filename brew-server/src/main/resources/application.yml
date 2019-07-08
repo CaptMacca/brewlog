@@ -6,20 +6,28 @@ spring:
   application:
     name: brewlog
   datasource:
-    url: jdbc:mysql://10.1.1.79:3306/brews
+    url: jdbc:postgresql://10.1.1.79:5432/brewdb
     username: springboot
     password: springboot
+
+  # Flyway
+  flyway:
+    baseline-on-migrate: false
 
   #JPA-Hibernate
   jpa:
     hibernate:
       ddl-auto: validate
-
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
     show-sql: true
-    database: mysql
-
+    database: postgresql
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
 brews:
   app:
     jwtSecret: jwtSecretKeyThatNoOneMustKnow

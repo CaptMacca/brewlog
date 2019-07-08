@@ -138,9 +138,13 @@ public class BrewControllerTest {
         brew.setUser(user);
         brew.setRecipe(recipe);
 
+        RecipeDto recipeDto = new RecipeDto();
+        recipe.setId(1L);
+
         CreateBrewDto createBrew = new CreateBrewDto();
         createBrew.setBrew(brew);
         createBrew.setUsername("joe");
+        createBrew.setRecipe(recipeDto);
 
         when(brewService.saveBrew(any(BrewDto.class), anyString())).thenReturn(brew);
 
@@ -228,7 +232,7 @@ public class BrewControllerTest {
         brew.setId(1L);
         brew.setRecipe(recipe);
 
-        when(brewService.updateBrew(any(BrewDto.class))).thenReturn(brew);
+        when(brewService.updateBrew(any(UpdateBrewDto.class))).thenReturn(brew);
 
         // When
         mockMvc.perform(put("/api/brews")
@@ -241,7 +245,7 @@ public class BrewControllerTest {
                 .andExpect(jsonPath("$.recipe.name", is("mock")));
 
         // Then
-        verify(brewService, times(1)).updateBrew(any(BrewDto.class));
+        verify(brewService, times(1)).updateBrew(any(UpdateBrewDto.class));
 
     }
 
@@ -256,7 +260,7 @@ public class BrewControllerTest {
         brew.setId(1L);
         brew.setRecipe(recipe);
 
-        when(brewService.updateBrew(any(BrewDto.class))).thenThrow(new BrewsEntityNotFoundException());
+        when(brewService.updateBrew(any(UpdateBrewDto.class))).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         mockMvc.perform(put("/api/brews")
@@ -266,7 +270,7 @@ public class BrewControllerTest {
                 .andExpect(status().isNotFound());
 
         // Then
-        verify(brewService, times(1)).updateBrew(any(BrewDto.class));
+        verify(brewService, times(1)).updateBrew(any(UpdateBrewDto.class));
     }
 
     @Test

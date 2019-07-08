@@ -2,6 +2,8 @@ package brews.controllers;
 
 import brews.domain.dto.BrewDto;
 import brews.domain.dto.CreateBrewDto;
+import brews.domain.dto.RecipeDto;
+import brews.domain.dto.UpdateBrewDto;
 import brews.services.BrewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,24 +56,30 @@ public final class BrewController {
 
         String username = createBrewDto.getUsername();
         BrewDto brewDto = createBrewDto.getBrew();
+        RecipeDto recipeDto = createBrewDto.getRecipe();
 
-        if (brewDto.getRecipe() == null) {
+        if (recipeDto == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (brewDto.getUser() == null) {
+        if (username == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        BrewDto newBrew = brewService.saveBrew(brewDto, "joe");
+        if (brewDto == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        BrewDto newBrew = brewService.saveBrew(brewDto, username);
 
         return new ResponseEntity<>(newBrew, HttpStatus.ACCEPTED);
     }
 
     @PutMapping()
     @ApiOperation("Updates a brew identified by the id")
-    public ResponseEntity<BrewDto> update(@RequestBody BrewDto brewDto) {
-        BrewDto updatedBrewDto = brewService.updateBrew(brewDto);
+    public ResponseEntity<BrewDto> update(@RequestBody UpdateBrewDto updateBrewDto) {
+        BrewDto updatedBrewDto = brewService.updateBrew(updateBrewDto);
         return ResponseEntity.ok(updatedBrewDto);
     }
 

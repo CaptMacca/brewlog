@@ -20,7 +20,7 @@ import org.hibernate.annotations.NaturalId;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", schema = "brews")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

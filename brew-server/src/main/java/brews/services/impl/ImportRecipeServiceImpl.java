@@ -56,7 +56,7 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
         log.debug("Retrieving user");
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));;
+            () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));;
 
         log.debug("Importing beerxml file ");
         ImportedRecipes importedRecipes = beerXMLReaderService.readBeerXML(contents);

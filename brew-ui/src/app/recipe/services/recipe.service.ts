@@ -32,7 +32,7 @@ export class RecipeService {
     });
   }
 
-  deleteRecipe(id: number) {
-    return this.http.delete(this.recipeApi + '/' + id);
+  deleteRecipe(recipe: Recipe) {
+    return this.http.delete(this.recipeApi + '/' + recipe.id);
   }
 }
