@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/measurement")
 @CrossOrigin(origins = "*")
-@Api(description = "API for creating, retrieving, deleting and updating measurements for a brew")
+@Api("API for creating, retrieving, deleting and updating measurements for a brew")
 public final class MeasurementController {
 
     private final MeasurementService measurementService;

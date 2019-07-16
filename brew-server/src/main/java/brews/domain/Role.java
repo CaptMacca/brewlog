@@ -15,13 +15,15 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
 @Entity
 @Table(name = "roles", schema = "brews")
-public class Role {
+public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

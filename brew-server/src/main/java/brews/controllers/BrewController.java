@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/brews")
 @CrossOrigin(origins = "*")
-@Api(description = "API for creating, retrieving, deleting and updating a brew")
+@Api("API for creating, retrieving, deleting and updating a brew")
 public final class BrewController {
 
     private final BrewService brewService;

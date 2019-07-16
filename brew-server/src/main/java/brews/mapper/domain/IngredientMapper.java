@@ -19,7 +19,7 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IngredientMapper {
 
-    HopDto toHopDto(Hop Hop);
+    HopDto toHopDto(Hop hop);
     List<HopDto> toHopDtos(List<Hop> hops);
 
     @InheritInverseConfiguration

@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/recipes")
 @CrossOrigin(origins = "*")
-@Api(description = "API for uploading a recipe in beer xml format, note this only supports beer.xml v1 files")
+@Api("API for uploading a recipe in beer xml format, note this only supports beer.xml v1 files")
 public final class UploadRecipeController {
 
     private final ImportRecipeService importRecipeService;

@@ -10,6 +10,8 @@ import brews.security.jwt.request.LoginForm;
 import brews.security.jwt.request.SignUpForm;
 import brews.security.jwt.response.JwtResponse;
 import brews.security.jwt.response.ResponseMessage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +29,7 @@ import java.util.Set;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@Api("API for authentication and user registration")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -49,6 +52,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
+    @ApiOperation("Validates the users login credentials and returns the JWT token if ok")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -63,6 +67,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @ApiOperation("Registers a new user account")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity<>(new ResponseMessage("Fail -> Username is already taken!"),
