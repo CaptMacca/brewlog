@@ -1,4 +1,4 @@
-import { Brew, NewBrewRequest } from '@app/model';
+import { Brew, CreateBrew } from '@app/model';
 
 export class LoadAllBrews {
   static readonly type = '[Brew] Load All Brews';
@@ -26,7 +26,7 @@ export class RemoveBrew {
 
 export class SaveBrew {
   static readonly type = '[Brew] Save Brew';
-  constructor(public payload: NewBrewRequest) {}
+  constructor(public payload: CreateBrew) {}
 }
 
 export class UpdateBrew {
