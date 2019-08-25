@@ -8,9 +8,10 @@ import { Observable } from 'rxjs';
 
 import { Measurement, Brew } from '@app/model';
 import { MeasurementState } from '@app/measurement/state/measurement.state';
-import { AddMeasurement, UpdateMeasurement } from '@app/measurement/state/measurement.actions';
+import { AddMeasurement, UpdateMeasurement, NewMeasurement } from '@app/measurement/state/measurement.actions';
 import { BrewState } from '@app/brew/state/brew.state';
 import * as moment from 'moment';
+import { MeasurementService } from '@app/measurement/services/measurement.service';
 
 const now = new Date();
 
@@ -47,7 +48,8 @@ export class MeasurementDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private measurementService: MeasurementService
   ) {
     this.initForm();
   }
@@ -102,9 +104,13 @@ export class MeasurementDetailComponent implements OnInit {
       measurement.value = this.measurementValue.value;
 
       if (measurement.id === 0) {
-        this.store.dispatch(new AddMeasurement(measurement));
+        this.measurementService.saveMeasurement(measurement).subscribe(
+          newMeasurement => this.store.dispatch(new AddMeasurement(newMeasurement))
+        );
       } else {
-        this.store.dispatch(new UpdateMeasurement(measurement));
+        this.measurementService.updateMeasurement(measurement).subscribe(
+          updatedMeasurement => this.store.dispatch(new UpdateMeasurement(updatedMeasurement))
+        );
       }
 
       this.toastr.success('Saved Measurement', 'Success');

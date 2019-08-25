@@ -44,6 +44,7 @@ import { httpInterceptorProviders } from './auth/services/auth-interceptor.servi
 import { AuthGuardService } from './auth/services/auth-guard.service';
 import { NgxsStoragePluginModule, StorageOption } from '@ngxs/storage-plugin';
 import { AuthState } from './auth/state/auth.state';
+import { environment } from '@env/environment.prod';
 
 library.add(faEye, faDatabase, faArrowLeft, faTrash);
 library.add(faCheck, faBan, faExclamationCircle, faUpload);
@@ -70,7 +71,9 @@ library.add(faEdit, faEraser, faPlus, faBeer, faSave);
       key: 'auth',
       storage: StorageOption.SessionStorage
     }),
-    NgxsModule.forRoot([AuthState]),
+    NgxsModule.forRoot([AuthState], {
+      developmentMode: !environment.production
+    }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),

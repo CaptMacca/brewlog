@@ -11,6 +11,7 @@ import { Recipe } from '@app/model';
 import { ConfirmComponent } from '@app/common/confirm/confirm.component';
 import { RecipeState } from '@app/recipe/state/recipe.state';
 import { RemoveRecipe } from '@app/recipe/state/recipe.actions';
+import { RecipeService } from '@app/recipe/services/recipe.service';
 
 @Component({
   selector: 'app-recipe',
@@ -24,7 +25,8 @@ export class RecipeDetailComponent implements OnInit {
     private store: Store,
     private router: Router,
     private toastr: ToastrService,
-    private simpleModalService: SimpleModalService
+    private simpleModalService: SimpleModalService,
+    private recipeService: RecipeService
   ) {}
 
   ngOnInit() {}
@@ -34,8 +36,9 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   deleteRecipe(recipe: Recipe) {
-    this.store.dispatch(new RemoveRecipe(recipe)).subscribe(
+    this.recipeService.deleteRecipe(recipe).subscribe(
       () => {
+        this.store.dispatch(new RemoveRecipe(recipe));
         this.toastr.success('Recipe has been deleted.', 'Recipe');
         this.gotoRecipes();
       },

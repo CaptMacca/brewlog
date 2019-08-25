@@ -7,12 +7,12 @@ export class RemoveRecipe {
 
 export class LoadRecipe {
   static readonly type = '[Recipe] Load Recipe';
-  constructor(public payload: number) {}
+  constructor(public payload: Recipe) {}
 }
 
 export class LoadRecipes {
   static readonly type = '[Recipe] Load Recipes';
-  constructor(public payload: string) {}
+  constructor(public payload: Recipe[]) {}
 }
 
 export class LoadAllRecipes {

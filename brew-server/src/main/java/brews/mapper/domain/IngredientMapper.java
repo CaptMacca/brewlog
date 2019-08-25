@@ -17,36 +17,36 @@ import java.util.List;
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface IngredientMapper {
+public abstract class IngredientMapper {
 
-    HopDto toHopDto(Hop hop);
-    List<HopDto> toHopDtos(List<Hop> hops);
-
-    @InheritInverseConfiguration
-    Hop toHop(HopDto hopDto);
+    public abstract HopDto toHopDto(Hop hop);
+    public abstract List<HopDto> toHopDtos(List<Hop> hops);
 
     @InheritInverseConfiguration
-    List<Hop> toHops(List<HopDto> hopDtos);
-
-    YeastDto toYeastDto(Yeast yeast);
-    List<YeastDto> toYeastDtos(List<Yeast> yeasts);
+    public abstract Hop toHop(HopDto hopDto);
 
     @InheritInverseConfiguration
-    Yeast toYeast(YeastDto yeastDto);
+    public abstract List<Hop> toHops(List<HopDto> hopDtos);
+
+    public abstract YeastDto toYeastDto(Yeast yeast);
+    public abstract List<YeastDto> toYeastDtos(List<Yeast> yeasts);
 
     @InheritInverseConfiguration
-    List<Yeast> toYeasts(List<YeastDto> yeastDtos);
-
-    FermentableDto toFermentableDto(Fermentable fermentable);
-    List<FermentableDto> toFermentableDtos(List<Fermentable> fermentables);
+    public abstract Yeast toYeast(YeastDto yeastDto);
 
     @InheritInverseConfiguration
-    Fermentable toFermentable(FermentableDto fermentableDto);
+    public abstract List<Yeast> toYeasts(List<YeastDto> yeastDtos);
+
+    public abstract FermentableDto toFermentableDto(Fermentable fermentable);
+    public abstract List<FermentableDto> toFermentableDtos(List<Fermentable> fermentables);
 
     @InheritInverseConfiguration
-    List<Fermentable> toFermentables(List<FermentableDto> fermentableDtos);
+    public abstract Fermentable toFermentable(FermentableDto fermentableDto);
 
-    default IngredientDto ingredientToIngredientDto(Ingredient ingredient) {
+    @InheritInverseConfiguration
+    public abstract List<Fermentable> toFermentables(List<FermentableDto> fermentableDtos);
+
+    public IngredientDto ingredientToIngredientDto(Ingredient ingredient) {
 
         if (ingredient instanceof Yeast) {
             return this.toYeastDto((Yeast) ingredient);
@@ -58,7 +58,7 @@ public interface IngredientMapper {
     }
 
     @InheritInverseConfiguration
-    default Ingredient ingredientDtoToIngredient(IngredientDto ingredientDto) {
+    public Ingredient ingredientDtoToIngredient(IngredientDto ingredientDto) {
         if (ingredientDto instanceof YeastDto) {
             return this.toYeast((YeastDto) ingredientDto);
         } else if (ingredientDto instanceof HopDto) {

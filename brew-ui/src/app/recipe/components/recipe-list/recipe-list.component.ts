@@ -7,8 +7,9 @@ import { Observable } from 'rxjs';
 
 import { Recipe } from '@app/model';
 import { RecipeState } from '@app/recipe/state/recipe.state';
-import { LoadRecipes } from '@app/recipe/state/recipe.actions';
+import { LoadRecipes, SelectRecipe } from '@app/recipe/state/recipe.actions';
 import { AuthState } from '@app/auth/state/auth.state';
+import { RecipeService } from '@app/recipe/services/recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
@@ -18,11 +19,22 @@ import { AuthState } from '@app/auth/state/auth.state';
 export class RecipeListComponent implements OnInit {
   @Select(RecipeState.getRecipes) recipes$: Observable<Recipe>;
 
-  constructor(private store: Store, private router: Router, private toastr: ToastrService) {}
+  constructor(
+    private store: Store,
+    private router: Router,
+    private toastr: ToastrService,
+    private recipeService: RecipeService
+  ) {}
 
   ngOnInit(): void {
     const username = this.store.selectSnapshot(AuthState.getUsername);
-    this.store.dispatch(new LoadRecipes(username));
+    if (username) {
+      this.recipeService.getRecipes(username).subscribe(
+        recipes => {
+        this.store.dispatch(new LoadRecipes(recipes));
+      });
+    }
+
   }
 
   importRecipes() {

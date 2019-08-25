@@ -10,6 +10,7 @@ import { MeasurementState } from '@app/measurement/state/measurement.state';
 import { NewMeasurement, LoadMeasurement, RemoveMeasurement } from '@app/measurement/state/measurement.actions';
 import { ConfirmComponent } from '@app/common/confirm/confirm.component';
 import { BrewState } from '@app/brew/state/brew.state';
+import { MeasurementService } from '@app/measurement/services/measurement.service';
 
 @Component({
   selector: 'app-measurement-list',
@@ -21,9 +22,12 @@ export class MeasurementListComponent implements OnInit {
   @Select(MeasurementState.getMeasurements) measurements$: Observable<Measurement[]>;
   brewId: number;
 
-  constructor(private store: Store,
-              private router: Router,
-              private simpleModalService: SimpleModalService) { }
+  constructor(
+    private store: Store,
+    private router: Router,
+    private simpleModalService: SimpleModalService,
+    private measurementService: MeasurementService
+  ) { }
 
   ngOnInit() {
     const brew = this.store.selectSnapshot(BrewState.getBrew);
@@ -36,14 +40,22 @@ export class MeasurementListComponent implements OnInit {
   }
 
   public editMeasurement(measurementId: number) {
-    this.store.dispatch(new LoadMeasurement(measurementId)).subscribe(
-      () => {
-        this.router.navigate(['/brews/' + this.brewId + '/measurement/' + measurementId]);
-      });
+    if (measurementId) {
+      this.measurementService.getMeasurement(measurementId).subscribe(
+        measurement => {
+          this.store.dispatch(new LoadMeasurement(measurement));
+          this.router.navigate(['/brews/' + this.brewId + '/measurement/' + measurementId]);
+        }
+      )
+    }
   }
 
   private deleteMeasurement(measurement: Measurement) {
-    this.store.dispatch(new RemoveMeasurement(measurement));
+    if (measurement) {
+      this.measurementService.deleteMeasurement(measurement.id).subscribe(
+        () => this.store.dispatch(new RemoveMeasurement(measurement))
+      );
+    }
   }
 
   public confirmDelete(measurement: Measurement) {

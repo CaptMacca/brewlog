@@ -1,13 +1,10 @@
-import { tap, catchError } from 'rxjs/operators';
 import { State, Selector, StateContext, Action } from '@ngxs/store';
 import { patch, removeItem, append, updateItem } from '@ngxs/store/operators';
 
-import { MeasurementService } from '@app/measurement/services/measurement.service';
 import { Measurement } from '@app/model';
 import { LoadMeasurement, NewMeasurement,
          RemoveMeasurement, AddMeasurement,
-         UpdateMeasurement, LoadMeasurementSuccess,
-         LoadMeasurementError, LoadMeasurements } from '@app/measurement/state/measurement.actions';
+         UpdateMeasurement, LoadMeasurements } from '@app/measurement/state/measurement.actions';
 
 export class MeasurementStateModel {
   measurements: Measurement[];
@@ -32,43 +29,22 @@ export class MeasurementState {
     return state.measurement;
   }
 
-  constructor(private measurementService: MeasurementService) {}
+  constructor() {}
 
   @Action(NewMeasurement)
   NewMeasurement(ctx: StateContext<MeasurementStateModel>, action: NewMeasurement) {
     const measurement = new Measurement();
     measurement.id = 0;
-    return ctx.setState(
-      patch({
-        measurement: measurement
-      })
-    );
+    return ctx.setState(patch({
+      measurement: measurement
+    }));
   }
 
   @Action(LoadMeasurement)
   LoadMeasurement(ctx: StateContext<MeasurementStateModel>, { payload }: LoadMeasurement) {
-    return this.measurementService.getMeasurement(+payload).pipe(
-      tap(measurement => ctx.dispatch(new LoadMeasurementSuccess(measurement))),
-      catchError(err => ctx.dispatch(new LoadMeasurementError(err)))
-    );
-  }
-
-  @Action(LoadMeasurementSuccess)
-  LoadMeasurementSuccess(ctx: StateContext<MeasurementStateModel>, { payload }: LoadMeasurementSuccess) {
-    return ctx.setState(
-      patch({
-        measurement: payload
-      }))
-    ;
-  }
-
-  @Action(LoadMeasurementError)
-  LoadMeasurementError(ctx: StateContext<MeasurementStateModel>, { payload }: LoadMeasurementError) {
-    return ctx.setState(
-      patch({
-        measurement: null
-      })
-    );
+    return ctx.setState(patch({
+      measurement: payload
+    }));
   }
 
   @Action(LoadMeasurements)
@@ -82,37 +58,25 @@ export class MeasurementState {
 
   @Action(RemoveMeasurement)
   RemoveMeasurement(ctx: StateContext<MeasurementStateModel>, { payload }: RemoveMeasurement) {
-    return this.measurementService.deleteMeasurement(+payload.id).pipe(
-      tap(() => ctx.setState(
-          patch({
-            measurement: new Measurement(),
-            measurements: removeItem(m => m === payload)
-          })
-      ))
-    );
+    return ctx.setState(patch({
+      measurement: new Measurement(),
+      measurements: removeItem(m => m === payload)
+    }));
   }
 
   @Action(AddMeasurement)
   AddMeasurement(ctx: StateContext<MeasurementStateModel>, { payload }: AddMeasurement) {
-    return this.measurementService.saveMeasurement(payload).pipe(
-      tap(measurement => ctx.setState(
-        patch({
-          measurement: measurement,
-          measurements: append([measurement])
-        })
-      ))
-    );
+    return ctx.setState(patch({
+      measurement: payload,
+      measurements: append([payload])
+    }));
   }
 
   @Action(UpdateMeasurement)
   UpdateMeasurement(ctx: StateContext<MeasurementStateModel>, { payload }: UpdateMeasurement) {
-    return this.measurementService.updateMeasurement(payload).pipe(
-      tap(measurement => ctx.setState(
-        patch({
-          measurement: measurement,
-          measurements: updateItem(m => m.id === payload.id, measurement)
-        })
-      ))
-    );
+    return ctx.setState(patch({
+      measurement: payload,
+      measurements: updateItem(m => m.id === payload.id, payload)
+    }));
   }
 }

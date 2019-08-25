@@ -1,4 +1,4 @@
-import { Brew, CreateBrew } from '@app/model';
+import { Brew } from '@app/model';
 
 export class LoadAllBrews {
   static readonly type = '[Brew] Load All Brews';
@@ -6,12 +6,12 @@ export class LoadAllBrews {
 
 export class LoadBrews {
   static readonly type = '[Brew] Load Brews';
-  constructor(public payload: string) {}
+  constructor(public payload: Brew[]) {}
 }
 
 export class LoadBrew {
   static readonly type = '[Brew] Load Brew';
-  constructor(public payload: number) {}
+  constructor(public payload: Brew) {}
 }
 
 export class NewBrew {
@@ -26,7 +26,7 @@ export class RemoveBrew {
 
 export class SaveBrew {
   static readonly type = '[Brew] Save Brew';
-  constructor(public payload: CreateBrew) {}
+  constructor(public payload: Brew) {}
 }
 
 export class UpdateBrew {

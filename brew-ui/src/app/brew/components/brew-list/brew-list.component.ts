@@ -10,6 +10,7 @@ import { Brew } from '@app/model';
 import { BrewState } from '@app/brew/state/brew.state';
 import { LoadBrews, RemoveBrew, LoadBrew } from '@app/brew/state/brew.actions';
 import { AuthState } from '@app/auth/state/auth.state';
+import { BrewService } from '@app/brew/services/brew.service';
 
 @Component({
   selector: 'app-brew-list',
@@ -22,23 +23,33 @@ export class BrewListComponent implements OnInit {
   constructor(
     private store: Store,
     private router: Router,
-    private simpleModalService: SimpleModalService
+    private simpleModalService: SimpleModalService,
+    private brewService: BrewService
   ) {}
 
   ngOnInit(): void {
     const username = this.store.selectSnapshot(AuthState.getUsername);
-    this.store.dispatch(new LoadBrews(username));
+    if (username) {
+      this.brewService.getBrews(username).subscribe(
+        brews => this.store.dispatch(new LoadBrews(brews))
+      );
+    }
+
   }
 
-  editBrew(brew: Brew): void {
-    this.store.dispatch(new LoadBrew(brew.id)).subscribe(
-      () => {
+  editBrew(selectedBrew: Brew): void {
+    this.brewService.getBrew(selectedBrew.id).subscribe(
+      brew => {
+        this.store.dispatch(new LoadBrew(brew));
         this.router.navigate(['/brews/' + brew.id]);
-      });
+      }
+    );
   }
 
   private deleteBrew(brew: Brew): void {
-    this.store.dispatch(new RemoveBrew(brew));
+    this.brewService.deleteBrew(brew.id).subscribe(
+      () => this.store.dispatch(new RemoveBrew(brew))
+    );
   }
 
   addBrew(): void {
