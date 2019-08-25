@@ -1,13 +1,9 @@
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
 import { State, StateContext, Selector, Action } from '@ngxs/store';
+import { patch, removeItem, append, updateItem } from '@ngxs/store/operators';
 
 import { Brew } from '@app/model';
 import { LoadBrews, RemoveBrew, LoadBrew, SaveBrew, UpdateBrew } from '@app/brew/state/brew.actions';
-import { BrewService } from '@app/brew/services/brew.service';
 import { MeasurementState } from '@app/measurement/state/measurement.state';
-import { patch, removeItem, append, updateItem } from '@ngxs/store/operators';
 
 export class BrewStateModel {
   brews: Brew[];
@@ -40,64 +36,44 @@ export class BrewState {
     return state.brew;
   }
 
-  constructor(private brewService: BrewService) {}
+  constructor() {}
 
   @Action(LoadBrews)
   LoadBrews(ctx: StateContext<BrewStateModel>, { payload }: LoadBrews) {
-    return this.brewService.getBrews(payload).pipe(
-      tap(brews => ctx.setState(
-        patch({
-          brews: brews
-        })
-      ))
-    );
+    return ctx.setState(patch({
+      brews: payload
+    }));
   }
 
   @Action(LoadBrew)
   LoadBrew(ctx: StateContext<BrewStateModel>, { payload }: LoadBrew) {
-    return this.brewService.getBrew(+payload).pipe(
-      tap(brew => ctx.setState(
-        patch({
-          brew: brew
-        })
-      ))
-    );
+    return ctx.setState(patch({
+      brew: payload
+    }));
   }
 
   @Action(RemoveBrew)
   RemoveBrew(ctx: StateContext<BrewStateModel>, { payload }: RemoveBrew) {
-    return this.brewService.deleteBrew(+payload.id).pipe(
-      tap(() => ctx.setState(
-        patch({
-          brew: new Brew(),
-          brews: removeItem(id => id === payload)
-        })
-      ))
-    );
+    return ctx.setState(patch({
+      brew: new Brew(),
+      brews: removeItem(id => id === payload)
+    }));
   }
 
   @Action(SaveBrew)
-  SaveBrew(ctx: StateContext<BrewStateModel>, { payload }: SaveBrew): Observable<Brew> {
-    return this.brewService.saveBrew(payload).pipe(
-      tap(brew => ctx.setState(
-        patch({
-          brew: brew,
-          brews: append([brew])
-        })
-      ))
-    );
+  SaveBrew(ctx: StateContext<BrewStateModel>, { payload }: SaveBrew) {
+    return ctx.setState(patch({
+      brew: payload,
+      brews: append([payload])
+    }));
   }
 
   @Action(UpdateBrew)
   UpdateBrew(ctx: StateContext<BrewStateModel>, { payload }: UpdateBrew) {
-    return this.brewService.updateBrew(payload).pipe(
-      tap(brew => ctx.setState(
-        patch({
-          brew: brew,
-          brews: updateItem(b => b.id === payload.id, brew)
-        })
-      ))
-    );
+    return ctx.setState(patch({
+      brew: payload,
+      brews: updateItem(b => b.id === payload.id, payload)
+    }));
   }
 
 }

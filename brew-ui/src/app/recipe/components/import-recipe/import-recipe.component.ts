@@ -9,6 +9,7 @@ import { Store } from '@ngxs/store';
 import { environment } from '@env/environment';
 import { LoadRecipes } from '@app/recipe/state/recipe.actions';
 import { AuthState } from '@app/auth/state/auth.state';
+import { RecipeService } from '@app/recipe/services/recipe.service';
 
 @Component({
   selector: 'app-import-recipe',
@@ -28,7 +29,8 @@ export class ImportRecipeComponent implements OnInit {
   constructor(
     private store: Store,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private recipeService: RecipeService
     ) {}
 
   ngOnInit() {
@@ -54,7 +56,9 @@ export class ImportRecipeComponent implements OnInit {
 
     this.uploader.onCompleteAll = () => {
       this.toastr.success('Recipe files have been uploaded', 'Success');
-      this.store.dispatch(new LoadRecipes(username));
+      this.recipeService.getRecipes(username).subscribe(
+        recipes => this.store.dispatch(new LoadRecipes(recipes))
+      );
     };
   }
 

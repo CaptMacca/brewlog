@@ -3,6 +3,7 @@ package brews.domain.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.mapstruct.IterableMapping;
 
 import java.util.Set;
 
@@ -25,6 +26,9 @@ public class RecipeDto {
     private String notes;
     private UserDto user;
     private Set<IngredientDto> ingredients;
+    private Set<FermentableDto> fermentables;
+    private Set<HopDto> hops;
+    private Set<YeastDto> yeasts;
     private Set<MashDto> mashes;
     private Long versionId;
 }

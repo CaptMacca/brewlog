@@ -6,17 +6,7 @@ export class NewMeasurement {
 
 export class LoadMeasurement {
   static readonly type = '[Measurement] Load Measurement';
-  constructor(public payload: number) {}
-}
-
-export class LoadMeasurementSuccess {
-  static readonly type = '[Measurement] Load Measurement Success';
   constructor(public payload: Measurement) {}
-}
-
-export class LoadMeasurementError {
-  static readonly type = '[Measurement] Load Measurement Error';
-  constructor(public payload: Error) {}
 }
 
 export class LoadMeasurements {
