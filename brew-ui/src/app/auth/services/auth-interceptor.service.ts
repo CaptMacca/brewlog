@@ -12,15 +12,15 @@ export class AuthInterceptorService implements HttpInterceptor {
     constructor(private store: Store) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
-        let authReq = req;
-        const token = this.store.selectSnapshot(AuthState.getAccessToken);
-        if (token != null) {
-            authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
-        }
-        return next.handle(authReq);
+      let authReq = req;
+      const token = this.store.selectSnapshot(AuthState.getAccessToken);
+      if (token) {
+        authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
+      }
+      return next.handle(authReq);
     }
 }
 
 export const httpInterceptorProviders = [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
 ];
