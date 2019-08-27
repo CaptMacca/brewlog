@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.mapstruct.IterableMapping;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class RecipeDto {
     private UserDto user;
     private Set<IngredientDto> ingredients;
     private Set<FermentableDto> fermentables;
-    private Set<HopDto> hops;
+    private SortedSet<HopDto> hops;
     private Set<YeastDto> yeasts;
     private Set<MashDto> mashes;
     private Long versionId;

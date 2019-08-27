@@ -8,6 +8,7 @@ import brews.domain.dto.YeastDto;
 import org.mapstruct.*;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
@@ -41,14 +42,17 @@ public abstract class RecipeMapper {
                 .map(f -> new IngredientMapperImpl().toFermentableDto(f))
                 .collect(Collectors.toSet());
 
-        Set<HopDto> hopDtos =
-          recipe.getIngredients()
+        // Sort the hops by addition time desending
+        SortedSet<HopDto> hopDtos = new TreeSet<>();
+        Comparator<HopDto> byAdditionTime= Comparator.comparing(HopDto::getAdditionTime).reversed();
+        Supplier<TreeSet<HopDto>> supplier = () -> new TreeSet<>(byAdditionTime);
+
+        hopDtos = recipe.getIngredients()
             .stream()
             .filter(Hop.class::isInstance)
             .map(Hop.class::cast)
-            .sorted(Comparator.comparing(Hop::getAdditionTime))
             .map(h -> new IngredientMapperImpl().toHopDto(h))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toCollection(supplier));
 
         Set<YeastDto> yeastDtos =
           recipe.getIngredients()
