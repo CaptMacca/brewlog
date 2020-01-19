@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brew-server
+  labels:
+    app: brew-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: brew-server
+  template:
+    metadata:
+      labels:
+        app: brew-server
+        tier: backend
+    spec:
+      containers:
+        - name: brew-server
+          image: mackysm/brew-server
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          env:
+            - name: GET_HOSTS_FROM
+              value: dns
+          ports:
+            - containerPort: 8080
