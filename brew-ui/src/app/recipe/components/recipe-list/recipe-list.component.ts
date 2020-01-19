@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { Store, Select } from '@ngxs/store';
+import { AuthState } from '@app/auth/state/auth.state';
+import { Recipe } from '@app/model';
+import { RecipeService } from '@app/recipe/services/recipe.service';
+import { LoadRecipes } from '@app/recipe/state/recipe.actions';
+import { RecipeState } from '@app/recipe/state/recipe.state';
+import { Select, Store } from '@ngxs/store';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-
-import { Recipe } from '@app/model';
-import { RecipeState } from '@app/recipe/state/recipe.state';
-import { LoadRecipes, SelectRecipe } from '@app/recipe/state/recipe.actions';
-import { AuthState } from '@app/auth/state/auth.state';
-import { RecipeService } from '@app/recipe/services/recipe.service';
 
 @Component({
   selector: 'app-recipe-list',

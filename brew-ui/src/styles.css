@@ -5,7 +5,8 @@
 @import "~primeng/resources/themes/nova-light/theme.css";
 @import "~primeng/resources/primeng.min.css";
 @import "brewlog-ui-theme.css";
-
+@import "~ng-zorro-antd/style/index.min.css"; /* Import basic styles */
+@import "~ng-zorro-antd/button/style/index.min.css"; /* Import styles of the component */
 
 /* Add application styles & imports to this file! */
 #toast-container > div {
