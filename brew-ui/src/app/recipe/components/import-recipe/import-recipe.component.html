@@ -1,4 +1,32 @@
-<section id="upload">
+<nz-page-header>
+  <nz-breadcrumb nz-page-header-breadcrumb>
+    <nz-breadcrumb-item>
+      Recipes
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>Import Recipes</a>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <nz-page-header-title>Import Recipes</nz-page-header-title>
+</nz-page-header>
+
+<div class="wrapper">
+  <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true">
+    <button nz-button><i nz-icon nzType="upload"></i><span>Select File</span></button>
+  </nz-upload>
+  <button
+    nz-button
+    [nzType]="'primary'"
+    [nzLoading]="uploading"
+    (click)="handleUpload()"
+    [disabled]="fileList.length == 0"
+    style="margin-top: 16px"
+  >
+    {{ uploading ? 'Uploading' : 'Start Upload' }}
+  </button>
+</div>
+
+<!-- <section id="upload">
   <div class="container">
     <div class="row">
       <div class="col-md-4">
@@ -128,4 +156,4 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->

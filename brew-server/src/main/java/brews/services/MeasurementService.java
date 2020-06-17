@@ -1,5 +1,6 @@
 package brews.services;
 
+import brews.domain.Measurement;
 import brews.domain.dto.MeasurementDto;
 import brews.domain.dto.MeasurementTypeDto;
 
@@ -12,6 +13,8 @@ public interface MeasurementService {
     MeasurementDto getMeasurement(Long id);
 
     List<MeasurementDto> getMeasurementsForBrew(Long id);
+
+    List<MeasurementDto> saveMeasurements(List<MeasurementDto> measurements);
 
     MeasurementDto createMeasurement(MeasurementDto measurementDto);
 

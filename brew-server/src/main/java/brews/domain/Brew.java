@@ -64,7 +64,7 @@ public class Brew implements Serializable {
     @OneToMany(
       mappedBy = "brew",
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY
+      fetch = FetchType.EAGER
     )
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

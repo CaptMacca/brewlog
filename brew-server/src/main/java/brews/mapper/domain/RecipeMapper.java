@@ -34,16 +34,16 @@ public abstract class RecipeMapper {
 
     @AfterMapping
     public void afterDtoMapping(final Recipe recipe, @MappingTarget final RecipeDto recipeDto) {
-        Set<FermentableDto> fermentableDtos =
+        List<FermentableDto> fermentableDtos =
           recipe.getIngredients()
                 .stream()
                 .filter(Fermentable.class::isInstance)
                 .map(Fermentable.class::cast)
                 .map(f -> new IngredientMapperImpl().toFermentableDto(f))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         // Sort the hops by addition time desending
-        SortedSet<HopDto> hopDtos = new TreeSet<>();
+        SortedSet<HopDto> hopDtos;
         Comparator<HopDto> byAdditionTime= Comparator.comparing(HopDto::getAdditionTime).reversed();
         Supplier<TreeSet<HopDto>> supplier = () -> new TreeSet<>(byAdditionTime);
 
@@ -54,13 +54,13 @@ public abstract class RecipeMapper {
             .map(h -> new IngredientMapperImpl().toHopDto(h))
             .collect(Collectors.toCollection(supplier));
 
-        Set<YeastDto> yeastDtos =
+        List<YeastDto> yeastDtos =
           recipe.getIngredients()
             .stream()
             .filter(Yeast.class::isInstance)
             .map(Yeast.class::cast)
             .map(y -> new IngredientMapperImpl().toYeastDto(y))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
 
 
         recipeDto.setFermentables(fermentableDtos);

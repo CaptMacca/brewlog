@@ -42,6 +42,7 @@ public class RecipeMapperTest {
 
         Hop hop = new Hop();
         hop.setId(1L);
+        hop.setAdditionTime(20.0);
 
         Fermentable fermentable = new Fermentable();
         fermentable.setId(1L);

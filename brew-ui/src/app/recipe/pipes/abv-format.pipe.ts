@@ -7,7 +7,7 @@ export class AbvFormatPipe implements PipeTransform {
 
   transform(value: any, ...args: any[]): any {
     if (value) {
-      return value.split(' ').filter(a=> a !== '%').join(' ');
+      return value.split(' ').filter(a => a !== '%').join(' ');
     } else {
       return null;
     }

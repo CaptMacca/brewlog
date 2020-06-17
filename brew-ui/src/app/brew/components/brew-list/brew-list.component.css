@@ -1,0 +1,9 @@
+nz-page-header, .wrapper {
+  border: 1px solid rgb(235, 237, 240);
+  background-color: white;
+  margin: 10px;
+}
+
+.wrapper {
+  padding: 15px;
+}

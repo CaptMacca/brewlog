@@ -29,22 +29,11 @@ services:
     build:
       context: ./brew-db
       dockerfile: Dockerfile
-    volumes:
-     - db-data:/var/lib/postgresql/data/
+    # volumes:
+    #  - db-data:/var/lib/postgresql/data/
     image: brewlog-db:latest
     ports:
      - 5432:5432
 
-
- # db:
- #   image: mysql/mysql-server:5.7
- #   command: "--default-authentication-plugin=mysql_native_password"
- #   environment:
- #     - MYSQL_DATABASE=brews
- #     - MYSQL_ROOT_PASSWORD=password
- #     - MYSQL_USER=springboot
- #     - MYSQL_PASSWORD=springboot
- #   ports:
- #     - 3306:3306
 volumes:
   db-data:

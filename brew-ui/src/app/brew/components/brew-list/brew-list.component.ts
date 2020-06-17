@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { SimpleModalService } from 'ngx-simple-modal';
-import { Observable } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
-
-import { ConfirmComponent } from '@app/common/confirm/confirm.component';
-import { Brew } from '@app/model';
-import { BrewState } from '@app/brew/state/brew.state';
-import { LoadBrews, RemoveBrew, LoadBrew } from '@app/brew/state/brew.actions';
 import { AuthState } from '@app/auth/state/auth.state';
-import { BrewService } from '@app/brew/services/brew.service';
+import { LoadBrews, RemoveBrew } from '@app/brew/state/brew.actions';
+import { BrewState } from '@app/brew/state/brew.state';
+import { Brew } from '@app/model';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-brew-list',
@@ -19,49 +15,93 @@ import { BrewService } from '@app/brew/services/brew.service';
 })
 export class BrewListComponent implements OnInit {
   @Select(BrewState.getBrews) brews$: Observable<Brew[]>;
+  username: string;
+  loading: Boolean = true;
+  selections: Brew[] = [];
+  isAllDisplayDataChecked = false;
+  isIndeterminate = false;
+  mapOfCheckedId: { [key: string]: boolean } = {};
 
   constructor(
-    private store: Store,
-    private router: Router,
-    private simpleModalService: SimpleModalService,
-    private brewService: BrewService
+    private readonly store: Store,
+    private readonly router: Router,
+    private readonly message: NzMessageService,
+    private readonly modalService: NzModalService,
   ) {}
 
   ngOnInit(): void {
-    const username = this.store.selectSnapshot(AuthState.getUsername);
-    if (username) {
-      this.brewService.getBrews(username).subscribe(
-        brews => this.store.dispatch(new LoadBrews(brews))
-      );
-    }
+    this.username = this.store.selectSnapshot(AuthState.getUsername);
+    this.loadBrews(this.username);
+  }
 
+  refresh() {
+    this.loadBrews(this.username);
   }
 
   editBrew(selectedBrew: Brew): void {
-    this.brewService.getBrew(selectedBrew.id).subscribe(
-      brew => {
-        this.store.dispatch(new LoadBrew(brew));
-        this.router.navigate(['/brews/' + brew.id]);
-      }
-    );
+    if (selectedBrew) {
+      this.router.navigate(['/main/brews/' + selectedBrew.id]);
+    }
+  }
+
+  private async loadBrews(username: string) {
+    if (username) {
+      await this.store.dispatch(new LoadBrews(username));
+      this.loading = false;
+    }
   }
 
   private deleteBrew(brew: Brew): void {
-    this.brewService.deleteBrew(brew.id).subscribe(
-      () => this.store.dispatch(new RemoveBrew(brew))
-    );
+    if (brew) {
+      this.store.dispatch(new RemoveBrew(brew)).subscribe(
+      state => this.message.success('Brew session has been successfully deleted.')
+      );
+    }
   }
 
   addBrew(): void {
-    this.router.navigate(['/brews/add']);
+    this.router.navigate(['/main/brews/add']);
   }
 
-  confirmDelete(brew: Brew) {
-    this.simpleModalService.addModal(ConfirmComponent, {
-        title: 'Confirm Delete',
-        message: 'Are you sure you wish to delete this brew.'
-      }).subscribe(
-        isConfirmed => isConfirmed ? this.deleteBrew(brew) : null
-      );
+  confirm(): void {
+    this.modalService.confirm({
+      nzTitle: 'Are you sure delete the selected brews?',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzOnOk: () => this.deleteBrews(),
+      nzCancelText: 'No',
+    });
+  }
+
+  private deleteBrews(): void {
+    if (this.selections) {
+      this.selections.forEach(b => {
+        this.store.dispatch(new RemoveBrew(b));
+      });
+      this.message.success('Selected Recipes have been deleted');
+    }
+  }
+
+  checkAll(value: boolean, brews: Brew[]): void {
+    if (value) {
+      brews.forEach(b => this.check(value, b));
+    } else {
+      brews.forEach(b => this.mapOfCheckedId[b.id] = value);
+      this.selections = [];
+    }
+  }
+
+  check(value: boolean, brew: Brew) {
+    this.mapOfCheckedId[brew.id] = value;
+    if (!value) {
+      this.selections = this.selections.filter(b => b.id !== brew.id)
+      if (this.isAllDisplayDataChecked) {
+        this.isAllDisplayDataChecked = false;
+      }
+    } else {
+      if (!this.selections.find(b => b.id === brew.id)) {
+        this.selections.push(brew);
+      }
+    }
   }
 }

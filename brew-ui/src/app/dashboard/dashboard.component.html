@@ -1,0 +1,15 @@
+<nz-page-header nzTitle="Dashboard">
+  <nz-breadcrumb nz-page-header-breadcrumb>
+    <nz-breadcrumb-item>
+      Home
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>Dashboard</a>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+</nz-page-header>
+
+<div class="wrapper">
+  <app-top5recipes [recipes]="recipes$ | async"></app-top5recipes>
+  <app-recent5brews [brews]="brews$ | async"></app-recent5brews>
+<div>

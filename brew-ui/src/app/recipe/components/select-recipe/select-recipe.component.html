@@ -1,30 +1,33 @@
-<p-table
-  [value]="recipes" [columns]="cols"
-  emptymessage="No recipes found."  [paginator]="true"
-  [rows]="10" [rowsPerPageOptions]="[10,20,30]"
-  [first]="first" selectionMode="single"
-  [(selection)]="selectedRecipes" data-key="name"
-  (onRowSelect)="selectRecipe($event)"
-  (onRowUnselect)="unselectRecipe($event)">
-  <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th class="recipes-checkbox">
-        &nbsp;
-      </th>
-      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-        {{ col.header }}
-        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-recipe let-columns="columns">
-    <tr>
-      <td>
-        <p-tableCheckbox [value]="recipe"></p-tableCheckbox>
-      </td>
-      <td *ngFor="let col of columns">
-        {{ recipe[col.field] }}
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+<nz-table
+  #recipeTable
+  nzSize="small"
+  [nzLoading]="loading"
+  [nzBordered]="true"
+  [nzShowPagination]="true"
+  [nzData]="recipes"
+  [nzLoadingIndicator]="spinner"
+>
+  <thead>
+  <tr>
+    <th></th>
+    <th>Recipe Name</th>
+    <th>Style</th>
+    <th>Type</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let recipe of recipeTable.data">
+    <td
+      nzShowCheckbox
+      [(nzChecked)]="mapOfCheckedId[recipe.id]"
+      (nzCheckedChange)="check($event,recipe)"
+    ></td>
+    <td>{{ recipe.name }}</td>
+    <td>{{ recipe.style }}</td>
+    <td>{{ recipe.type }}</td>
+  </tr>
+  </tbody>
+</nz-table>
+<ng-template #spinner>
+  <nz-spin nzSimple></nz-spin>
+</ng-template>

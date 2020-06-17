@@ -1,59 +1,45 @@
-<section id="LoginForm">
-    <div class="container mt-2">
-      <div class="form-row">
-        <div class="col-md-10">
-          <div class="card">
-            <div class="card-header"><h5>Login</h5></div>
-            <div class="card-body">
-              <form [formGroup]="form" class="needs-validation" novalidate (ngSubmit)="login()"
-              >
-                <div class="form-group">
-                  <label class="col-form-label">Username</label>
-                  <input
-                    formControlName="username" class="form-control" id="username" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        username.dirty && username.touched && username.invalid}"/>
-                  <div class="invalid-feedback">
-                    <div *ngFor="let validation of form_validation_messages.username">
-                      <span *ngIf="username.hasError(validation.type)">
-                        {{ validation.message }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Password</label>
-                  <input
-                    formControlName="password" class="form-control" id="password" type="password"
-                    [ngClass]="{
-                      'is-invalid':
-                        password.dirty && password.touched && password.invalid
-                    }"/>
-                  <div class="invalid-feedback">
-                    <div *ngFor="let validation of form_validation_messages.password">
-                      <span *ngIf="password.hasError(validation.type)">
-                        {{ validation.message }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div>
-                    <button class="btn btn-primary btn-sm" name="Register" type="submit"
-                     [disabled]="form.invalid && submitted">
-                      <fa-icon [icon]="['fas', 'save']"></fa-icon>&nbsp; Login
-                    </button>
-                    <button class="btn btn-light btn-sm" type="button" (click)="signUp()"                    >
-                      <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>&nbsp;Sign up
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
+<nz-card [nzBordered]="false" nzTitle="Login to Brew Log">
+  <form nzForm [formGroup]="form" class="login-form" novalidate>
+    <nz-form-item>
+      <!-- Username -->
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="user">
+          <input nz-input formControlName="username" nzHasFeedback id="username" type="text" placeholder="username"/>
+        </nz-input-group>
+        <nz-form-explain *ngIf="username.dirty && username.errors">
+          <div nzErrorTip *ngFor="let errorMessage of username['errorMessages']">
+            {{errorMessage}}<br/>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
 
+    <!-- Password -->
+    <nz-form-item>
+
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="lock">
+          <input nz-input type="password" nzHasFeedback formControlName="password" placeholder="Password" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="password.dirty && password.errors">
+          <div nzErrorTip *ngFor="let errorMessage of password['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Login/Register/Forgot -->
+    <nz-form-item>
+      <nz-form-control>
+        <label nz-checkbox formControlName="remember">
+          <span>Remember me</span>
+        </label>
+        <a class="login-form-forgot" class="login-form-forgot">Forgot password</a>
+        <button nz-button class="login-form-button" [nzType]="'primary'" (click)="login()">Log in</button>
+        Or
+        <a (click)="register()">register now!</a>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>

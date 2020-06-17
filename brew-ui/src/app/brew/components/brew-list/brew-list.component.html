@@ -1,55 +1,57 @@
-<section id="brew-list">
-  <div class="container">
-    <div class="table-responsive mt-3">
-      <div *ngIf="(brews$ | async) as brews">
-        <div *ngIf="brews.length">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Action</th>
-                <th>Recipe Name</th>
-                <th>Brew Date</th>
-                <th>Brewer</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let brew of brews">
-                <td>
-                  <button class="btn btn-success btn-sm" (click)="editBrew(brew)">
-                    <fa-icon [icon]="['fas', 'edit']"></fa-icon>&nbsp;Edit
-                  </button>
-                  <button class="btn btn-danger btn-sm" (click)="confirmDelete(brew)">
-                    <fa-icon [icon]="['fas', 'eraser']"></fa-icon>&nbsp;Delete
-                  </button>
-                </td>
-                <td>{{ brew.recipe.name }}</td>
-                <td>{{ brew.brewDate | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ brew.brewer?.givenName }} {{ brew.brewer?.surname }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div *ngIf="!brews.length">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Action</th>
-                <th>Recipe Name</th>
-                <th>Brew Date</th>
-                <th>Brewer</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="4">No Brews found</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <button class="btn btn-primary btn-sm" (click)="addBrew()">
-        <fa-icon [icon]="['fas', 'plus']"></fa-icon>&nbsp;Add Brew
-      </button>
-    </div>
-  </div>
-</section>
+<nz-page-header>
+  <nz-breadcrumb nz-page-header-breadcrumb>
+    <nz-breadcrumb-item>
+      Brews
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>View Brews</a>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <nz-page-header-title>View Brews</nz-page-header-title>
+  <nz-page-header-extra>
+    <button nz-button nzType="danger" [disabled]="selections.length === 0" (click)="confirm()">Delete Selected</button>
+    <button nz-button (click)="addBrew()">Add Brew</button>
+    <button nz-button nzType="primary" (click)="refresh()">Refresh</button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="wrapper">
+  <nz-table
+    #brewsTable
+    nzSize="small"
+    [nzLoading]="loading"
+    [nzBordered]="true"
+    [nzShowPagination]="true"
+    [nzData]="brews$ | async"
+    [nzLoadingIndicator]="spinner"
+  >
+    <thead>
+      <tr>
+        <th
+          nzShowCheckbox
+          [(nzChecked)]="isAllDisplayDataChecked"
+          [nzIndeterminate]="isIndeterminate"
+          (nzCheckedChange)="checkAll($event,brewsTable.data)"
+        ></th>
+        <th>Recipe Name</th>
+        <th>Brew Date</th>
+        <th>Brewer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let brew of brewsTable.data">
+        <td
+          nzShowCheckbox
+          [(nzChecked)]="mapOfCheckedId[brew.id]"
+          (nzCheckedChange)="check($event,brew)"
+        ></td>
+        <td><a (click)="editBrew(brew)">{{ brew.recipe.name }}</a></td>
+        <td>{{ brew.brewDate | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ brew.brewer?.givenName }} {{ brew.brewer?.surname }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <ng-template #spinner>
+    <nz-spin nzSimple></nz-spin>
+  </ng-template>
+</div>

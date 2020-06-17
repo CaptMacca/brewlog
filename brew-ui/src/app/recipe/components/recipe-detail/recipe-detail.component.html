@@ -1,209 +1,148 @@
-<!-- Recipe Details -->
-<section id="recipe-detail">
-  <div class="container">
-    <div class="row my-3">
-      <div class="col">
-        <div *ngIf="(recipe$ | async) as recipe">
-          <div class="card">
-            <div class="card-header">
-              <h5>{{ recipe.name }}</h5>
-            </div>
-            <div class="card-body">
-              <div class="container">
-                <div class="row">
-                  <div class="col-md-8">
-                    <table class="table">
-                      <tbody>
-                        <tr>
-                          <td><label>Type:</label></td>
-                          <td>
-                            <span>{{ recipe.type }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Style:</label></td>
-                          <td>
-                            <span>{{ recipe.style }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Estimated IBU:</label></td>
-                          <td>
-                            <span>{{ recipe.estimatedIbu }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Estimated ABV:</label></td>
-                          <td>
-                            <span>{{ recipe.estimatedAbv }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Estimated Colour:</label></td>
-                          <td>
-                            <span>{{ recipe.estimatedColour }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Batch Size:</label></td>
-                          <td>
-                            <span>{{ recipe.batchSize }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Original Gravity:</label></td>
-                          <td>
-                            <span>{{ recipe.originalGravity }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Final Gravity:</label></td>
-                          <td>
-                            <span>{{ recipe.finalGravity }}</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><label>Boil Time:</label></td>
-                          <td>
-                            <span>{{ recipe.boilTime }} minutes</span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="col-md-4">
-                    <app-recipe-colour
-                      [recipeColour]="recipe.estimatedColour"
-                      [imgWidth]="58"
-                      [imgHeight]="100"
-                    ></app-recipe-colour>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<div *ngIf="(recipe$ | async) as recipe">
+  <nz-page-header>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item>
+        Recipes
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Recipe Details</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-page-header-title>Recipe Details</nz-page-header-title>
+    <nz-page-header-extra>
+      <button nz-button nzType="danger"  (click)="confirm(recipe)">Delete Recipe</button>
+      <button nz-button (click)="brewRecipe(recipe)">Brew Recipe</button>
+      <button nz-button nzType="primary" (click)="gotoRecipes()">View Recipes</button>
+    </nz-page-header-extra>
+  </nz-page-header>
 
-          <div class="pt-3">
-            <ul class="nav nav-tabs">
-              <li class="nav-item ">
-                <a class="nav-link active" role="tab" data-toggle="tab" href="#fermentables"
-                  >Fermentables</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" role="tab" data-toggle="tab" href="#hops">Hops</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" role="tab" data-toggle="tab" href="#yeasts">Yeast</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" role="tab" data-toggle="tab" href="#mash">Mash Schedule</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" role="tab" data-toggle="tab" href="#notes">Notes</a>
-              </li>
-            </ul>
-
-            <div class="tab-content">
-              <div id="fermentables" class="tab-pane fade show active" role="tabpanel">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let fermentable of recipe.fermentables">
-                      <td>{{ fermentable.name }}</td>
-                      <td>{{ fermentable.amount | round: 2 }} kg</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div id="hops" class="tab-pane">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Amount</th>
-                      <th>Alpha</th>
-                      <th>Addition Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let hop of recipe.hops">
-                      <td>{{ hop.name }}</td>
-                      <td>{{ +hop.amount * 1000 | round: 2 }} g</td>
-                      <td>{{ hop.alpha }} %</td>
-                      <ng-template [ngIf]="hop.hopUsage == 'Boil'">
-                        <td>{{ hop.additionTime }} min</td>
-                      </ng-template>
-                      <ng-template [ngIf]="hop.hopUsage != 'Boil'">
-                        <td>{{ hop.hopUsage }}</td>
-                      </ng-template>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div id="yeasts" class="tab-pane fade" role="tabpanel">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let yeast of recipe.yeasts">
-                      <td>{{ yeast.name }}</td>
-                      <td>{{ yeast.amount * 100 | round: 2 }} ml</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div id="mash" class="tab-pane fade" role="tabpanel">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Step Temp</th>
-                      <th>Step Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let mash of recipe.mashes">
-                      <ng-template [ngIf]="mash">
-                        <td>{{ mash.name }}</td>
-                        <td>{{ mash.stepTemp | round: 1 }} c</td>
-                        <td>{{ mash.stepTime }} min</td>
-                      </ng-template>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div id="notes" class="tab-pane fade" role="tabpanel">
-                <div *ngIf="recipe.notes">
-                  <p>{{ recipe.notes }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-2">
-            <button class="btn btn-primary btn-sm" (click)="gotoRecipes()">
-              <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>&nbsp;Recipes
-            </button>
-            <button class="btn btn-danger btn-sm" (click)="confirmDelete(recipe)">
-              <fa-icon [icon]="['fas', 'trash']"></fa-icon>&nbsp;Delete Recipe
-            </button>
-          </div>
-        </div>
-      </div>
+  <div class="wrapper">
+    <h3>{{recipe.name}}</h3>
+    <nz-rate [nzCount]="5" [(ngModel)]="rating" (ngModelChange)="updateRating(recipe)"></nz-rate>
+    <div nz-row>
+      <div nz-col nzSpan="6"><label>Type:</label></div>
+      <div nz-col nzSpan="6"><span>{{ recipe.type }}</span></div>
+      <div nz-col nzSpan="6"><label>Style:</label></div>
+      <div nz-col nzSpan="6"><span>{{ recipe.style }}</span></div>
     </div>
+    <div nz-row>
+      <div nz-col nzSpan="6"><label>Batch Size:</label></div>
+      <div nz-col nzSpan="6"><span>{{ recipe.batchSize }}</span></div>
+      <div nz-col nzSpan="6"><label>Original Gravity:</label></div>
+      <div nz-col nzSpan="6"><span>{{ recipe.originalGravity }}</span></div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="6"><label>Final Gravity:</label></div>
+      <div nz-col nzSpan="6"><span>{{ recipe.finalGravity }}</span></div>
+      <div nz-col nzSpan="6"><label>Boil Time:</label></div>
+      <div nz-col nzSpan="6"><span>{{ recipe.boilTime }} minutes</span></div>
+    </div>
+
+    <nz-card>
+      <div nz-card-grid>
+        <label>Estimated IBU</label>
+        <app-ibu-gauge [ibuMax]="200" [ibuValue]="recipe.estimatedIbu | ibuFormat"></app-ibu-gauge>
+      </div>
+      <div nz-card-grid>
+        <label>Estimated ABV</label>
+        <app-abv-gauge [abvMax]="12" [abvValue]="recipe.estimatedAbv | abvFormat"></app-abv-gauge>
+      </div>
+      <div nz-card-grid>
+        <label>Estimated Colour</label>
+        <span>{{ recipe.estimatedColour }}</span>
+        <br/>
+        <app-recipe-colour
+          [recipeColour]="recipe.estimatedColour"
+          [imgWidth]="58"
+          [imgHeight]="100"
+        ></app-recipe-colour>
+      </div>
+    </nz-card>
+
+    <nz-tabset>
+      <nz-tab nzTitle="Fermentables">
+        <nz-table #fermentableTable [nzData]="recipe.fermentables" [nzBordered]="true">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let fermentable of fermentableTable.data">
+            <td>{{ fermentable.name }}</td>
+            <td>{{ fermentable.amount | round: 2 }} kg</td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+      <nz-tab nzTitle="Hops">
+        <nz-table #hopTable [nzData]="recipe.hops" [nzBordered]="true">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Alpha</th>
+            <th>Addition Time</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let hop of hopTable.data">
+            <td>{{ hop.name }}</td>
+            <td>{{ +hop.amount * 1000 | round: 2 }} g</td>
+            <td>{{ hop.alpha }} %</td>
+            <ng-template [ngIf]="hop.hopUsage == 'Boil'">
+              <td>{{ hop.additionTime }} min</td>
+            </ng-template>
+            <ng-template [ngIf]="hop.hopUsage != 'Boil'">
+              <td>{{ hop.hopUsage }}</td>
+            </ng-template>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+      <nz-tab nzTitle="Yeast">
+        <nz-table #yeastTable [nzData]="recipe.yeasts" [nzBordered]="true">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let yeast of yeastTable.data">
+            <td>{{ yeast.name }}</td>
+            <td>{{ yeast.amount * 100 | round: 2 }} ml</td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+      <nz-tab nzTitle="Mash Schedule">
+        <nz-table #mashTable [nzData]="recipe.mashes" [nzBordered]="true">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Step Temp</th>
+            <th>Step Time</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let mash of mashTable.data">
+            <ng-template [ngIf]="mash">
+              <td>{{ mash.name }}</td>
+              <td>{{ mash.stepTemp | round: 1 }} c</td>
+              <td>{{ mash.stepTime }} min</td>
+            </ng-template>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+      <nz-tab nzTitle="Notes">
+        <div *ngIf="recipe.notes">
+          <p>{{ recipe.notes }}</p>
+        </div>
+      </nz-tab>
+    </nz-tabset>
   </div>
-</section>
+</div>
+

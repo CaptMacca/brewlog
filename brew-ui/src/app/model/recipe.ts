@@ -17,6 +17,7 @@ export class Recipe {
   finalGravity: string;
   boilTime: string;
   notes: string;
+  rating: number;
   ingredients: Ingredient[];
   fermentables: Fermentable[];
   hops: Hop[];

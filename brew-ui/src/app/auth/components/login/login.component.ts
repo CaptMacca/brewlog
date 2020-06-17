@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { Store, Select } from '@ngxs/store';
-import { ToastrService } from 'ngx-toastr';
-
 import { AuthLoginInfo } from '@app/auth/model/login-info';
 import { Login } from '@app/auth/state/auth.actions';
-import { AuthState } from '@app/auth/state/auth.state';
+import { Store } from '@ngxs/store';
+import { RxFormBuilder, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-login',
@@ -16,32 +14,21 @@ import { AuthState } from '@app/auth/state/auth.state';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  errorMessage = '';
-  @Select(AuthState.getAuthorities) roles$;
   submitted = false;
 
-  form_validation_messages = {
-    username: [
-      { type: 'required', message: 'First Name is required' },
-      { type: 'minlength', message: 'First Name must contain at least 3 characters' },
-      { type: 'maxlength', message: 'First Name cannot be more than 50 characters' }],
-    password: [
-      { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password must contain at least 3 characters' },
-      { type: 'maxlength', message: 'Password cannot be more than 40 characters' }]
-  };
-
-  constructor(private store: Store,
-    private fb: FormBuilder,
-    private router: Router,
-    private toastr: ToastrService
+  constructor(
+    private readonly store: Store,
+    private readonly fb: RxFormBuilder,
+    private readonly router: Router,
+    private readonly message: NzMessageService
     ) { }
 
   ngOnInit() {
 
     this.form = this.fb.group({
-      username: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(40)])]
+      username: ['', [RxwebValidators.required({message: 'Please enter your username'})]],
+      password: ['', [RxwebValidators.required({message: 'Please enter your password'})]],
+      remember: ['false'],
     });
   }
 
@@ -53,6 +40,10 @@ export class LoginComponent implements OnInit {
     return this.form.get('password');
   }
 
+  get remember() {
+    return this.form.get('remember');
+  }
+
   login() {
     this.submitted = true;
 
@@ -60,21 +51,16 @@ export class LoginComponent implements OnInit {
       const loginInfo = new AuthLoginInfo(this.username.value, this.password.value);
       this.store.dispatch(new Login(loginInfo)).subscribe(
         () => {
-          this.toastr.success('Logged in successfully', 'Login')
-          this.router.navigateByUrl('/');
+          this.message.success('Logged in successfully')
+          this.router.navigate(['/main/dashboard']);
         },
-        err => this.toastr.error('Login was unsuccessful', 'Login')
+        err => this.message.error('Login was unsuccessful')
       );
     }
   }
 
-  backToWelcome() {
-    this.router.navigate(['/welcome']);
+  register() {
+    this.router.navigate(['/welcome/signup']);
   }
-
-  signUp() {
-    this.router.navigate(['/user/signup']);
-  }
-
 
 }

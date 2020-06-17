@@ -1,0 +1,228 @@
+<!-- Brew Date -->
+<div nz-row>
+  <div nz-col>
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="brewDate" nzRequired>Brew Date</nz-form-label>
+      <nz-form-control [nzErrorTip]="brewDateErrorTpl">
+        <nz-date-picker formControlName="brewDate" [nzFormat]="dateFormat"></nz-date-picker>
+        <ng-template #brewDateErrorTpl>
+          <div *ngFor="let errorMessage of brewDate['errorMessages']">
+           {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<!-- Score -->
+<div nz-row>
+  <div nz-col>
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="score">Score</nz-form-label>
+      <nz-form-control>
+        <nz-rate [nzCount]="5" id="score" formControlName="score"></nz-rate>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<!-- Volumes -->
+<div nz-row>
+  <div nz-col nzSpan="8">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="fermenterVol">Fermenter Volume</nz-form-label>
+      <nz-form-control [nzErrorTip]="fermenterVolErrorTpl">
+        <nz-input-number formControlName="fermenterVol" id="fermenterVol" type="number"></nz-input-number>
+        <ng-template #fermenterVolErrorTpl>
+          <div *ngFor="let errorMessage of fermenterVol['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="8">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="spargeVol">Sparge Volume</nz-form-label>
+      <nz-form-control [nzErrorTip]="spargeVolErrorTpl">
+        <nz-input-number formControlName="spargeVol" id="spargeVol" type="number"></nz-input-number>
+        <ng-template #spargeVolErrorTpl>
+          <div *ngFor="let errorMessage of spargeVol['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="8">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="totalWater">Total Water Required</nz-form-label>
+      <nz-form-control [nzErrorTip]="totalWaterErrorTpl">
+        <nz-input-number formControlName="totalWater" id="totalWater" type="number"></nz-input-number>
+        <ng-template #totalWaterErrorTpl>
+          <div *ngFor="let errorMessage of totalWater['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<!-- Estimated/Measured Pre Boil Gravity -->
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="estimatedPreBoilGravity">Estimated Pre-Boil Gravity</nz-form-label>
+      <nz-form-control [nzErrorTip]="estimatedPreboilGravityErrorTpl">
+        <nz-input-number formControlName="estimatedPreboilGravity" id="estimatedPreBoilGravity" type="number"></nz-input-number>
+        <ng-template #estimatedPreboilGravityErrorTpl>
+          <div *ngFor="let errorMessage of estimatedPreboilGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="measuredPreBoilGravity">Measured Pre-Boil Gravity</nz-form-label>
+      <nz-form-control [nzErrorTip]="measuredPreboilGravityErrorTpl">
+        <nz-input-number formControlName="measuredPreboilGravity" id="measuredPreBoilGravity" type="number"></nz-input-number>
+        <ng-template #measuredPreboilGravityErrorTpl>
+          <div *ngFor="let errorMessage of measuredPreboilGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<!-- Estimated/Measured Original Gravity -->
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="estimateOriginalGravity">Estimated Original Gravity</nz-form-label>
+      <nz-form-control [nzErrorTip]="estimatedOriginalGravityErrorTpl">
+        <nz-input-number formControlName="estimatedOriginalGravity" id="estimatedOriginalGravity" type="number"></nz-input-number>
+        <ng-template #estimatedOriginalGravityErrorTpl>
+          <div *ngFor="let errorMessage of estimatedOriginalGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="measuredOriginalGravity">Measured Original Gravity</nz-form-label>
+      <nz-form-control [nzErrorTip]="measuredOriginalGravityErrorTpl">
+        <nz-input-number formControlName="measuredOriginalGravity" id="measuredOriginalGravity" type="number"></nz-input-number>
+        <ng-template #measuredOriginalGravityErrorTpl>
+          <div *ngFor="let errorMessage of measuredOriginalGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<!-- Estimated/Measured Final Gravity -->
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="estimatedFinalGravity">Estimated Final Gravity</nz-form-label>
+      <nz-form-control [nzErrorTip]="estimatedFinalGravityErrorTpl">
+        <nz-input-number formControlName="estimatedFinalGravity" id="estimatedFinalGravity" type="number"></nz-input-number>
+        <ng-template #estimatedFinalGravityErrorTpl>
+          <div *ngFor="let errorMessage of estimatedFinalGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="measuredFinalGravity">Measured Final Gravity</nz-form-label>
+      <nz-form-control [nzErrorTip]="measuredFinalGravityErrorTpl">
+        <nz-input-number formControlName="measuredFinalGravity" id="measuredFinalGravity" type="number"></nz-input-number>
+        <ng-template #measuredFinalGravityErrorTpl>
+          <div *ngFor="let errorMessage of measuredFinalGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<!-- Estimated/Measured Fermentation Vol -->
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="estimatedFermentVolume">Estimated Fermentation Volume</nz-form-label>
+      <nz-form-control [nzErrorTip]="estimatedFermentVolumeErrorTpl">
+        <nz-input-number formControlName="estimatedFermentVolume" id="estimatedFermentVolume" type="number"></nz-input-number>
+        <ng-template #estimatedFermentVolumeErrorTpl>
+          <div *ngFor="let errorMessage of estimatedFermentVolume['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="measuredFermentVolume">Measured Fermentation Volume</nz-form-label>
+      <nz-form-control [nzErrorTip]="measureFermentVolumeErrorTpl">
+        <nz-input-number formControlName="measuredFermentVolume" id="measuredFermentVolume" type="number"></nz-input-number>
+        <ng-template #measureFermentVolumeErrorTpl>
+          <div *ngFor="let errorMessage of measuredFermentVolume['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<!-- Estimated/Measured Bottling Vol -->
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="estimatedBottleVolume">Estimated Bottling Volume</nz-form-label>
+      <nz-form-control [nzErrorTip]="estimatedBottleVolumeErrorTpl">
+        <nz-input-number formControlName="estimatedBottleVolume" id="estimatedBottleVolume" type="number"></nz-input-number>
+        <ng-template #estimatedBottleVolumeErrorTpl>
+          <div *ngFor="let errorMessage of estimatedBottleVolume['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="measuredBottleVolume">Measured Bottling Volume</nz-form-label>
+      <nz-form-control [nzErrorTip]="measuredBottleVolumeErrorTpl">
+        <nz-input-number formControlName="measuredBottleVolume" id="measuredBottleVolume" type="number"></nz-input-number>
+        <ng-template #measuredBottleVolumeErrorTpl>
+          <div *ngFor="let errorMessage of measuredBottleVolume['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>

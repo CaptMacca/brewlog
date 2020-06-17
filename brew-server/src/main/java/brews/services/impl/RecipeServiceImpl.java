@@ -1,15 +1,11 @@
 package brews.services.impl;
 
 import brews.domain.Brew;
-import brews.domain.Ingredient;
-import brews.domain.Mash;
 import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.RecipeMapper;
 import brews.repository.BrewsRepository;
-import brews.repository.IngredientRepository;
-import brews.repository.MashRepository;
 import brews.repository.RecipeRepository;
 import brews.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +20,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final BrewsRepository brewsRepository;
-    private final IngredientRepository ingredientRepository;
-    private final MashRepository mashRepository;
     private final RecipeMapper recipeMapper;
 
     public RecipeServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository,
-                             IngredientRepository ingredientRepository, MashRepository mashRepository,
                              RecipeMapper recipeMapper) {
         this.recipeRepository = recipeRepository;
         this.brewsRepository = brewsRepository;
-        this.ingredientRepository = ingredientRepository;
-        this.mashRepository = mashRepository;
         this.recipeMapper = recipeMapper;
     }
 
@@ -43,7 +34,6 @@ public class RecipeServiceImpl implements RecipeService {
     public List<RecipeDto> getAllRecipes() {
         log.debug("Retrieving all recipes from the database");
         List<Recipe> recipes = recipeRepository.findAll();
-
         return recipeMapper.toRecipeDtos(recipes);
     }
 
@@ -52,7 +42,14 @@ public class RecipeServiceImpl implements RecipeService {
     public List<RecipeDto> getAllRecipesForUser(String username) {
         log.debug("Retrieve recipes for user: {}", username);
         List<Recipe> recipes = recipeRepository.findRecipesByUserUsername(username);
+        return recipeMapper.toRecipeDtos(recipes);
+    }
 
+    @Override
+    @Transactional
+    public List<RecipeDto> getTop5RatedRecipesForUser(String username) {
+        log.debug("Retrieve top 5 rated recipes for user: {}", username);
+        List<Recipe> recipes = recipeRepository.findTop5RatedByUserUsernameOrderByNameDesc(username);
         return recipeMapper.toRecipeDtos(recipes);
     }
 
@@ -103,5 +100,21 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         recipeRepository.delete(recipe);
+    }
+
+    @Override
+    @Transactional
+    public RecipeDto updateRating(Long id, Short rating) {
+        log.debug(String.format("Updating recipe id: %d with rating: %d", id, rating));
+        Recipe recipe = recipeRepository.getOne(id);
+
+        if (recipe == null) {
+            throw new BrewsEntityNotFoundException();
+        }
+
+        recipe.setRating(rating);
+        Recipe updatedRecipe = recipeRepository.save(recipe);
+
+        return recipeMapper.toRecipeDto(updatedRecipe);
     }
 }

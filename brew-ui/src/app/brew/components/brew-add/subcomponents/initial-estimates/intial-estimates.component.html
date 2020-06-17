@@ -1,0 +1,81 @@
+<div class="wrapper">
+  <form nz-form [formGroup]="parentForm" novalidate>
+    <!-- Brew Date -->
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="brewDate" nzRequired>Brew Date</nz-form-label>
+      <nz-form-control [nzErrorTip]="brewDateErrorTpl">
+        <nz-date-picker formControlName="brewDate" [nzFormat]="dateFormat"></nz-date-picker>
+        <ng-template #brewDateErrorTpl>
+          <div *ngFor="let errorMessage of brewDate['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Estimated Pre Boil Gravity -->
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="estimatedPreBoilGravity" nzRequired>Estimated Pre-Boil Gravity</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="estimatedPreboilGravityErrorTpl">
+        <nz-input-number formControlName="estimatedPreboilGravity" id="estimatedPreBoilGravity" type="number"></nz-input-number>
+        <ng-template #estimatedPreboilGravityErrorTpl>
+          <div *ngFor="let errorMessage of estimatedPreboilGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Estimated Original Gravity -->
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="estimateOriginalGravity" nzRequired>Estimated Original Gravity</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="estimatedOriginalGravityErrorTpl">
+        <nz-input-number formControlName="estimatedOriginalGravity" id="estimatedOriginalGravity" type="number"></nz-input-number>
+        <ng-template #estimatedOriginalGravityErrorTpl>
+          <div *ngFor="let errorMessage of estimatedOriginalGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Estimated Final Gravity -->
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="estimatedFinalGravity" nzRequired>Estimated Final Gravity</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="estimatedFinalGravityErrorTpl">
+        <nz-input-number formControlName="estimatedFinalGravity" id="estimatedFinalGravity" type="number"></nz-input-number>
+        <ng-template #estimatedFinalGravityErrorTpl>
+          <div *ngFor="let errorMessage of estimatedFinalGravity['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Estimated Fermentation Vol -->
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="estimatedFermentVolume" nzRequired>Estimated Fermentation Volume</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="estimatedFermentVolumeTpl">
+        <nz-input-number formControlName="estimatedFermentVolume" id="estimatedFermentVolume" type="number"></nz-input-number>
+        <ng-template #estimatedFermentVolumeTpl>
+          <div *ngFor="let errorMessage of estimatedFermentVolume['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Estimated Bottling Vol -->
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="estimatedBottleVolume" nzRequired>Estimated Bottling Volume</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="estimatedBottleVolumeErrorTpl">
+        <nz-input-number formControlName="estimatedBottleVolume" id="estimatedBottleVolume" type="number"></nz-input-number>
+        <ng-template #estimatedBottleVolumeErrorTpl>
+          <div *ngFor="let errorMessage of estimatedBottleVolume['errorMessages']">
+            {{errorMessage}}<br/>
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

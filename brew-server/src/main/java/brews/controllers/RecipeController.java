@@ -1,6 +1,7 @@
 package brews.controllers;
 
 import brews.domain.dto.RecipeDto;
+import brews.domain.dto.UpdateRatingDto;
 import brews.services.RecipeService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,12 @@ public final class RecipeController {
         return ResponseEntity.ok(recipeService.getAllRecipesForUser(username));
     }
 
+    @GetMapping("/top5")
+    @ApiOperation("Returns top 5 rate recipes stored in the repository for a user")
+    public ResponseEntity<List<RecipeDto>> getTop5RatedRecipesForUser(@RequestParam String username) {
+        return ResponseEntity.ok(recipeService.getTop5RatedRecipesForUser(username));
+    }
+
 
     @GetMapping("{id}")
     @ApiOperation("Returns a recipe identified by the id")
@@ -52,6 +59,13 @@ public final class RecipeController {
     public ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto) {
         RecipeDto updatedRecipeDto = recipeService.updateRecipe(id, recipeDto);
         return ResponseEntity.ok(updatedRecipeDto);
+    }
+
+    @PutMapping("{id}/rating")
+    @ApiOperation("Update the recipe rating")
+    public ResponseEntity<RecipeDto> updateRating(@RequestBody UpdateRatingDto updateRatingDto) {
+        RecipeDto updateRecipeDto = recipeService.updateRating(updateRatingDto.getId(), updateRatingDto.getRating());
+        return ResponseEntity.ok(updateRecipeDto);
     }
 
     @DeleteMapping("{id}")

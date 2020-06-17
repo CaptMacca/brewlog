@@ -1,14 +1,9 @@
-@import "~bootstrap/dist/css/bootstrap.min.css";
-@import '~ngx-toastr/toastr.css';
-@import "~ngx-simple-modal/dist/styles/simple-modal.css";
-@import "~primeicons/primeicons.css";
-@import "~primeng/resources/themes/nova-light/theme.css";
-@import "~primeng/resources/primeng.min.css";
-@import "brewlog-ui-theme.css";
-@import "~ng-zorro-antd/style/index.min.css"; /* Import basic styles */
-@import "~ng-zorro-antd/button/style/index.min.css"; /* Import styles of the component */
+/*//@import "~ng-zorro-antd/style/index.min.css"; !* Import basic styles *!*/
+/*@import "~ng-zorro-antd/button/style/index.min.css"; !* Import styles of the component *!*/
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
 
 /* Add application styles & imports to this file! */
 #toast-container > div {
   opacity:1;
 }
+

@@ -1,0 +1,73 @@
+import { NgModule } from '@angular/core';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import {
+  NzBreadCrumbModule,
+  NzButtonModule,
+  NzCardModule,
+  NzDatePickerModule,
+  NzFormModule,
+  NzGridModule,
+  NzIconModule,
+  NzInputModule,
+  NzInputNumberModule,
+  NzModalModule,
+  NzNotificationModule,
+  NzPageHeaderModule,
+  NzPopconfirmModule,
+  NzRateModule,
+  NzResultModule,
+  NzSpinModule,
+  NzStepsModule,
+  NzTabsModule,
+  NzUploadModule
+} from 'ng-zorro-antd';
+
+
+@NgModule({
+  declarations: [],
+  imports: [
+    NzTableModule,
+    NzGridModule,
+    NzPageHeaderModule,
+    NzBreadCrumbModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzStepsModule,
+    NzDatePickerModule,
+    NzInputNumberModule,
+    NzFormModule,
+    NzNotificationModule,
+    NzResultModule,
+    NzSpinModule,
+    NzModalModule,
+    NzRateModule,
+    NzTabsModule,
+    NzInputModule,
+    NzIconModule,
+    NzUploadModule,
+    NzCardModule,
+  ],
+  exports: [
+    NzTableModule,
+    NzGridModule,
+    NzPageHeaderModule,
+    NzBreadCrumbModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzStepsModule,
+    NzDatePickerModule,
+    NzInputNumberModule,
+    NzFormModule,
+    NzNotificationModule,
+    NzResultModule,
+    NzSpinModule,
+    NzModalModule,
+    NzRateModule,
+    NzTabsModule,
+    NzInputModule,
+    NzIconModule,
+    NzUploadModule,
+    NzCardModule,
+  ]
+})
+export class UiModule { }

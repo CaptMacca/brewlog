@@ -37,6 +37,7 @@ public class Recipe implements Serializable {
     private String boilTime;
     @Lob
     private String notes;
+    private Short rating;
 
     @OneToMany(
       mappedBy = "recipe",

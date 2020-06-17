@@ -1,203 +1,41 @@
-<section id="edit-brew" class="p-5">
-  <div *ngIf="(brew$ | async) as brew">
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <div class="card w-100">
-            <div class="card-header"><h5>Edit Brew</h5></div>
-            <div class="card-body">
-              <form [formGroup]="brewForm" ngxsForm="brews.brewForm" class="needs-validation" novalidate
-                (ngSubmit)="save()">
-                <div class="form-group">
-                  <label class="col-form-label">Brew Date</label><br />
-                  <p-calendar formControlName="brewDate" showIcon="true" id="brewDate" dateFormat="dd/mm/yy" showButtonBar="true"
-                    [ngClass]="{
-                      'is-invalid':
-                        brewDate.dirty && brewDate.touched && brewDate.invalid
-                    }"></p-calendar>
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-lable">Score</label>
-                  <input formControlName="score" class="form-control" id="score" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        score.dirty && score.touched && score.invalid
-                    }"/>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Sparge Water</label>
-                  <input formControlName="spargeVol" class="form-control" id="spargeVol" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        spargeVol.dirty && spargeVol.touched && spargeVol.invalid
-                    }"/>
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Total Water Required</label>
-                  <input formControlName="totalWater" class="form-control" id="totalWater" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        totalWater.dirty && totalWater.touched && totalWater.invalid
-                    }"/>
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Fermenter Volume</label>
-                  <input formControlName="fermenterVol" class="form-control" id="fermenterVol" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        fermenterVol.dirty && fermenterVol.touched && fermenterVol.invalid
-                    }"/>
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Estimated Pre Boil Gravity</label>
-                  <input id="estimatedPreboilGravity" type="text" formControlName="estimatedPreboilGravity" class="form-control"
-                    [ngClass]="{
-                      'is-invalid':
-                        estimatedPreboilGravity.dirty && estimatedPreboilGravity.touched && estimatedPreboilGravity.invalid
-                    }"/>
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Measured Pre Boil Gravity</label>
-                  <input formControlName="measuredPreboilGravity" class="form-control" id="measuredPreboilGravity" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        measuredPreboilGravity.dirty && measureddPreboilGravity.touched && measuredPreboilGravity.invalid
-                    }"
-                  />
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Estimated Original Gravity</label>
-                  <input formControlName="estimatedOriginalGravity" class="form-control" id="estimatedOriginalGravity" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        estimatedOriginalGravity.dirty && estimatedOriginalGravity.touched && estimatedOriginalGravity.invalid
-                    }"
-                  />
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Measured Original Gravity</label>
-                  <input formControlName="measuredOriginalGravity" class="form-control" id="measuredOriginalGravity" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        measuredOriginalGravity.dirty && measureddOriginalGravity.touched && measuredOriginalGravity.invalid
-                    }"
-                  />
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Estimated Final Gravity</label>
-                  <input formControlName="estimatedFinalGravity" class="form-control" id="estimatedFinalGravity" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        estimatedFinalGravity.dirty && estimatedFinalGravity.touched && estimatedFinalGravity.invalid
-                    }"
-                  />
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Measured Final Gravity</label>
-                  <input formControlName="measuredFinalGravity" class="form-control" id="measuredFinalGravity" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        measuredFinalGravity.dirty && measuredFinalGravity.touched && measuredFinalGravity.invalid
-                    }"
-                  />
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Estimated Fermenter Volume</label>
-                  <input formControlName="estimatedFermentVolume" class="form-control" id="estimatedFermentVolume" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        estimatedFermentVolume.dirty && estimatedFermentVolume.touched && estimatedFermentVolume.invalid
-                    }"
-                  />
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">Measured Fermenter Volume</label>
-                  <input formControlName="measuredFermentVolume" class="form-control" id="measuredFermenterVolume" type="text"
-                    [ngClass]="{
-                      'is-invalid':
-                        measuredFermentVolume.dirty && measuredFermentVolume.touched && measuredFermentVolume.invalid
-                    }"
-                  />
-                  <div class="invalid-feedback">
-                  </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label">Estimated Bottle Volume</label>
-                    <input formControlName="estimatedBottleVolume" class="form-control" id="estimatedBottleVolume" type="text"
-                      [ngClass]="{
-                        'is-invalid':
-                          estimatedBottleVolume.dirty && estimatedBottleVolume.touched && estimatedBottleVolume.invalid
-                      }"
-                    />
-                    <div class="invalid-feedback">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-form-label">Measured Bottle Volume</label>
-                    <input formControlName="measuredBottleVolume" class="form-control" id="measuredBottleVolume" type="text"
-                      [ngClass]="{
-                        'is-invalid':
-                          measuredBottleVolume.dirty && measuredBottleVolume.touched && measuredBottleVolume.invalid
-                      }"
-                    />
-                    <div class="invalid-feedback">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-form-label">Brewing Notes</label>
-                    <textarea formControlName="notes" rows="10" class="form-control" id="notes" type="text"
-                      [ngClass]="{
-                        'is-invalid':
-                          notes.dirty && notes.touched && notes.invalid
-                      }"></textarea>
-                    <div class="invalid-feedback">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-form-label">Tasting Notes</label>
-                    <textarea formControlName="tastingNotes" rows="10" class="form-control" id="tastingNotes" type="text"
-                      [ngClass]="{
-                        'is-invalid':
-                          tastingNotes.dirty && tastingNotes.touched && tastingNotes.invalid
-                      }"></textarea>
-                    <div class="invalid-feedback">
-                    </div>
-                  </div>
-              </form>
-            </div>
-            <div class="card-footer">
-              <button class="btn btn-primary btn-sm attach-left" (click)="save()" [disabled]="!brewForm.valid || !brewForm.dirty">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>&nbsp;Save
-              </button>&nbsp;
-              <button class="btn btn-secondary btn-sm attach-left" (click)="gotoMeasurements()" [disabled]="brewId === 0">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>&nbsp;Measurements
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div *ngIf="(brew$ | async) as brew">
+  <nz-page-header>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item>
+        Brews
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Edit Brew Session</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-page-header-title>Brew Details</nz-page-header-title>
+    <nz-page-header-extra>
+      <button nz-button nzType="danger"  (click)="confirm(brew)">Delete</button>
+      <button nz-button (click)="save(brew)" [disabled]="!brewForm.dirty  || !brewForm.valid || (saving | async)" [nzLoading]="saving | async">Save</button>
+      <button nz-button nzType="primary" (click)="gotoBrews()">View Brews</button>
+    </nz-page-header-extra>
+  </nz-page-header>
+
+  <div class="wrapper">
+    <h5>Brew Session for {{brew.recipe?.name}}</h5>
+    <form nz-form [formGroup]="brewForm" novalidate [nzLayout]="'vertical'">
+      <nz-tabset [nzTabPosition]="'top'" [nzType]="'line'">
+        <nz-tab [nzTitle]="'Brew Session'">
+          <app-brew-session [parentForm]="brewForm"></app-brew-session>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Notes'">
+          <app-brew-notes [parentForm]="brewForm"></app-brew-notes>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Measurements'">
+          <app-brew-measurements
+            [parentForm]="brewForm"
+            (deleteMeasurementEvent)="deleteMeasurement($event)"
+            (addMeasurementEvent)="addMeasurement()"
+          >
+          </app-brew-measurements>
+        </nz-tab>
+      </nz-tabset>
+    </form>
   </div>
-</section>
+</div>
+

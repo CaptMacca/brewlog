@@ -12,4 +12,5 @@ public interface BrewsRepository extends JpaRepository<Brew, Long> {
 
     List<Brew> findBrewsByRecipe(Recipe recipe);
     List<Brew> findBrewsByUserUsername(String username);
+    List<Brew> findTop5BrewsByUserUsernameOrderByBrewDateDesc(String username);
 }

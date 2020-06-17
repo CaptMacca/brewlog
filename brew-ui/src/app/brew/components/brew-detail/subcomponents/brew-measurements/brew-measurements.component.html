@@ -1,0 +1,34 @@
+<button nz-button (click)="addMeasurement()" nzType="primary">Add</button>
+<br />
+<br />
+<nz-table nzTemplateMode nzBordered [formGroup]="parentForm">
+  <thead>
+  <tr>
+    <th>Action</th>
+    <th>Date</th>
+    <th>Gravity Reading</th>
+  </tr>
+  </thead>
+  <tbody formArrayName="measurements">
+    <tr *ngFor="let measurement of measurements.controls; let i=index" >
+      <ng-container [formGroupName]="i">
+        <td>
+          <a nz-popconfirm nzPopconfirmTitle="Confirm delete?" (nzOnConfirm)="deleteMeasurement(i)" [nzIcon]="iconTpl">Delete</a>
+          <ng-template #iconTpl>
+            <i nz-icon nzType="question-circle-o" style="color: red;"></i>
+          </ng-template>
+        </td>
+      </ng-container>
+      <ng-container [formGroupName]="i">
+        <td>
+          <nz-date-picker [nzFormat]="dateFormat" formControlName="measurementDate"></nz-date-picker>
+        </td>
+      </ng-container>
+      <ng-container [formGroupName]="i">
+        <td>
+          <nz-input-number formControlName="measurementValue" type="number"></nz-input-number>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</nz-table>

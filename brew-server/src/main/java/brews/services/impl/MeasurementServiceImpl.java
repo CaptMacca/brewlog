@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -56,6 +57,22 @@ public class MeasurementServiceImpl implements MeasurementService {
         measurements = measurementRepository.findMeasurementsByBrewId(id);
 
         return measurementMapper.toMeasurementDtos(measurements);
+    }
+
+    @Override
+    public List<MeasurementDto> saveMeasurements(List<MeasurementDto> measurements) {
+        List<MeasurementDto> savedMeasurements = new ArrayList<>();
+        for (MeasurementDto measurementDto: measurements) {
+            Long measurementId = measurementDto.getId();
+            MeasurementDto savedMeasurement = null;
+            if (measurementId > 0) {
+                savedMeasurement = updateMeasurement(measurementDto);
+            } else {
+                savedMeasurement = createMeasurement(measurementDto);
+            }
+            savedMeasurements.add(savedMeasurement);
+        }
+        return savedMeasurements;
     }
 
     @Override
