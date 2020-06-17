@@ -1,0 +1,30 @@
+<nz-layout class="layout">
+  <nz-sider
+    nzCollapsible
+    [(nzCollapsed)]="isCollapsed"
+    [nzBreakpoint]="'lg'"
+    [nzCollapsedWidth]="0"
+    [nzZeroTrigger]="zeroTrigger"
+  >
+    <div class="logo"></div>
+    <app-navigation></app-navigation>
+  </nz-sider>
+  <nz-layout>
+    <nz-header nzTheme="dark">
+      <div nz-row nzType="flex" nzJustify="end" nzAlign="middle">
+        <div nz-col nzSpan="20"></div>
+        <div nz-col nzSpan="2">
+          <button nz-button nzType="secondary" nzGhost (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
+<ng-template #zeroTrigger>
+  <i nz-icon nzType="menu-fold" nzTheme="outline"></i>
+</ng-template>

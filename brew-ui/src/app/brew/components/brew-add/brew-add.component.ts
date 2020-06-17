@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { ToastrService } from 'ngx-toastr';
-import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
-
-import { Brew, Recipe, CreateBrew } from '@app/model';
-import { LoadRecipes } from '@app/recipe/state/recipe.actions';
-import { RecipeState } from '@app/recipe/state/recipe.state';
+import { AuthState } from '@app/auth/state/auth.state';
 import { SaveBrew } from '@app/brew/state/brew.actions';
 import { BrewState } from '@app/brew/state/brew.state';
-import { AuthState } from '@app/auth/state/auth.state';
-import { RecipeService } from '@app/recipe/services/recipe.service';
-import { BrewService } from '@app/brew/services/brew.service';
+import { Brew, CreateBrew, Recipe } from '@app/model';
+import { LoadRecipes } from '@app/recipe/state/recipe.actions';
+import { RecipeState } from '@app/recipe/state/recipe.state';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
+import { RxFormBuilder, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-brew-add',
@@ -20,50 +19,180 @@ import { BrewService } from '@app/brew/services/brew.service';
   styleUrls: ['./brew-add.component.css']
 })
 export class BrewAddComponent implements OnInit {
-
   @Select(RecipeState.getRecipes) recipes$: Observable<Recipe[]>;
 
+  selectedRecipe: Recipe;
+  current = 0;
+  brewForm: FormGroup;
+  brew: Brew;
+
   constructor(
-    private store: Store,
-    private router: Router,
-    private toastr: ToastrService,
-    private recipeService: RecipeService,
-    private brewService: BrewService
+    private readonly store: Store,
+    private readonly router: Router,
+    private readonly fb: RxFormBuilder,
+    private readonly message: NzMessageService,
+    private readonly notification: NzNotificationService
   ) {}
 
   ngOnInit() {
+    // TODO: Add support to pass a recipe to the component via router
     const username: string = this.store.selectSnapshot(AuthState.getUsername);
     if (username) {
-      this.recipeService.getRecipes(username).subscribe(
-        recipes => this.store.dispatch(new LoadRecipes(recipes))
-      );
+      this.store.dispatch(new LoadRecipes(username));
     }
 
+    this.brewForm = this.fb.group({
+      brewDate: ['', [
+          RxwebValidators.required({ message: 'Please set the date of the brew session' })
+        ]],
+      estimatedOriginalGravity: ['', [
+          RxwebValidators.required({ message: 'Please provide an estimated original gravity' })
+        ]],
+      estimatedFinalGravity: ['', [
+          RxwebValidators.required({ message: 'Please provide an estimated final gravity' }),
+          RxwebValidators.lessThanEqualTo({
+            fieldName: 'estimatedOriginalGravity',
+            message: 'Estimated Final Gravity should be less than or equal to Estimated Original Gravity'
+          })
+        ]],
+      estimatedPreboilGravity: ['', [
+          RxwebValidators.required({ message: 'Please provide an estimated pre-boil gravity' }),
+          RxwebValidators.lessThanEqualTo({
+            fieldName: 'estimatedOriginalGravity',
+            message: 'Estimated Pre-Boil Gravity should be less than or equal to Estimated Original Gravity'
+          })
+        ]],
+      estimatedFermentVolume: [
+        '',
+        [
+          RxwebValidators.required({
+            message: 'Please provide an Estimated Fermentation Volume'
+          })
+        ]
+      ],
+      estimatedBottleVolume: [
+        '',
+        [
+          RxwebValidators.required({
+            message: 'Please provide an Estimated Bottling Volume'
+          }),
+          RxwebValidators.lessThanEqualTo({
+            fieldName: 'estimatedFermentVolume',
+            message:
+              'Estimated Bottling Volume should be less than or equal to the Estimated Fermentation Volume'
+          })
+        ]
+      ]
+    });
+    this.populateForm();
   }
 
-  saveBrew(recipe: Recipe) {
-    if (recipe) {
-      const newBrew = this.newBrew(recipe);
-      const username: string = this.store.selectSnapshot(AuthState.getUsername);
-      const createBrew: CreateBrew = {
-        username: username,
-        brew: newBrew,
-        recipe
-      };
+  private populateForm() {
+    if (this.brewForm) {
+      this.brewForm.reset();
+    }
 
-      this.brewService.saveBrew(createBrew).subscribe(
-        brew => {
-          this.store.dispatch(new SaveBrew(brew));
-          this.toastr.success('A new brew session has been created', 'Success');
-          this.router.navigate(['/brews/' + brew.id]);
+    const brewDate = moment();
+    this.brewForm.patchValue({
+      brewDate: brewDate.toDate(),
+      estimatedOriginalGravity: 0,
+      estimatedPreboilGravity: 0,
+      estimatedFinalGravity: 0,
+      estimatedFermentVolume: 0,
+      estimatedBottleVolume: 0
+    });
+    this.brewForm.markAsDirty();
+    this.store.dispatch('brews.brewsForm');
+  }
 
-        }
-      )
+  get brewDate(): AbstractControl {
+    return this.brewForm.controls['brewDate'];
+  }
+  get estimatedOriginalGravity(): AbstractControl {
+    return this.brewForm.controls['estimatedOriginalGravity'];
+  }
+  get estimatedPreboilGravity(): AbstractControl {
+    return this.brewForm.controls['estimatedPreboilGravity'];
+  }
+  get estimatedFinalGravity(): AbstractControl {
+    return this.brewForm.controls['estimatedFinalGravity'];
+  }
+  get estimatedFermentVolume(): AbstractControl {
+    return this.brewForm.controls['estimatedFermentVolume'];
+  }
+  get estimatedBottleVolume(): AbstractControl {
+    return this.brewForm.controls['estimatedBottleVolume'];
+  }
+
+  selectRecipe(recipe: Recipe) {
+    this.selectedRecipe = recipe;
+  }
+
+  unselectRecipe(recipe: Recipe): void {
+    this.selectedRecipe = undefined;
+  }
+
+  saveBrew(saveIt: string): void {
+    if (saveIt === 'yes' && this.brewForm.dirty && this.brewForm.valid) {
+      if (this.selectedRecipe) {
+        const newBrew = new Brew();
+        newBrew.id = 0;
+        newBrew.recipe = this.selectedRecipe;
+        newBrew.score = 0;
+        newBrew.brewDate = this.brewDate.value;
+        newBrew.estimatedPreboilGravity = this.estimatedPreboilGravity.value;
+        newBrew.estimatedOriginalGravity = this.estimatedOriginalGravity.value;
+        newBrew.estimatedFinalGravity = this.estimatedFinalGravity.value;
+        newBrew.estimatedBottleVolume = this.estimatedBottleVolume.value;
+        newBrew.estimatedFermentVolume = this.estimatedFermentVolume.value;
+
+        const username: string = this.store.selectSnapshot(
+          AuthState.getUsername
+        );
+        const createBrew: CreateBrew = {
+          username: username,
+          brew: newBrew,
+          recipe: this.selectedRecipe
+        };
+
+        this.store.dispatch(new SaveBrew(createBrew)).subscribe(
+          state => {
+            const brew = this.store.selectSnapshot(BrewState.getBrew);
+            this.message.success('A new brew session has been saved');
+            this.router.navigate(['/main/brews/' + brew.id]);
+          },
+          error => {
+            this.message.error('Creation of brew session failed');
+          }
+        );
+      }
+    } else {
+      this.backToBrewsList();
     }
   }
 
-  backToBrewsList() {
-    this.router.navigate(['/brews']);
+  next(): void {
+    if (this.selectedRecipe) {
+      if (this.brewForm.valid) {
+        this.current++;
+      } else {
+        this.notification.create(
+          'error',
+          'Add Brew',
+          'The initial values provided are not correct, please correct them before proceeding'
+        );
+      }
+    }
+  }
+
+  prev(): void {
+    if (this.current > 0) {
+      this.current--;
+    }
+  }
+
+  backToBrewsList(): void {
+    this.router.navigate(['/main/brews']);
   }
 
   private newBrew(recipe: Recipe): Brew {
@@ -71,7 +200,7 @@ export class BrewAddComponent implements OnInit {
     brew.id = 0;
     brew.brewDate = new Date();
     brew.score = 0;
-    brew.recipe = recipe;
+    // brew.recipe = recipe;
     return brew;
   }
 }

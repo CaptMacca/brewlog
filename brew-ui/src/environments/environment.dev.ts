@@ -5,10 +5,11 @@
 
 export const environment = {
   production: false,
-  // apiUrl: 'http://localhost:8080/'
   apiUrl: 'http://10.1.1.79:8080/',
   recipeApiUrl: 'http://10.1.1.79:8080/api/recipes',
   brewsApiUrl: 'http://10.1.1.79:8080/api/brews',
   measurementApiUrl: 'http://10.1.1.79:8080/api/measurement',
-  recipeUploadApiUrl: 'http://10.1.1.79.100:8080/api/recipes/upload'
+  recipeUploadApiUrl: 'http://10.1.1.79:8080/api/recipes/upload',
+  loginUrl: 'http://10.1.1.79:8080/api/auth/signin',
+  signupUrl: 'http://10.1.1.79::8080/api/auth/signup',
 };

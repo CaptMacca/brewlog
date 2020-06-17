@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { ToastrService } from 'ngx-toastr';
-import { Store } from '@ngxs/store';
-
 import { SignUpInfo } from '@app/auth/model/signup-info';
 import { Signup } from '@app/auth/state/auth.actions';
+import { Store } from '@ngxs/store';
+import { RxFormBuilder, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-register',
@@ -16,45 +15,43 @@ import { Signup } from '@app/auth/state/auth.actions';
 export class RegisterComponent implements OnInit {
 
   form: FormGroup;
-  errorMessage = '';
+
   submitted = false;
 
-  form_validation_messages = {
-    firstName: [
-      { type: 'required', message: 'First Name is required' },
-      { type: 'minlength', message: 'First Name must contain at least 3 characters' },
-      { type: 'maxlength', message: 'First Name cannot be more than 50 characters' }],
-    surname: [
-      { type: 'required', message: 'Surname is required' },
-      { type: 'minlength', message: 'Surname must contain at least 3 characters' },
-      { type: 'maxlength', message: 'Surname cannot be more than 50 characters' }],
-    username: [
-      { type: 'required', message: 'First Name is required' },
-      { type: 'minlength', message: 'First Name must contain at least 3 characters' },
-      { type: 'maxlength', message: 'First Name cannot be more than 50 characters' }],
-    email: [
-      { type: 'required', message: 'Email address is required' },
-      { type: 'email', message: 'Email must be a valid email address' },
-      { type: 'maxlength', message: 'Email cannot be more than 60 characters' }],
-    password: [
-      { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password must contain at least 3 characters' },
-      { type: 'maxlength', message: 'Password cannot be more than 40 characters' }]
-  };
-
   constructor(
-    private store: Store,
-    private fb: FormBuilder,
-    private router: Router,
-    private toastr: ToastrService) { }
+    private readonly store: Store,
+    private readonly fb: RxFormBuilder,
+    private readonly router: Router,
+    private readonly message: NzMessageService) { }
 
   ngOnInit() {
     this.form = this.fb.group({
-      firstName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])],
-      surname: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])],
-      username: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])],
-      email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(60)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(40)])]
+      firstName: ['', [
+        RxwebValidators.required({message: 'Please provide a first name !'}),
+        RxwebValidators.maxLength({message: 'The first name cannot exceed 50 characters!', value: 50}),
+      ]],
+      surname: ['', [
+        RxwebValidators.required({message: 'Please provide a surname !'}),
+        RxwebValidators.maxLength({message: 'The surname cannot exceed 50 characters!', value: 50}),
+      ]],
+      username: ['', [
+        RxwebValidators.required({message: 'Please provide a username !'}),
+        RxwebValidators.minLength({message: 'The username must be at least 3 characters!', value: 3}),
+        RxwebValidators.maxLength({message: 'The username cannot exceed 20 characters!', value: 20}),
+      ]],
+      email: ['', [
+        RxwebValidators.required({message: 'Please provide an email address !'}),
+        RxwebValidators.email({message: 'Please enter a valid email address !'}),
+      ]],
+      password: ['', [
+        RxwebValidators.required({message: 'Please provide a password !'}),
+        RxwebValidators.minLength({message: 'The password must be at least 3 characters!', value: 3}),
+      ]],
+      confirm: ['', [
+        RxwebValidators.required({message: 'Please provide a password !'}),
+        RxwebValidators.minLength({message: 'The password must be at least 3 characters!', value: 3}),
+        RxwebValidators.compare({message: 'The confirm password does not match the password', fieldName: 'password'}),
+      ]],
     });
    }
 
@@ -78,6 +75,11 @@ export class RegisterComponent implements OnInit {
      return this.form.get('password');
    }
 
+   get confirm() {
+    return this.form.get('confirm');
+  }
+
+
   register() {
     this.submitted = true;
     if (this.form.dirty && this.form.valid) {
@@ -89,18 +91,18 @@ export class RegisterComponent implements OnInit {
         this.password.value);
       this.store.dispatch(new Signup(signupInfo)).subscribe(
         () => {
-          this.toastr.success('Success', 'Your account has been registered and you can now login');
-          this.router.navigate(['/user/login']);
+          this.message.success('Your account has been registered and you can now login !');
+          this.backToWelcome();
         },
         () => {
-          this.toastr.success('Error', 'Your registration has failed');
+          this.message.error('Your registration attempt has failed !');
         }
       );
     }
   }
 
   backToWelcome() {
-    this.router.navigate(['/welcome']);
+    this.router.navigate(['/welcome/login']);
   }
 
 }

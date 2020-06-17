@@ -15,6 +15,8 @@ public interface BrewService {
 
     List<BrewDto> getBrewsForRecipe(Recipe recipe);
 
+    List<BrewDto> getTop5BrewsForUser(String username);
+
     BrewDto saveBrew(BrewDto brewDto, String username);
 
     BrewDto updateBrew(UpdateBrewDto updateBrewDto);

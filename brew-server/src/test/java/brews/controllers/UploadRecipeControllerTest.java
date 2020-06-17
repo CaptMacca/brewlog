@@ -43,7 +43,8 @@ public class UploadRecipeControllerTest {
     public void canUploadRecipe() throws Exception {
 
         // Given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "domain.xml",
+        String user = "joe";
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("files", "domain.xml",
                 "text/plain", "domain data".getBytes());
         List<RecipeDto> recipes = new ArrayList<>();
         RecipeDto recipe = new RecipeDto();
@@ -52,8 +53,11 @@ public class UploadRecipeControllerTest {
 
         when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenReturn(recipes);
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
-                .file(mockMultipartFile);
+        MockHttpServletRequestBuilder builder =
+          MockMvcRequestBuilders.multipart("/api/recipes/upload")
+            .file(mockMultipartFile)
+            .param("user",user);
+
 
         // When
         mockMvc.perform(builder)
@@ -68,15 +72,18 @@ public class UploadRecipeControllerTest {
     public void expectBadRequestWhenNotBeerXML() throws Exception {
 
         // Given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "domain.txt",
+        String user = "joe";
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("files", "domain.txt",
                 "text/plain", "domain data".getBytes());
         List<RecipeDto> recipes = new ArrayList<>();
         RecipeDto recipe = new RecipeDto();
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
-                .file(mockMultipartFile);
+        MockHttpServletRequestBuilder builder =
+          MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
+            .file(mockMultipartFile)
+            .param("user",user);
 
         // When
         mockMvc.perform(builder)
@@ -91,7 +98,8 @@ public class UploadRecipeControllerTest {
     public void expectBadRequestWhenUploadingEmptyRecipe() throws Exception {
 
         // Given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "",
+        String user = "joe";
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("files", "",
                 "text/plain", "".getBytes());
         List<RecipeDto> recipes = new ArrayList<>();
         RecipeDto recipe = new RecipeDto();
@@ -100,8 +108,10 @@ public class UploadRecipeControllerTest {
 
         when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenReturn(recipes);
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
-                .file(mockMultipartFile);
+        MockHttpServletRequestBuilder builder =
+          MockMvcRequestBuilders.multipart("/api/recipes/upload")
+            .file(mockMultipartFile)
+            .param("user",user);;
 
         // When
         mockMvc.perform(builder)
@@ -116,7 +126,8 @@ public class UploadRecipeControllerTest {
     public void expectBadRequestWhenRecipeCannotBeParsed() throws Exception {
 
         // Given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "myrecipe.xml",
+        String user = "joe";
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("files", "myrecipe.xml",
                 "text/plain", "domain data".getBytes());
         List<RecipeDto> recipes = new ArrayList<>();
         RecipeDto recipe = new RecipeDto();
@@ -125,8 +136,9 @@ public class UploadRecipeControllerTest {
 
         when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenThrow(new ImportedRecipeUploadException());
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload?user=joe")
-                .file(mockMultipartFile);
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload")
+          .file(mockMultipartFile)
+          .param("user",user);
 
         // When
         mockMvc.perform(builder)

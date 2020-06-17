@@ -50,6 +50,12 @@ public final class BrewController {
         return brewService.getBrew(id);
     }
 
+    @GetMapping("/top5")
+    @ApiOperation("Returns top 5 recent brews stored in the repository for a user")
+    public ResponseEntity<List<BrewDto>> getTop5RatedBrewsForUser(@RequestParam String username) {
+        return ResponseEntity.ok(brewService.getTop5BrewsForUser(username));
+    }
+
     @PostMapping()
     @ApiOperation("Creates a new brew")
     public ResponseEntity<BrewDto> create(@RequestBody CreateBrewDto createBrewDto) {
@@ -69,7 +75,6 @@ public final class BrewController {
         if (brewDto == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
 
         BrewDto newBrew = brewService.saveBrew(brewDto, username);
 

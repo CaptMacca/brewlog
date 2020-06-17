@@ -1,12 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { Store, Select } from '@ngxs/store';
-import { Observable, Subscription } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthState } from '@app/auth/state/auth.state';
-import { Logout } from '@app/auth/state/auth.actions';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -17,8 +12,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
   @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<boolean>;
   authority: string;
   loggedInSubscription: Subscription;
+  isCollapsed: false;
 
-  constructor(private store: Store, private router: Router, private toastr: ToastrService) {}
+  constructor(private readonly store: Store) {}
 
   ngOnInit() {
 
@@ -43,15 +39,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
         this.authority = 'user';
       }
     }
-  }
-
-  logout() {
-    this.store.dispatch(new Logout()).subscribe(
-      () => {
-        this.router.navigateByUrl('/');
-        this.toastr.success('You have been logged out', 'Login');
-      }
-    );
   }
 
 }

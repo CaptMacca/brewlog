@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { Store, Select } from '@ngxs/store';
-import { ToastrService } from 'ngx-toastr';
-import { SimpleModalService } from 'ngx-simple-modal';
-import { Observable } from 'rxjs';
-
+import { NavigationEnd, Route, Router } from '@angular/router';
+import { AuthState } from '@app/auth/state/auth.state';
 import { Recipe } from '@app/model';
-
-import { ConfirmComponent } from '@app/common/confirm/confirm.component';
+import { LoadRecipes, RemoveRecipe, UpdateRecipeRating } from '@app/recipe/state/recipe.actions';
 import { RecipeState } from '@app/recipe/state/recipe.state';
-import { RemoveRecipe } from '@app/recipe/state/recipe.actions';
-import { RecipeService } from '@app/recipe/services/recipe.service';
+import { Select, Store } from '@ngxs/store';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { UpdateRating } from '@app/model/update-rating';
 
 @Component({
   selector: 'app-recipe',
@@ -20,46 +17,61 @@ import { RecipeService } from '@app/recipe/services/recipe.service';
 })
 export class RecipeDetailComponent implements OnInit {
   @Select(RecipeState.getRecipe) recipe$: Observable<Recipe>;
+  rating: number;
 
   constructor(
-    private store: Store,
-    private router: Router,
-    private toastr: ToastrService,
-    private simpleModalService: SimpleModalService,
-    private recipeService: RecipeService
-  ) {}
-
-  ngOnInit() {}
-
-  gotoRecipes() {
-    this.router.navigate(['/recipes']);
-  }
-
-  deleteRecipe(recipe: Recipe) {
-    this.recipeService.deleteRecipe(recipe).subscribe(
-      () => {
-        this.store.dispatch(new RemoveRecipe(recipe));
-        this.toastr.success('Recipe has been deleted.', 'Recipe');
-        this.gotoRecipes();
-      },
-      err => this.toastr.error('Problem deleting the recipe', 'Recipe')
+    private readonly store: Store,
+    private readonly router: Router,
+    private readonly message: NzMessageService,
+    private readonly modalService: NzModalService,
+  ) {
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+    ).subscribe(
+      (event) => {
+        const recipe = this.recipe$.subscribe((r: Recipe) => this.rating = r.rating);
+      }
     );
   }
 
-  confirmDelete(recipe: Recipe) {
-    const disposable = this.simpleModalService
-      .addModal(ConfirmComponent, {
-        title: 'Confirm Delete',
-        message: `Are you sure you wish to delete this recipe.
-                      Note any associated brews will also be deleted.`
-      })
-      .subscribe(isConfirmed => {
-        if (isConfirmed) {
-          this.deleteRecipe(recipe);
-        }
-      });
-    setTimeout(() => {
-      disposable.unsubscribe();
-    }, 10000);
+  ngOnInit() {}
+
+  gotoRecipes(): void {
+    this.router.navigate(['/main/recipes']);
+  }
+
+  private deleteRecipe(recipe: Recipe): void {
+    const username = this.store.selectSnapshot(AuthState.getUsername);
+    this.store.dispatch([
+      new RemoveRecipe(recipe),
+      new LoadRecipes(username)
+    ]).subscribe(
+      state => {
+        this.message.success('Recipe has been deleted.');
+        this.gotoRecipes();
+      },
+      err => this.message.error('Problem deleting the recipe')
+    );
+  }
+
+  confirm(recipe: Recipe): void {
+    this.modalService.confirm({
+      nzTitle: 'Are you sure delete the selected recipes?',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzOnOk: () => this.deleteRecipe(recipe),
+      nzCancelText: 'No',
+    });
+  }
+
+  brewRecipe(recipe: Recipe): void {
+    this.router.navigate(['/main/brews/add']);
+  }
+
+  updateRating(recipe: Recipe): void {
+    const updateRating = new UpdateRating();
+    updateRating.id = recipe.id;
+    updateRating.rating = this.rating;
+    this.store.dispatch(new UpdateRecipeRating(updateRating));
   }
 }

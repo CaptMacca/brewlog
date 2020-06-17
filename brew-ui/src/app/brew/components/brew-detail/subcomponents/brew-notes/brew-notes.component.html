@@ -1,0 +1,21 @@
+<div nz-row>
+  <div nz-col nzSpan="24">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="brewNotes">Brew Notes</nz-form-label>
+      <nz-form-control>
+        <textarea rows="10" id="brewNotes" nz-input formControlName="notes"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+
+<div nz-row>
+  <div nz-col nzSpan="24">
+    <nz-form-item [formGroup]="parentForm">
+      <nz-form-label nzFor="tastingNotes">Tasting Notes</nz-form-label>
+      <nz-form-control>
+        <textarea rows="10" id="tastingNotes" nz-input formControlName="tastingNotes"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<h6>Top 5 Rated Recipes</h6>
+<nz-table
+  #recipeTable
+  nzBordered
+  nzSize="small"
+  [nzData]="recipes"
+>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Style</th>
+      <th>Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let recipe of recipeTable.data">
+      <td>{{ recipe.name }}</td>
+      <td>{{ recipe.style }}</td>
+      <td>{{ recipe.rating }}</td>
+    </tr>
+  </tbody>
+</nz-table>

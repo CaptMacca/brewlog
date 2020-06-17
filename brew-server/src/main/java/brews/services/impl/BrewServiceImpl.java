@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -47,6 +46,11 @@ public class BrewServiceImpl implements BrewService {
         return brewMapper.toBrewDtos(brewsRepository.findBrewsByUserUsername(username));
     }
 
+    @Override
+    @Transactional
+    public List<BrewDto> getTop5BrewsForUser(String username) {
+        return brewMapper.toBrewDtos(brewsRepository.findTop5BrewsByUserUsernameOrderByBrewDateDesc(username));
+    }
 
     @Override
     @Transactional

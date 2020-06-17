@@ -1,62 +1,59 @@
-<!-- Recipe List Section -->
-<section id="recipe-list">
-  <div class="container mt-3">
-    <div class="table-responsive">
-      <div *ngIf="(recipes$ | async) as recipes">
-        <div *ngIf="recipes.length">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Action</th>
-                <th>Recipe Name</th>
-                <th>Type</th>
-                <th>Estimated ABV</th>
-                <th>Batch Size</th>
-                <th>Estimated Colour</th>
-                <th>Estimated IBU</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let recipe of recipes">
-                <td>
-                  <button class="btn btn-success btn-sm" (click)="viewRecipe(recipe)">
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>&nbsp;View
-                  </button>
-                </td>
-                <td>{{ recipe.name }}</td>
-                <td>{{ recipe.type }}</td>
-                <td>{{ recipe.estimatedAbv }}</td>
-                <td>{{ recipe.batchSize }}</td>
-                <td>{{ recipe.estimatedColour }}</td>
-                <td>{{ recipe.estimatedIbu }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div *ngIf="!recipes.length">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Action</th>
-                <th>Recipe Name</th>
-                <th>Type</th>
-                <th>Estimated ABV</th>
-                <th>Batch Size</th>
-                <th>Estimated Colour</th>
-                <th>Estimated IBU</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="7">No Recipes found</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <button class="btn btn-primary btn-sm" (click)="importRecipes()">
-      <fa-icon [icon]="['fas', 'database']"></fa-icon>&nbsp;Import Recipes
-    </button>
-  </div>
-</section>
+<nz-page-header>
+  <nz-breadcrumb nz-page-header-breadcrumb>
+    <nz-breadcrumb-item>
+      Recipes
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>View Recipes</a>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <nz-page-header-title>View Recipes</nz-page-header-title>
+  <nz-page-header-extra>
+    <button nz-button nzType="danger" [disabled]="selections.length === 0" (click)="confirm()">Delete Selected</button>
+    <button nz-button (click)="importRecipes()">Import Recipe</button>
+    <button nz-button nzType="primary" (click)="refresh()">Refresh</button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="wrapper">
+  <nz-table
+    #recipeTable
+    nzSize="small"
+    [nzLoading]="loading"
+    [nzBordered]="true"
+    [nzShowPagination]="true"
+    [nzData]="recipes$ | async"
+    [nzLoadingIndicator]="spinner"
+  >
+    <thead>
+      <tr>
+        <th
+          nzShowCheckbox
+          [(nzChecked)]="isAllDisplayDataChecked"
+          [nzIndeterminate]="isIndeterminate"
+          (nzCheckedChange)="checkAll($event,recipeTable.data)"
+        ></th>
+        <th>Recipe Name</th>
+        <th>Style</th>
+        <th>Type</th>
+        <th>Estimated ABV</th>
+  </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let recipe of recipeTable.data">
+        <td
+          nzShowCheckbox
+          [(nzChecked)]="mapOfCheckedId[recipe.id]"
+          (nzCheckedChange)="check($event,recipe)"
+        ></td>
+        <td><a (click)="viewRecipe(recipe)">{{ recipe.name }}</a></td>
+        <td>{{ recipe.style }}</td>
+        <td>{{ recipe.type }}</td>
+        <td>{{ recipe.estimatedAbv }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <ng-template #spinner>
+    <nz-spin nzSimple></nz-spin>
+  </ng-template>
+</div>

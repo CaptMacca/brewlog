@@ -30,9 +30,19 @@ public final class UploadRecipeController {
     }
 
     @PostMapping("upload")
-    @ApiOperation("Handles the upload of a beer.xml file, will fail if a recipe with the same roleName already exists in the repository")
-    public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("file") MultipartFile uploadfile, @RequestParam("user") String user) {
+    @ApiOperation("Handles the upload of a beer.xml files, will fail if a recipe with the same name already exists in the repository")
+    public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("files") MultipartFile[] uploadfiles, @RequestParam("user") String user) {
+        List<RecipeDto> recipes = new ArrayList<>();
 
+        for (MultipartFile file : uploadfiles) {
+           // Each xml file can contain multiple recipes
+           recipes.addAll(uploadRecipe(file, user));
+        }
+
+        return new ResponseEntity<>(recipes, HttpStatus.CREATED);
+    }
+
+    private List<RecipeDto> uploadRecipe(MultipartFile uploadfile, String user) {
         log.debug("File upload requested.");
         if (uploadfile.isEmpty()) {
             throw new IllegalArgumentException("File to be uploaded is empty ?");
@@ -47,13 +57,13 @@ public final class UploadRecipeController {
         }
 
         try {
-            List<RecipeDto> recipes = new ArrayList<>();
             InputStream fileContents = uploadfile.getInputStream();
+            List<RecipeDto> recipes = null;
             if (fileContents != null) {
                 recipes = importRecipeService.importBeerXml(fileContents, user);
             }
 
-            return new ResponseEntity<>(recipes, HttpStatus.CREATED);
+            return recipes;
         } catch (IOException e) {
             throw new ImportedRecipeUploadException("Exception encountered importing the uploaded",e);
         }

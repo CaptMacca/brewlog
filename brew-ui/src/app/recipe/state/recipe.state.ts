@@ -1,10 +1,19 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { patch, removeItem, append } from '@ngxs/store/operators';
-
 import { Recipe } from '@app/model';
-import { LoadRecipes, LoadRecipe, RemoveRecipe, SelectRecipe, AddRecipe } from '@app/recipe/state/recipe.actions';
+import {
+  AddRecipe,
+  LoadRecipe,
+  LoadRecipes,
+  LoadTop5Recipes,
+  RemoveRecipe,
+  SelectRecipe,
+  UpdateRecipeRating
+} from '@app/recipe/state/recipe.actions';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem } from '@ngxs/store/operators';
+import { RecipeService } from '../services/recipe.service';
 
 export class RecipeStateModel {
+  top5Recipes: [];
   recipes: Recipe[];
   recipe: Recipe;
 }
@@ -12,58 +21,103 @@ export class RecipeStateModel {
 @State<RecipeStateModel>({
   name: 'recipes',
   defaults: {
+    top5Recipes: [],
     recipes: [],
     recipe: new Recipe()
   }
 })
-
 export class RecipeState {
-
   @Selector()
-  static getRecipes(state: RecipeStateModel) {
-      return state.recipes;
+  static getRecipes(state: RecipeStateModel): Recipe[] {
+    return state.recipes;
   }
 
   @Selector()
-  static getRecipe(state: RecipeStateModel) {
-      return state.recipe;
+  static getRecipe(state: RecipeStateModel): Recipe {
+    return state.recipe;
   }
 
-  constructor() { }
+  @Selector()
+  static getTop5Recipe(state: RecipeStateModel): Recipe[] {
+    return state.top5Recipes;
+  }
+
+  constructor(private readonly recipeService: RecipeService) {}
 
   @Action(LoadRecipes)
   LoadRecipes(ctx: StateContext<RecipeStateModel>, action: LoadRecipes) {
-    return ctx.setState(patch({
-      recipes: action.payload
-    }));
+    return this.recipeService.getRecipes(action.payload).subscribe(recipes =>
+      ctx.setState(
+        patch({
+          recipes: recipes
+        })
+      )
+    );
+  }
+
+  @Action(LoadTop5Recipes)
+  LoadTop5Recipes(ctx: StateContext<RecipeStateModel>, action: LoadRecipes) {
+    return this.recipeService
+      .getTop5RatedRecipes(action.payload)
+      .subscribe(recipes =>
+        ctx.setState(
+          patch({
+            top5Recipes: recipes
+          })
+        )
+      );
   }
 
   @Action(LoadRecipe)
   LoadRecipe(ctx: StateContext<RecipeStateModel>, action: LoadRecipe) {
-    return ctx.setState(patch({
-      recipe: action.payload
-    }));
+    return this.recipeService.getRecipe(+action.payload).subscribe(recipe =>
+      ctx.setState(
+        patch({
+          recipe: recipe
+        })
+      )
+    );
   }
 
   @Action(RemoveRecipe)
   RemoveRecipe(ctx: StateContext<RecipeStateModel>, { payload }: RemoveRecipe) {
-    return ctx.setState(patch({
-      recipe: new Recipe(),
-      recipes: removeItem(id => id === payload)
-    }));
+    return this.recipeService.deleteRecipe(payload).subscribe(() => {
+      return ctx.setState(
+        patch({
+          recipe: new Recipe(),
+          recipes: removeItem(r => r === payload.id)
+        })
+      );
+    });
   }
 
   @Action(SelectRecipe)
   SelectRecipe(ctx: StateContext<RecipeStateModel>, { payload }: SelectRecipe) {
-    return ctx.setState(patch({
-      recipe: payload
-    }));
+    return ctx.setState(
+      patch({
+        recipe: payload
+      })
+    );
   }
 
   @Action(AddRecipe)
   AddRecipe(ctx: StateContext<RecipeStateModel>, { payload }: AddRecipe) {
-    return ctx.setState(patch({
-      recipes: append([payload])
-    }));
+    return ctx.setState(
+      patch({
+        recipes: append([payload])
+      })
+    );
+  }
+
+  @Action(UpdateRecipeRating)
+  UpdateRecipeRating(ctx: StateContext<RecipeStateModel>, { payload }: UpdateRecipeRating) {
+    return this.recipeService.updateRecipeRating(payload).subscribe(
+      recipe => {
+        return ctx.setState(
+          patch({
+            recipe: recipe
+          })
+        );
+    });
   }
 }

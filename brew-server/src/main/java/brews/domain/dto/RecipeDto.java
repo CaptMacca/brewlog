@@ -1,16 +1,18 @@
 package brews.domain.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.mapstruct.IterableMapping;
 
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 public class RecipeDto {
 
     private Long id;
@@ -25,11 +27,12 @@ public class RecipeDto {
     private String finalGravity;
     private String boilTime;
     private String notes;
+    private Short rating;
     private UserDto user;
-    private Set<IngredientDto> ingredients;
-    private Set<FermentableDto> fermentables;
+    private List<IngredientDto> ingredients;
+    private List<FermentableDto> fermentables;
     private SortedSet<HopDto> hops;
-    private Set<YeastDto> yeasts;
-    private Set<MashDto> mashes;
+    private List<YeastDto> yeasts;
+    private List<MashDto> mashes;
     private Long versionId;
 }

@@ -1,43 +1,56 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CalendarModule } from 'primeng/calendar';
-import { NgxsModule } from '@ngxs/store';
-import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-
-import { BrewListComponent } from '@app/brew/components/brew-list/brew-list.component';
 import { BrewAddComponent } from '@app/brew/components/brew-add/brew-add.component';
 import { BrewDetailComponent } from '@app/brew/components/brew-detail/brew-detail.component';
+import { BrewListComponent } from '@app/brew/components/brew-list/brew-list.component';
+import { Recent5brewsComponent } from '@app/brew/components/recent5brews/recent5brews.component';
 import { BrewEditGuard } from '@app/brew/services/brew-guard.service';
 import { BrewService } from '@app/brew/services/brew.service';
-import { MeasurementModule } from '@app/measurement/measurement.module';
 import { BrewState } from '@app/brew/state/brew.state';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxsFormPluginModule } from '@ngxs/form-plugin';
+import { NgxsModule } from '@ngxs/store';
+import { RecipeModule } from '@app/recipe/recipe.module';
+import { IntialEstimatesComponent } from './components/brew-add/subcomponents/initial-estimates/intial-estimates.component';
+import { SummaryComponent } from './components/brew-add/subcomponents/summary/summary.component';
+import { BrewSessionComponent } from './components/brew-detail/subcomponents/brew-session/brew-session.component';
+import { BrewNotesComponent } from './components/brew-detail/subcomponents/brew-notes/brew-notes.component';
+import { BrewMeasurementsComponent } from './components/brew-detail/subcomponents/brew-measurements/brew-measurements.component';
+import { MeasurementState } from '@app/brew/state/measurement.state';
+import { MeasurementService } from '@app/brew/services/measurement.service';
+import { BrewResolverService } from '@app/brew/services/brew-resolver.service';
+import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { UiModule } from '@app/common/ui/ui.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    CalendarModule,
-    MeasurementModule,
     FontAwesomeModule,
-    NgxsModule.forFeature([BrewState]),
-    NgxsFormPluginModule
-  ],
+    NgxsModule.forFeature([BrewState, MeasurementState]),
+    NgxsFormPluginModule,
+    RecipeModule,
+    RxReactiveFormsModule,
+    UiModule,
+    ],
   declarations: [
     BrewListComponent,
     BrewDetailComponent,
-    BrewAddComponent
+    BrewAddComponent,
+    Recent5brewsComponent,
+    IntialEstimatesComponent,
+    SummaryComponent,
+    BrewSessionComponent,
+    BrewNotesComponent,
+    BrewMeasurementsComponent
   ],
-  providers: [
-    BrewService,
-    BrewEditGuard
-  ],
+  providers: [BrewService, BrewEditGuard, MeasurementService, BrewResolverService],
   exports: [
     BrewListComponent,
     BrewDetailComponent,
-    BrewAddComponent
+    BrewAddComponent,
+    Recent5brewsComponent
   ]
 })
-export class BrewModule { }
+export class BrewModule {}

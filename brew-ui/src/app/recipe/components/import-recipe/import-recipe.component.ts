@@ -1,15 +1,12 @@
+import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
-import { ToastrService } from 'ngx-toastr';
-import { faCheck, faBan, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
-import { Store } from '@ngxs/store';
-
-import { environment } from '@env/environment';
-import { LoadRecipes } from '@app/recipe/state/recipe.actions';
 import { AuthState } from '@app/auth/state/auth.state';
-import { RecipeService } from '@app/recipe/services/recipe.service';
+import { LoadRecipes } from '@app/recipe/state/recipe.actions';
+import { environment } from '@env/environment';
+import { Store } from '@ngxs/store';
+import { NzMessageService, UploadFile } from 'ng-zorro-antd';
+import { filter, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-import-recipe',
@@ -17,52 +14,57 @@ import { RecipeService } from '@app/recipe/services/recipe.service';
   styleUrls: ['./import-recipe.component.css']
 })
 export class ImportRecipeComponent implements OnInit {
-
   private url: string = environment.recipeUploadApiUrl;
-
-  uploader: FileUploader;
-
-  faCheck = faCheck;
-  faBan = faBan;
-  faExclamationCircle = faExclamationCircle;
+  uploading = false;
+  fileList: UploadFile[] = [];
 
   constructor(
-    private store: Store,
-    private router: Router,
-    private toastr: ToastrService,
-    private recipeService: RecipeService
-    ) {}
+    private readonly store: Store,
+    private readonly router: Router,
+    private readonly message: NzMessageService,
+    private readonly http: HttpClient
+  ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  beforeUpload = (file: UploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  };
+
+  handleUpload(): void {
     const accessToken = this.store.selectSnapshot(AuthState.getAccessToken);
     const username = this.store.selectSnapshot(AuthState.getUsername);
-    this.uploader = new FileUploader({ url: this.url,  authToken: 'Bearer ' + accessToken});
-
-    // Mock for now till we add user registration and login via oauth
-    this.uploader.onBuildItemForm = (item, form) => {
-      form.append('user', username);
-    }
-
-    this.uploader.onAfterAddingFile = file => {
-      file.withCredentials = false;
-    };
-
-    this.uploader.onErrorItem = (item: any, response: any, status: any, headers: any) => {
-      this.toastr.error(
-        'File ' + item.file.name + ' uploaded failed. Reason : ' + response,
-        'Error'
+    this.uploading = true;
+    const formData = new FormData();
+    // tslint:disable-next-line:no-any
+    this.fileList.forEach((file: any) => {
+      formData.append('files', file);
+    });
+    formData.append('user', username);
+    const req = new HttpRequest('POST', this.url, formData, {
+      reportProgress: true
+    });
+    req.headers.append('Bearer', accessToken);
+    this.http.request(req).pipe(
+        filter(e => e instanceof HttpResponse),
+        finalize(() => {
+          this.uploading = false;
+          this.fileList = [];
+        })
+      ).subscribe(
+        () => {},
+        () => {
+          this.message.error('upload failed.');
+        },
+        () => {
+          this.message.success(`All Recipe file(s) have been uploaded`);
+          this.store.dispatch(new LoadRecipes(username));
+        }
       );
-    };
-
-    this.uploader.onCompleteAll = () => {
-      this.toastr.success('Recipe files have been uploaded', 'Success');
-      this.recipeService.getRecipes(username).subscribe(
-        recipes => this.store.dispatch(new LoadRecipes(recipes))
-      );
-    };
   }
 
   gotoRecipes() {
-    this.router.navigate(['/recipes']);
+    this.router.navigate(['/main/recipes']);
   }
 }

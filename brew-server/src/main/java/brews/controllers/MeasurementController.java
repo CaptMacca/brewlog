@@ -39,21 +39,29 @@ public final class MeasurementController {
         return measurementService.getMeasurementsForBrew(id);
     }
 
+//    @PostMapping()
+//    @ApiOperation("Creates a new measurement")
+//    public ResponseEntity<MeasurementDto> createMeasurement(@RequestBody MeasurementDto measurementDto) {
+//        log.debug("Creating new measurement");
+//        MeasurementDto createdMeasurementDto = this.measurementService.createMeasurement(measurementDto);
+//        return ResponseEntity.ok(createdMeasurementDto);
+//    }
+
     @PostMapping()
-    @ApiOperation("Creates a new measurement")
-    public ResponseEntity<MeasurementDto> createMeasurement(@RequestBody MeasurementDto measurementDto) {
-        log.debug("Creating new measurement");
-        MeasurementDto createdMeasurementDto = this.measurementService.createMeasurement(measurementDto);
-        return ResponseEntity.ok(createdMeasurementDto);
+    @ApiOperation("Saves new or updated measurements")
+    public ResponseEntity<List<MeasurementDto>> saveMeasurement(@RequestBody List<MeasurementDto> measurementDtos) {
+        log.debug("Saving measurements");
+        List<MeasurementDto> savedMeasurementDtos = this.measurementService.saveMeasurements(measurementDtos);
+        return ResponseEntity.ok(savedMeasurementDtos);
     }
 
-    @PutMapping()
-    @ApiOperation("Updates a measurement identified by the id")
-    public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
-        log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
-        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(measurementDto);
-        return ResponseEntity.ok(savedMeasurementDto);
-    }
+//    @PutMapping()
+//    @ApiOperation("Updates a measurement identified by the id")
+//    public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
+//        log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
+//        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(measurementDto);
+//        return ResponseEntity.ok(savedMeasurementDto);
+//    }
 
     @DeleteMapping("{id}")
     @ApiOperation("Deletes a measurement identified by the id")
