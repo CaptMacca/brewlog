@@ -4,6 +4,7 @@ import brews.domain.dto.RecipeDto;
 import brews.domain.dto.UpdateRatingDto;
 import brews.services.RecipeService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,47 +30,46 @@ public final class RecipeController {
     }
 
     @GetMapping("/all")
-    @ApiOperation("Returns all recipes stored in the repository")
+    @ApiOperation(value="Returns all recipes stored in the repository", authorizations = { @Authorization(value="jwtToken")})
     @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<RecipeDto>> getAll() {
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 
     @GetMapping()
-    @ApiOperation("Returns all recipes stored in the repository for a user")
+    @ApiOperation(value="Returns all recipes stored in the repository for a user", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<List<RecipeDto>> getAllRecipesForUser(@RequestParam String username) {
         return ResponseEntity.ok(recipeService.getAllRecipesForUser(username));
     }
 
     @GetMapping("/top5")
-    @ApiOperation("Returns top 5 rate recipes stored in the repository for a user")
+    @ApiOperation(value="Returns top 5 rate recipes stored in the repository for a user", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<List<RecipeDto>> getTop5RatedRecipesForUser(@RequestParam String username) {
         return ResponseEntity.ok(recipeService.getTop5RatedRecipesForUser(username));
     }
 
-
     @GetMapping("{id}")
-    @ApiOperation("Returns a recipe identified by the id")
+    @ApiOperation(value="Returns a recipe identified by the id",  authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long id) {
         return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
     @PutMapping("{id}")
-    @ApiOperation("Updates a recipe identified by the id")
+    @ApiOperation(value="Updates a recipe identified by the id", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto) {
         RecipeDto updatedRecipeDto = recipeService.updateRecipe(id, recipeDto);
         return ResponseEntity.ok(updatedRecipeDto);
     }
 
     @PutMapping("{id}/rating")
-    @ApiOperation("Update the recipe rating")
+    @ApiOperation(value="Update the recipe rating", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<RecipeDto> updateRating(@RequestBody UpdateRatingDto updateRatingDto) {
         RecipeDto updateRecipeDto = recipeService.updateRating(updateRatingDto.getId(), updateRatingDto.getRating());
         return ResponseEntity.ok(updateRecipeDto);
     }
 
     @DeleteMapping("{id}")
-    @ApiOperation("Deletes a recipe identified by the id")
+    @ApiOperation(value="Deletes a recipe identified by the id", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.noContent().build();

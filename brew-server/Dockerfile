@@ -1,5 +1,5 @@
 ARG BUILD_VERSION
-FROM gradle:4.3.0-jdk8-alpine as BUILD
+FROM gradle:6.3.0-jdk8-alpine as BUILD
 
 ADD src src
 ADD build.gradle .

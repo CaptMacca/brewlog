@@ -5,6 +5,7 @@ import brews.exceptions.ImportedRecipeUploadException;
 import brews.services.ImportRecipeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,9 @@ public final class UploadRecipeController {
     }
 
     @PostMapping("upload")
-    @ApiOperation("Handles the upload of a beer.xml files, will fail if a recipe with the same name already exists in the repository")
+    @ApiOperation(
+      value="Handles the upload of a beer.xml files, will fail if a recipe with the same name already exists in the repository",
+      authorizations = { @Authorization(value="jwtToken") })
     public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("files") MultipartFile[] uploadfiles, @RequestParam("user") String user) {
         List<RecipeDto> recipes = new ArrayList<>();
 

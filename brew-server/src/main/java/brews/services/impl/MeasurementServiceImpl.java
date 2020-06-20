@@ -65,10 +65,10 @@ public class MeasurementServiceImpl implements MeasurementService {
         for (MeasurementDto measurementDto: measurements) {
             Long measurementId = measurementDto.getId();
             MeasurementDto savedMeasurement = null;
-            if (measurementId > 0) {
-                savedMeasurement = updateMeasurement(measurementDto);
-            } else {
+            if (measurementId == null || measurementId <= 0) {
                 savedMeasurement = createMeasurement(measurementDto);
+            } else {
+                savedMeasurement = updateMeasurement(measurementDto);
             }
             savedMeasurements.add(savedMeasurement);
         }

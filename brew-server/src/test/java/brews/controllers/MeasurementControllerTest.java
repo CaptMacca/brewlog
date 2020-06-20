@@ -1,7 +1,7 @@
 package brews.controllers;
 
+import brews.domain.Measurement;
 import brews.domain.dto.MeasurementDto;
-import brews.domain.dto.MeasurementTypeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.handler.BrewsControllerExceptionHandler;
 import brews.services.MeasurementService;
@@ -17,12 +17,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 public class MeasurementControllerTest {
 
@@ -44,38 +42,6 @@ public class MeasurementControllerTest {
                 .build();
     }
 
-//    @Test
-//    public void testGetMeasurementTypes() throws Exception {
-//
-//        // Given
-//        List<MeasurementTypeDto> measurements = new ArrayList<>();
-//
-//        MeasurementTypeDto measurementType1 = new MeasurementTypeDto();
-//        measurementType1.setCode("Code1");
-//        measurementType1.setDescription("Description1");
-//        MeasurementTypeDto measurementType2 = new MeasurementTypeDto();
-//        measurementType2.setCode("Code2");
-//        measurementType2.setDescription("Description2");
-//
-//        measurements.add(measurementType1);
-//        measurements.add(measurementType2);
-//
-//        when(measurementService.getMeasurementTypes()).thenReturn(measurements);
-//
-//        // When
-//        mockMvc.perform(get("/api/measurement/types")
-//                .contentType(MediaType.APPLICATION_JSON_UTF8))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-//                .andExpect(jsonPath("$", hasSize(2)))
-//                .andExpect(jsonPath("$[0].code", is("Code1")))
-//                .andExpect(jsonPath("$[1].code", is("Code2")));
-//
-//        // Then
-//        verify(measurementService, times(1)).getMeasurementTypes();
-//
-//    }
-
     @Test
     public void testGetMeasurement() throws Exception {
         // Given
@@ -88,9 +54,9 @@ public class MeasurementControllerTest {
 
         // When
         mockMvc.perform(get("/api/measurement/1")
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.brewId", is(1)))
                 .andExpect(jsonPath("$.value", is(123.0)));
 
@@ -102,24 +68,24 @@ public class MeasurementControllerTest {
     public void testCreateMeasurement() throws Exception {
         // Given
         MeasurementDto measurement = new MeasurementDto();
-        measurement.setId(1L);
+        measurement.setId(-1L);
         measurement.setBrewId(1L);
         measurement.setValue(123.00);
 
-        when(measurementService.createMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
+        List<MeasurementDto> measurementDtos = new ArrayList<>();
+        measurementDtos.add(measurement);
+
+        when(measurementService.saveMeasurements(anyList())).thenReturn(measurementDtos);
 
         // When
         mockMvc.perform(post("/api/measurement")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(measurement)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(measurementDtos)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.brewId", is(1)))
-                .andExpect(jsonPath("$.value", is(123.0)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         // Then
-        verify(measurementService, times(1)).createMeasurement(any(MeasurementDto.class));
+        verify(measurementService, times(1)).saveMeasurements(anyList());
     }
 
     @Test
@@ -129,16 +95,19 @@ public class MeasurementControllerTest {
         measurement.setId(1L);
         measurement.setValue(123.00);
 
-        when(measurementService.createMeasurement(any(MeasurementDto.class))).thenThrow(new IllegalArgumentException());
+        List<MeasurementDto> measurementDtos = new ArrayList<>();
+        measurementDtos.add(measurement);
+
+        when(measurementService.saveMeasurements(anyList())).thenThrow(new IllegalArgumentException());
 
         // When
         mockMvc.perform(post("/api/measurement")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(measurement)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(measurementDtos)))
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(measurementService, times(1)).createMeasurement(any(MeasurementDto.class));
+        verify(measurementService, times(1)).saveMeasurements(anyList());
     }
 
     @Test
@@ -148,16 +117,18 @@ public class MeasurementControllerTest {
         measurement.setId(1L);
         measurement.setValue(123.00);
 
-        when(measurementService.createMeasurement(any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());
+        List<MeasurementDto> measurementDtos = new ArrayList<>();
+
+        when(measurementService.saveMeasurements(anyList())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
         mockMvc.perform(post("/api/measurement")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(measurement)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(measurementDtos)))
                 .andExpect(status().isNotFound());
 
         // Then
-        verify(measurementService, times(1)).createMeasurement(any(MeasurementDto.class));
+        verify(measurementService, times(1)).saveMeasurements(anyList());
     }
 
     @Test
@@ -168,21 +139,21 @@ public class MeasurementControllerTest {
         measurement.setBrewId(1L);
         measurement.setValue(123.00);
 
-        when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
+        List<MeasurementDto> measurementDtos = new ArrayList<>();
+        measurementDtos.add(measurement);
+
+        when(measurementService.saveMeasurements(anyList())).thenReturn(measurementDtos);
 
         // When
-        mockMvc.perform(put("/api/measurement")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(measurement))
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(post("/api/measurement")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(measurementDtos))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.brewId", is(1)))
-                .andExpect(jsonPath("$.value", is(123.0)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         // Then
-        verify(measurementService, times(1)).updateMeasurement(any(MeasurementDto.class));
+        verify(measurementService, times(1)).saveMeasurements(anyList());
     }
 
     @Test
@@ -193,17 +164,20 @@ public class MeasurementControllerTest {
         measurement.setBrewId(1L);
         measurement.setValue(123.00);
 
-        when(measurementService.updateMeasurement(any(MeasurementDto.class))).thenThrow(new BrewsEntityNotFoundException());
+        List<MeasurementDto> measurementDtos = new ArrayList<>();
+        measurementDtos.add(measurement);
+
+        when(measurementService.saveMeasurements(anyList())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
-        mockMvc.perform(put("/api/measurement")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(measurement))
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+        mockMvc.perform(post("/api/measurement")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(measurementDtos))
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
         // Then
-        verify(measurementService, times(1)).updateMeasurement(any(MeasurementDto.class));
+        verify(measurementService, times(1)).saveMeasurements(anyList());
     }
 
     @Test

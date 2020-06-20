@@ -4,6 +4,7 @@ import brews.domain.dto.MeasurementDto;
 import brews.services.MeasurementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,13 @@ public final class MeasurementController {
     }
 
     @GetMapping("{id}")
-    @ApiOperation("Get a specific measurement identified by the id")
+    @ApiOperation(value="Get a specific measurement identified by the id", authorizations = { @Authorization(value="jwtToken")})
     public MeasurementDto getMeasurement(@PathVariable Long id) {
         return measurementService.getMeasurement(id);
     }
 
     @GetMapping("/brew/{id}")
-    @ApiOperation("Get a specific measurement identified by the id")
+    @ApiOperation(value="Get a specific measurement identified by the id",  authorizations = { @Authorization(value="jwtToken")})
     public List<MeasurementDto> getMeasurementsForBrew(@PathVariable Long id) {
         return measurementService.getMeasurementsForBrew(id);
     }
@@ -48,23 +49,23 @@ public final class MeasurementController {
 //    }
 
     @PostMapping()
-    @ApiOperation("Saves new or updated measurements")
+    @ApiOperation(value="Saves new or updated measurements", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<List<MeasurementDto>> saveMeasurement(@RequestBody List<MeasurementDto> measurementDtos) {
         log.debug("Saving measurements");
         List<MeasurementDto> savedMeasurementDtos = this.measurementService.saveMeasurements(measurementDtos);
         return ResponseEntity.ok(savedMeasurementDtos);
     }
 
-//    @PutMapping()
-//    @ApiOperation("Updates a measurement identified by the id")
-//    public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
-//        log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
-//        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(measurementDto);
-//        return ResponseEntity.ok(savedMeasurementDto);
-//    }
+    @PutMapping("{id}")
+    @ApiOperation(value="Updates a measurement identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
+        log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
+        MeasurementDto savedMeasurementDto = this.measurementService.updateMeasurement(measurementDto);
+        return ResponseEntity.ok(savedMeasurementDto);
+    }
 
     @DeleteMapping("{id}")
-    @ApiOperation("Deletes a measurement identified by the id")
+    @ApiOperation(value="Deletes a measurement identified by the id",  authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<Void> deleteMeasurement(@PathVariable Long id) {
         log.debug(String.format("Deleting measurement with id: %d", id));
         this.measurementService.deleteMeasurement(id);

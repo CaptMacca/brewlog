@@ -7,6 +7,7 @@ import brews.domain.dto.UpdateBrewDto;
 import brews.services.BrewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,32 +33,32 @@ public final class BrewController {
     }
 
     @GetMapping("/all")
-    @ApiOperation("Returns all brews in the repository")
+    @ApiOperation(value="Returns all brews in the repository", authorizations = { @Authorization(value="jwtToken")})
     @RolesAllowed("ROLE_ADMIN")
     public List<BrewDto> getAllBrews() {
         return brewService.getAllBrews();
     }
 
     @GetMapping()
-    @ApiOperation("Returns all brews in the repository for a given username")
+    @ApiOperation(value="Returns all brews in the repository for a given username", authorizations = { @Authorization(value="jwtToken")})
     public List<BrewDto> getBrews(@RequestParam String username) {
         return brewService.getAllBrewsForUser(username);
     }
 
     @GetMapping("{id}")
-    @ApiOperation("Returns an individual brew identified by the id")
+    @ApiOperation(value="Returns an individual brew identified by the id", authorizations = { @Authorization(value="jwtToken")})
     public BrewDto get(@PathVariable Long id) {
         return brewService.getBrew(id);
     }
 
     @GetMapping("/top5")
-    @ApiOperation("Returns top 5 recent brews stored in the repository for a user")
+    @ApiOperation(value="Returns top 5 recent brews stored in the repository for a user", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<List<BrewDto>> getTop5RatedBrewsForUser(@RequestParam String username) {
         return ResponseEntity.ok(brewService.getTop5BrewsForUser(username));
     }
 
     @PostMapping()
-    @ApiOperation("Creates a new brew")
+    @ApiOperation(value="Creates a new brew", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<BrewDto> create(@RequestBody CreateBrewDto createBrewDto) {
 
         String username = createBrewDto.getUsername();
@@ -82,14 +83,14 @@ public final class BrewController {
     }
 
     @PutMapping()
-    @ApiOperation("Updates a brew identified by the id")
+    @ApiOperation(value="Updates a brew identified by the id", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<BrewDto> update(@RequestBody UpdateBrewDto updateBrewDto) {
         BrewDto updatedBrewDto = brewService.updateBrew(updateBrewDto);
         return ResponseEntity.ok(updatedBrewDto);
     }
 
     @DeleteMapping("{id}")
-    @ApiOperation("Deletes a brew identified by the id")
+    @ApiOperation(value="Deletes a brew identified by the id", authorizations = { @Authorization(value="jwtToken")})
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         brewService.deleteBrew(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
