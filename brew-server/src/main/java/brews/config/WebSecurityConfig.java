@@ -24,6 +24,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_WHITELIST = {
+      "/api/auth/**",
+      "/actuator/**",
+      "/v2/api-docs",
+      "/configuration/ui",
+      "/swagger-resources/**",
+      "/configuration/security",
+      "/swagger-ui.html",
+      "/webjars/**"
+    };
+
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
@@ -55,10 +66,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().
-                authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/actuator/**").permitAll()
+        http.cors().and().csrf().disable()
+                .authorizeRequests()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
