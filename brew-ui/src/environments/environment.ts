@@ -12,4 +12,6 @@ export const environment = {
   recipeUploadApiUrl: 'http://localhost:8080/api/recipes/upload',
   loginUrl: 'http://localhost:8080/api/auth/signin',
   signupUrl: 'http://localhost:8080/api/auth/signup',
+  userRegistrationUrl: 'http://localhost:8080/api/user/',
+  updatePasswordUrl: 'http://localhost:8080/api/user/password',
 };

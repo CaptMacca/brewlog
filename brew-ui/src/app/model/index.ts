@@ -7,5 +7,5 @@ export * from './mash';
 export * from './measurement';
 export * from './recipe';
 export * from './yeast';
-export * from './user';
+export * from './user-details';
 export * from './update-rating';

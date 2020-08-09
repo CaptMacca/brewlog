@@ -1,6 +1,6 @@
 package brews.security.jwt;
 
-import brews.services.impl.UserPrinciple;
+import brews.security.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

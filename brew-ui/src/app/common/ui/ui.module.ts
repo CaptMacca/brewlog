@@ -19,7 +19,8 @@ import {
   NzSpinModule,
   NzStepsModule,
   NzTabsModule,
-  NzUploadModule
+  NzUploadModule,
+  NzDropDownModule
 } from 'ng-zorro-antd';
 
 
@@ -46,6 +47,7 @@ import {
     NzIconModule,
     NzUploadModule,
     NzCardModule,
+    NzDropDownModule,
   ],
   exports: [
     NzTableModule,
@@ -68,6 +70,7 @@ import {
     NzIconModule,
     NzUploadModule,
     NzCardModule,
+    NzDropDownModule,
   ]
 })
 export class UiModule { }

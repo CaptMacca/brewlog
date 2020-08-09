@@ -24,20 +24,16 @@ public class UserMapperTest {
     @Test
     public void testUserDtoMapping() {
         User user = new User();
-        user.setId(1L);
         user.setEmail("joe@brewer.com");
         user.setFirstName("Joe");
         user.setSurname("Brewer");
-        user.setUsername("joe");
         user.setPassword("MyPassword");
 
         UserDto userDto = this.userMapper.toUserDto(user);
 
-        assertThat(userDto.getId()).isEqualTo(1L);
         assertThat(userDto.getEmail()).isEqualTo("joe@brewer.com");
         assertThat(userDto.getFirstName()).isEqualTo("Joe");
         assertThat(userDto.getSurname()).isEqualTo("Brewer");
-        assertThat(userDto.getUsername()).isEqualTo("joe");
     }
 
 }

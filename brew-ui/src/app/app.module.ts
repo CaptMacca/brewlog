@@ -43,11 +43,15 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { AuthGuardService } from './auth/services/auth-guard.service';
 import { httpInterceptorProviders } from './auth/services/auth-interceptor.service';
 import { AuthState } from './auth/state/auth.state';
+import { UserState } from './user/state/user.state';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { IconsProviderModule } from './icons-provider.module';
 import { ErrorHandlerService } from '@app/common/error-handler/error-handler.service';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { LoginLayoutComponent } from './layouts/login-layout/login-layout.component';
+import { UiModule } from '@app/common/ui/ui.module';
+import { EditRegistrationComponent } from './user/components/edit-registration/edit-registration.component';
+import { ChangePasswordComponent } from './user/components/change-password/change-password.component';
 
 library.add(faEye, faDatabase, faArrowLeft, faTrash);
 library.add(faCheck, faBan, faExclamationCircle, faUpload);
@@ -64,7 +68,9 @@ registerLocaleData(en);
     RegisterComponent,
     DashboardComponent,
     MainLayoutComponent,
-    LoginLayoutComponent
+    LoginLayoutComponent,
+    EditRegistrationComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -80,13 +86,14 @@ registerLocaleData(en);
       key: 'auth',
       storage: StorageOption.SessionStorage
     }),
-    NgxsModule.forRoot([AuthState], {
+    NgxsModule.forRoot([AuthState, UserState], {
       developmentMode: !environment.production
     }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
     NgZorroAntdModule,
+    UiModule,
     IconsProviderModule,
     NgxGaugeModule,
     RxReactiveFormsModule

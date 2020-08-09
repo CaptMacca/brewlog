@@ -11,5 +11,7 @@ export const environment = {
   measurementApiUrl: 'http://10.1.1.79:8080/api/measurement',
   recipeUploadApiUrl: 'http://10.1.1.79:8080/api/recipes/upload',
   loginUrl: 'http://10.1.1.79:8080/api/auth/signin',
-  signupUrl: 'http://10.1.1.79::8080/api/auth/signup',
+  signupUrl: 'http://10.1.1.79:8080/api/auth/signup',
+  userRegistrationUrl: 'http://10.1.1.79:8080/api/auth/user/',
+  updatePasswordUrl: 'http://10.1.1.79:8080/api/auth/user/password',
 };

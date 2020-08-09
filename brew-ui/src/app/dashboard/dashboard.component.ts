@@ -24,10 +24,12 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.username$.subscribe(
       username => {
-        this.store.dispatch([
-          new LoadTop5Recipes(username),
-          new LoadRecent5Brews(username)
-        ]);
+        if (username) {
+          this.store.dispatch([
+            new LoadTop5Recipes(username),
+            new LoadRecent5Brews(username)
+          ]);
+        }
       }
     );
   }

@@ -15,6 +15,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainLayoutComponent } from '@app/layouts/main-layout/main-layout.component';
 import { LoginLayoutComponent } from '@app/layouts/login-layout/login-layout.component';
 import { BrewResolverService } from '@app/brew/services/brew-resolver.service';
+import { EditRegistrationComponent } from '@app/user/components/edit-registration/edit-registration.component';
+import { ChangePasswordComponent } from '@app/user/components/change-password/change-password.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'welcome/login' },
@@ -24,6 +26,8 @@ const routes: Routes = [
   ]},
   { path: 'main', component: MainLayoutComponent,  canActivateChild: [AuthGuardService], children: [
     { path: 'dashboard', component: DashboardComponent,  },
+    { path: 'edit-registration', component: EditRegistrationComponent, },
+    { path: 'change-password', component: ChangePasswordComponent},
     { path: 'recipes',
       children: [
         { path: '', component: RecipeListComponent, },

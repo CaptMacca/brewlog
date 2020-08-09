@@ -8,7 +8,7 @@ import { Logout } from '@app/auth/state/auth.actions';
 @Component({
   selector: 'app-main-layout',
   templateUrl: './main-layout.component.html',
-  styles: []
+  styleUrls: ['./main-layout.component.css']
 })
 export class MainLayoutComponent implements OnInit {
 
@@ -27,9 +27,17 @@ export class MainLayoutComponent implements OnInit {
   logout() {
     this.store.dispatch(new Logout()).subscribe(
       () => {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/welcome/login');
         this.message.success('You have been logged out');
       }
     );
+  }
+
+  editRegistration() {
+    this.router.navigate(['/main/edit-registration']);
+  }
+
+  changePassword() {
+    this.router.navigate(['/main/change-password']);
   }
 }

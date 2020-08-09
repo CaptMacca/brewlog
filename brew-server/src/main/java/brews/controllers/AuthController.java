@@ -69,6 +69,7 @@ public class AuthController {
     @PostMapping("/signup")
     @ApiOperation("Registers a new user account")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
+        // TODO: MOVE THIS LOGIC INTO SERVICE
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity<>(new ResponseMessage("Fail -> Username is already taken!"),
                     HttpStatus.BAD_REQUEST);

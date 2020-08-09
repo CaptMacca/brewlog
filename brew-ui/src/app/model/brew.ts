@@ -1,6 +1,6 @@
 import { Measurement } from '@app/model/measurement';
 import { Recipe } from '@app/model/recipe';
-import { User } from '@app/model/user';
+import { UserDetails } from '@app/model/user-details';
 
 export class Brew {
   id: number;
@@ -22,6 +22,6 @@ export class Brew {
   notes: string;
   tastingNotes: string;
   recipe: Recipe;
-  user: User;
+  user: UserDetails;
   measurements: Measurement[];
 }

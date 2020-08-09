@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { AuthLoginInfo } from '@app/auth/model/login-info';
 import { Login } from '@app/auth/state/auth.actions';
 import { Store } from '@ngxs/store';
-import { RxFormBuilder, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { NzMessageService } from 'ng-zorro-antd';
+import { LoginForm } from '@app/auth/model/login-form';
 
 @Component({
   selector: 'app-login',
@@ -24,12 +25,8 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-
-    this.form = this.fb.group({
-      username: ['', [RxwebValidators.required({message: 'Please enter your username'})]],
-      password: ['', [RxwebValidators.required({message: 'Please enter your password'})]],
-      remember: ['false'],
-    });
+    const loginForm = new LoginForm();
+    this.form = this.fb.formGroup(loginForm);
   }
 
   get username() {
@@ -40,10 +37,6 @@ export class LoginComponent implements OnInit {
     return this.form.get('password');
   }
 
-  get remember() {
-    return this.form.get('remember');
-  }
-
   login() {
     this.submitted = true;
 
@@ -51,11 +44,11 @@ export class LoginComponent implements OnInit {
       const loginInfo = new AuthLoginInfo(this.username.value, this.password.value);
       this.store.dispatch(new Login(loginInfo)).subscribe(
         () => {
-          this.message.success('Logged in successfully')
+          this.message.success('Logged in successfully');
           this.router.navigate(['/main/dashboard']);
         },
-        err => this.message.error('Login was unsuccessful')
-      );
+        err => this.message.error('Login was unsuccessful'),
+        );
     }
   }
 

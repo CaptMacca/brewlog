@@ -12,8 +12,19 @@
   <nz-layout>
     <nz-header nzTheme="dark">
       <div nz-row nzType="flex" nzJustify="end" nzAlign="middle">
-        <div nz-col nzSpan="20"></div>
-        <div nz-col nzSpan="2">
+        <div nz-col nzSpan="21"></div>
+        <div nz-col nzSpan="1">
+          <a nz-dropdown [nzDropdownMenu]="menu">
+            <i nz-icon nzType="setting" nzTheme="fill" ></i>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item><a (click)="editRegistration()">Edit Registration Details</a> </li>
+              <li nz-menu-item><a (click)="changePassword()">Change Password</a></li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+        <div nz-col nzSpan="1">
           <button nz-button nzType="secondary" nzGhost (click)="logout()">Logout</button>
         </div>
       </div>
