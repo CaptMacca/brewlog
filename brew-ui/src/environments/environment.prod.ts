@@ -7,4 +7,6 @@ export const environment = {
   recipeUploadApiUrl: 'http://192.168.99.100:8080/api/recipes/upload',
   loginUrl: 'http://192.168.99.100:8080/api/auth/signin',
   signupUrl: 'http://192.168.99.100:8080/api/auth/signup',
+  userRegistrationUrl: 'http://192.168.99.100:8080/api/auth/user/',
+  updatePasswordUrl: 'http://192.168.99.100:8080/api/auth/user/password',
 };

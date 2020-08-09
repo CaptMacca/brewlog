@@ -1,0 +1,64 @@
+<div *ngIf="(userDetails$ | async) as user">
+  <nz-page-header>
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item>
+        User
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Edit Registration</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-page-header-title>Update Registration for user: {{username$ | async}}</nz-page-header-title>
+    <nz-page-header-extra>
+      <button nz-button (click)="save()" [disabled]="!form.dirty  || !form.valid || (saving$ | async)" [nzLoading]="saving$ | async">Save</button>
+      <button nz-button (click)="reset()" [disabled]="!form.dirty  || !form.valid || (saving$ | async)" >Reset</button>
+    </nz-page-header-extra>
+  </nz-page-header>
+
+  <div class="wrapper">
+    <nz-card [nzBordered]="false" nzTitle="Update Register">
+      <form nz-form [formGroup]="form" novalidate>
+        <!-- First Name -->
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="firstName" nzRequired>First Name</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="firstNameErrorTpl">
+            <input nz-input formControlName="firstName" id="firstName" type="text"/>
+            <ng-template #firstNameErrorTpl>
+              <div *ngFor="let errorMessage of fc.firstName['errorMessages']">
+                {{errorMessage}}<br/>
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Surname -->
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="surname" nzRequired>Surname</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="surnameErrorTpl">
+            <input nz-input formControlName="surname" id="surname" type="text"/>
+            <ng-template #surnameErrorTpl>
+              <div *ngFor="let errorMessage of fc.surname['errorMessages']">
+                {{errorMessage}}<br/>
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Email -->
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>Email</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="emailErrorTpl">
+            <input nz-input formControlName="email" id="email" type="email"/>
+            <ng-template #emailErrorTpl>
+              <div *ngFor="let errorMessage of fc.email['errorMessages']">
+                {{errorMessage}}<br/>
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+      </form>
+    </nz-card>
+  </div>
+</div>
+

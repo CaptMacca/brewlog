@@ -1,10 +1,10 @@
-import { State, Selector, Action, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
 
 import { AuthService } from '@app/auth/services/auth.service';
 import { Login, Logout, Signup } from '@app/auth/state/auth.actions';
 import { tap } from 'rxjs/operators';
-
+import { ClearUserDetails, GetCurrentUserDetails } from '@app/user/state/user.actions';
 
 export class AuthStateModel {
   loggedIn: any;
@@ -49,24 +49,28 @@ export class AuthState {
   @Action(Login)
   Login(ctx: StateContext<AuthStateModel>, { payload }: Login) {
     return this.authService.attemptAuth(payload).pipe(
-      tap(data => ctx.setState(patch({
-        loggedIn: true,
-        accessToken: data.accessToken,
-        username: data.username,
-        authorities: data.authorities
-      })))
+      tap(data => {
+        ctx.setState(patch({
+          loggedIn: true,
+          accessToken: data.accessToken,
+          username: data.username,
+          authorities: data.authorities
+        }));
+        ctx.dispatch(new GetCurrentUserDetails());
+      })
     );
   }
 
   @Action(Logout)
   Logout(ctx: StateContext<AuthStateModel>) {
     const roles: string[] = [];
-    return ctx.setState(patch({
-      loggedIn: false,
-      accessToken: '',
-      username: '',
-      authorities: roles
-    }));
+    return ctx.dispatch(new ClearUserDetails()).pipe(
+      tap(() => ctx.setState(patch({
+        loggedIn: false,
+        accessToken: '',
+        username: '',
+        authorities: roles
+      }))));
   }
 
 

@@ -99,8 +99,7 @@ public class BrewMapperTest {
         assertThat(brewDto.getId()).isEqualTo(brew.getId());
         assertThat(brewDto.getRecipe()).isNotNull();
         assertThat(brewDto.getId()).isEqualTo(1L);
-        assertThat(brewDto.getUser().getId()).isEqualTo(1L);
-        assertThat(brewDto.getRecipe().getIngredients()).hasSize(3);
+                assertThat(brewDto.getRecipe().getIngredients()).hasSize(3);
 
         assertThat(brewDto.getRecipe().getIngredients()).extracting("class").contains(HopDto.class,FermentableDto.class, YeastDto.class);
         assertThat(brewDto.getMeasurements()).hasSize(1);

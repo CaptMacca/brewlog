@@ -7,10 +7,11 @@ import { Brew, Measurement } from '@app/model';
 import { Select, Store } from '@ngxs/store';
 import { Observable, throwError } from 'rxjs';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-import { RxFormBuilder, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { catchError, finalize, withLatestFrom } from 'rxjs/operators';
 import { MeasurementState } from '@app/brew/state/measurement.state';
 import { DeleteMeasurement, RemoveMeasurement, SaveMeasurements } from '@app/brew/state/measurement.actions';
+import { BrewDetailForm } from '@app/brew/model/brew-detail-form';
 
 @Component({
   selector: 'app-brew-detail',
@@ -57,53 +58,7 @@ export class BrewDetailComponent implements OnInit {
   }
 
   private initForm() {
-    this.brewForm = this.fb.group({
-      brewDate: ['', [
-        RxwebValidators.required({message: 'The brew date is required.'})
-      ]],
-      score: [''],
-      spargeVol: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Sparge volume must be greater than 0'})
-      ]],
-      totalWater: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Total water must be greater than 0'})
-      ]],
-      fermenterVol: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Fermenter volume must be greater than 0'})
-      ]],
-      estimatedOriginalGravity: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Estimated original gravity must be greater than 0'})
-      ]],
-      measuredOriginalGravity: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Measured original gravity must be greater than 0'})
-      ]],
-      estimatedPreboilGravity: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Estimated pre boil gravity must be greater than 0'})
-      ]],
-      measuredPreboilGravity: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Measured pre boil gravity must be greater than 0'})
-      ]],
-      estimatedFinalGravity: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Estimated final gravity must be greater than 0'})
-      ]],
-      measuredFinalGravity: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Measured final gravity must be greater than 0'})
-      ]],
-      estimatedFermentVolume: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Estimated fermenter volume must be greater than 0'})
-      ]],
-      measuredFermentVolume: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Measured fermenter must be greater than 0'})
-      ]],
-      estimatedBottleVolume: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Estimated bottling volume must be greater than 0'})
-      ]],
-      measuredBottleVolume: ['', [
-        RxwebValidators.greaterThanEqualTo({value: 0, message: 'Measured bottling volume must be greater than 0'})
-      ]],
-      notes: [''],
-      tastingNotes: [''],
-    });
+    this.brewForm = this.fb.formGroup(new BrewDetailForm());
   }
 
   private populateForm(brew: Brew, measurements: Measurement[]) {

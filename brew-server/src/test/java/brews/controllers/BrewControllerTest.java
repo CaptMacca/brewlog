@@ -48,7 +48,9 @@ public class BrewControllerTest {
 
         // Given
         UserDto brewer = new UserDto();
-        brewer.setId(1L);
+        brewer.setFirstName("joe");
+        brewer.setSurname("brewer");
+        brewer.setEmail("user@somewhere.com");
 
         List<BrewDto> brews = new ArrayList<>();
         BrewDto brew = new BrewDto();
@@ -87,7 +89,7 @@ public class BrewControllerTest {
 
         // Given
         UserDto user = new UserDto();
-        user.setId(1L);
+        user.setFirstName("joe");
 
         BrewDto brew = new BrewDto();
         brew.setUser(user);
@@ -106,7 +108,7 @@ public class BrewControllerTest {
     public void testGetBrewUnknownId() throws Exception {
         // Given
         UserDto user = new UserDto();
-        user.setId(1L);
+        user.setFirstName("joe");
 
         BrewDto brew = new BrewDto();
         brew.setUser(user);
@@ -130,8 +132,7 @@ public class BrewControllerTest {
         recipe.setName("Recipe");
 
         UserDto user = new UserDto();
-        user.setId(1L);
-        user.setUsername("joe");
+        user.setFirstName("joe");
 
         BrewDto brew = new BrewDto();
         brew.setId(1L);
@@ -171,7 +172,7 @@ public class BrewControllerTest {
         recipe.setName("Recipe");
 
         UserDto user = new UserDto();
-        user.setId(1L);
+        user.setFirstName("joe");
 
         BrewDto brew = new BrewDto();
         brew.setId(1L);

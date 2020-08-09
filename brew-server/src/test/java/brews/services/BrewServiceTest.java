@@ -50,13 +50,13 @@ public class BrewServiceTest {
     public void testGetAllBrews() {
 
         // Given
-        UserDto UserDto = new UserDto();
-        UserDto.setId(1L);
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("joe");
 
         List<BrewDto> brews = new ArrayList<>();
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(UserDto);
+        brewDto.setUser(userDto);
         brews.add(brewDto);
 
         when(brewMapper.toBrewDtos(anyList())).thenReturn(brews);
@@ -74,15 +74,15 @@ public class BrewServiceTest {
     public void testGetBrew() {
 
         // Given
-        UserDto UserDto = new UserDto();
-        UserDto.setId(1L);
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("joe");
 
         User user = new User();
         user.setId(1L);
 
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(UserDto);
+        brewDto.setUser(userDto);
 
         Brew brew = new Brew();
         brew.setId(1L);
@@ -109,12 +109,12 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
-        UserDto UserDto = new UserDto();
-        UserDto.setId(1L);
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("joe");
 
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(UserDto);
+        brewDto.setUser(userDto);
         brewDto.setRecipe(recipeDto);
         brews.add(brewDto);
 
@@ -136,12 +136,12 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
-        UserDto UserDto = new UserDto();
-        UserDto.setId(1L);
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("joe");
 
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(UserDto);
+        brewDto.setUser(userDto);
         brewDto.setRecipe(recipeDto);
 
         Recipe recipe = new Recipe();
@@ -178,8 +178,8 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
-        UserDto UserDto = new UserDto();
-        UserDto.setId(1L);
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("joe");
 
         UpdateBrewDto updateBrewDto = new UpdateBrewDto();
         updateBrewDto.setId(1L);
@@ -221,8 +221,8 @@ public class BrewServiceTest {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
 
-        UserDto UserDto = new UserDto();
-        UserDto.setId(1L);
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("joe");
 
         UpdateBrewDto brewDto = new UpdateBrewDto();
         brewDto.setId(1L);

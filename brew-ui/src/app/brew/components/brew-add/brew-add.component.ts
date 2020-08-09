@@ -12,6 +12,8 @@ import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { RxFormBuilder, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
+import { BrewAddForm } from '@app/brew/model/brew-add-form';
+import { withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-brew-add',
@@ -20,7 +22,7 @@ import * as moment from 'moment';
 })
 export class BrewAddComponent implements OnInit {
   @Select(RecipeState.getRecipes) recipes$: Observable<Recipe[]>;
-
+  @Select(AuthState.getUsername) username$: Observable<string>;
   selectedRecipe: Recipe;
   current = 0;
   brewForm: FormGroup;
@@ -36,55 +38,12 @@ export class BrewAddComponent implements OnInit {
 
   ngOnInit() {
     // TODO: Add support to pass a recipe to the component via router
-    const username: string = this.store.selectSnapshot(AuthState.getUsername);
-    if (username) {
-      this.store.dispatch(new LoadRecipes(username));
-    }
-
-    this.brewForm = this.fb.group({
-      brewDate: ['', [
-          RxwebValidators.required({ message: 'Please set the date of the brew session' })
-        ]],
-      estimatedOriginalGravity: ['', [
-          RxwebValidators.required({ message: 'Please provide an estimated original gravity' })
-        ]],
-      estimatedFinalGravity: ['', [
-          RxwebValidators.required({ message: 'Please provide an estimated final gravity' }),
-          RxwebValidators.lessThanEqualTo({
-            fieldName: 'estimatedOriginalGravity',
-            message: 'Estimated Final Gravity should be less than or equal to Estimated Original Gravity'
-          })
-        ]],
-      estimatedPreboilGravity: ['', [
-          RxwebValidators.required({ message: 'Please provide an estimated pre-boil gravity' }),
-          RxwebValidators.lessThanEqualTo({
-            fieldName: 'estimatedOriginalGravity',
-            message: 'Estimated Pre-Boil Gravity should be less than or equal to Estimated Original Gravity'
-          })
-        ]],
-      estimatedFermentVolume: [
-        '',
-        [
-          RxwebValidators.required({
-            message: 'Please provide an Estimated Fermentation Volume'
-          })
-        ]
-      ],
-      estimatedBottleVolume: [
-        '',
-        [
-          RxwebValidators.required({
-            message: 'Please provide an Estimated Bottling Volume'
-          }),
-          RxwebValidators.lessThanEqualTo({
-            fieldName: 'estimatedFermentVolume',
-            message:
-              'Estimated Bottling Volume should be less than or equal to the Estimated Fermentation Volume'
-          })
-        ]
-      ]
+    this.username$.pipe(
+      withLatestFrom(this.recipes$)
+    ).subscribe(([username, recipes]) => {
+      this.brewForm = this.fb.formGroup(new BrewAddForm());
+      this.populateForm();
     });
-    this.populateForm();
   }
 
   private populateForm() {

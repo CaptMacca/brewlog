@@ -1,4 +1,4 @@
-package brews.services.impl;
+package brews.security;
 
 import brews.domain.User;
 import brews.repository.UserRepository;
