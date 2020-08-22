@@ -1,8 +1,12 @@
 package brews.controllers;
 
+import brews.domain.Brew;
+import brews.domain.Recipe;
+import brews.domain.User;
 import brews.domain.dto.*;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.handler.BrewsControllerExceptionHandler;
+import brews.mapper.domain.BrewMapper;
 import brews.services.BrewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -26,6 +30,9 @@ public class BrewControllerTest {
     @Mock
     BrewService brewService;
 
+    @Mock
+    BrewMapper brewMapper;
+
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
@@ -34,7 +41,7 @@ public class BrewControllerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        BrewController brewController = new BrewController(brewService);
+        BrewController brewController = new BrewController(brewService, brewMapper);
 
         objectMapper = new ObjectMapper();
 
@@ -47,13 +54,13 @@ public class BrewControllerTest {
     public void testGetBrews() throws Exception {
 
         // Given
-        UserDto brewer = new UserDto();
+        User brewer = new User();
         brewer.setFirstName("joe");
         brewer.setSurname("brewer");
         brewer.setEmail("user@somewhere.com");
 
-        List<BrewDto> brews = new ArrayList<>();
-        BrewDto brew = new BrewDto();
+        List<Brew> brews = new ArrayList<>();
+        Brew brew = new Brew();
         brew.setId(1L);
         brew.setUser(brewer);
         brews.add(brew);
@@ -88,10 +95,10 @@ public class BrewControllerTest {
     public void testGetBrew() throws Exception {
 
         // Given
-        UserDto user = new UserDto();
+        User user = new User();
         user.setFirstName("joe");
 
-        BrewDto brew = new BrewDto();
+        Brew brew = new Brew();
         brew.setUser(user);
         brew.setId(1L);
 
@@ -127,14 +134,15 @@ public class BrewControllerTest {
     @Test
     public void testCreateNewBrew() throws Exception {
         // Given
-        RecipeDto recipe = new RecipeDto();
+        Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        UserDto user = new UserDto();
+        User user = new User();
+        user.setId(1L);
         user.setFirstName("joe");
 
-        BrewDto brew = new BrewDto();
+        Brew brew = new Brew();
         brew.setId(1L);
         brew.setUser(user);
         brew.setRecipe(recipe);
@@ -142,26 +150,35 @@ public class BrewControllerTest {
         RecipeDto recipeDto = new RecipeDto();
         recipe.setId(1L);
 
-        CreateBrewDto createBrew = new CreateBrewDto();
-        createBrew.setBrew(brew);
+        UserDto userDto = new UserDto();
+        userDto.setFirstName("joe");
+
+        BrewDto brewDto = new BrewDto();
+        brewDto.setId(1L);
+        brewDto.setUser(userDto);
+
+        CreateBrewRequest createBrew = new CreateBrewRequest();
+        createBrew.setBrew(brewDto);
         createBrew.setUsername("joe");
         createBrew.setRecipe(recipeDto);
 
-        when(brewService.saveBrew(any(BrewDto.class), anyString())).thenReturn(brew);
+
+        when(brewService.saveBrew(any(Brew.class), anyString())).thenReturn(brew);
+        when(brewMapper.toBrew(any(BrewDto.class))).thenReturn(brew);
+        when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         // When
-        mockMvc.perform(post("/api/brews").contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+        mockMvc.perform(post("/api/brews").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createBrew)))
                 .andExpect(status().isAccepted())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.user.id", is(1)));
+                .andExpect(jsonPath("$.user.firstName", is("joe")));
 
         // Then
-        verify(brewService, times(1)).saveBrew(any(BrewDto.class), anyString());
+        verify(brewService, times(1)).saveBrew(any(Brew.class), anyString());
     }
 
     @Test
@@ -171,18 +188,18 @@ public class BrewControllerTest {
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        UserDto user = new UserDto();
+        User user = new User();
         user.setFirstName("joe");
 
-        BrewDto brew = new BrewDto();
+        Brew brew = new Brew();
         brew.setId(1L);
         brew.setUser(user);
 
-        CreateBrewDto createBrew = new CreateBrewDto();
-        createBrew.setBrew(brew);
+        CreateBrewRequest createBrew = new CreateBrewRequest();
+        createBrew.setBrew(brewMapper.toBrewDto(brew));
         createBrew.setUsername("joe");
 
-        when(brewService.saveBrew(any(BrewDto.class), anyString())).thenReturn(brew);
+        when(brewService.saveBrew(any(Brew.class), anyString())).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -192,24 +209,24 @@ public class BrewControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(brewService,times(0)).saveBrew(any(BrewDto.class), anyString());
+        verify(brewService,times(0)).saveBrew(any(Brew.class), anyString());
 
     }
 
     @Test
     public void testCreateNewBrewNoUsername() throws Exception {
         // Given
-        RecipeDto recipe = new RecipeDto();
+        Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("Recipe");
 
-        BrewDto brew = new BrewDto();
+        Brew brew = new Brew();
         brew.setRecipe(recipe);
 
-        CreateBrewDto createBrew = new CreateBrewDto();
-        createBrew.setBrew(brew);
+        CreateBrewRequest createBrew = new CreateBrewRequest();
+        createBrew.setBrew(brewMapper.toBrewDto(brew));
 
-        when(brewService.saveBrew(any(BrewDto.class), anyString())).thenReturn(brew);
+        when(brewService.saveBrew(any(Brew.class), anyString())).thenReturn(brew);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -225,53 +242,57 @@ public class BrewControllerTest {
     @Test
     public void testUpdateBrew() throws Exception {
         // Given
-        RecipeDto recipe = new RecipeDto();
-        recipe.setId(1L);
-        recipe.setName("mock");
+        UpdateBrewRequest updateBrewRequest = new UpdateBrewRequest();
+        updateBrewRequest.setId(1L);
 
-        BrewDto brew = new BrewDto();
+        Brew brew = new Brew();
         brew.setId(1L);
-        brew.setRecipe(recipe);
 
-        when(brewService.updateBrew(any(UpdateBrewDto.class))).thenReturn(brew);
+        BrewDto brewDto = new BrewDto();
+        brewDto.setId(1L);
+
+        when(brewService.updateBrew(any(Brew.class))).thenReturn(brew);
+        when(brewMapper.updateBrewDtotoBrew(any(UpdateBrewRequest.class))).thenReturn(brew);
+        when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
 
         // When
         mockMvc.perform(put("/api/brews")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(brew)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateBrewRequest)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.recipe.name", is("mock")));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)));
 
         // Then
-        verify(brewService, times(1)).updateBrew(any(UpdateBrewDto.class));
+        verify(brewService, times(1)).updateBrew(any(Brew.class));
 
     }
 
     @Test
     public void testUpdateBrewUnknownId() throws Exception {
         // Given
-        RecipeDto recipe = new RecipeDto();
-        recipe.setId(1L);
-        recipe.setName("Recipe");
+        UpdateBrewRequest updateBrewRequest = new UpdateBrewRequest();
+        updateBrewRequest.setId(1L);
 
-        BrewDto brew = new BrewDto();
+        Brew brew = new Brew();
         brew.setId(1L);
-        brew.setRecipe(recipe);
 
-        when(brewService.updateBrew(any(UpdateBrewDto.class))).thenThrow(new BrewsEntityNotFoundException());
+        BrewDto brewDto = new BrewDto();
+        brewDto.setId(1L);
+
+        when(brewService.updateBrew(any(Brew.class))).thenThrow(new BrewsEntityNotFoundException());
+        when(brewMapper.updateBrewDtotoBrew(any(UpdateBrewRequest.class))).thenReturn(brew);
+        when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
 
         // When
         mockMvc.perform(put("/api/brews")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(brew)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateBrewRequest)))
                 .andExpect(status().isNotFound());
 
         // Then
-        verify(brewService, times(1)).updateBrew(any(UpdateBrewDto.class));
+        verify(brewService, times(1)).updateBrew(any(Brew.class));
     }
 
     @Test

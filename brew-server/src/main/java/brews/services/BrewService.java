@@ -1,25 +1,24 @@
 package brews.services;
 
+import brews.domain.Brew;
 import brews.domain.Recipe;
-import brews.domain.dto.BrewDto;
-import brews.domain.dto.UpdateBrewDto;
 
 import java.util.List;
 
 public interface BrewService {
-    List<BrewDto> getAllBrews();
+    List<Brew> getAllBrews();
 
-    List<BrewDto> getAllBrewsForUser(String username);
+    List<Brew> getAllBrewsForUser(String username);
 
-    BrewDto getBrew(Long id);
+    Brew getBrew(Long id);
 
-    List<BrewDto> getBrewsForRecipe(Recipe recipe);
+    List<Brew> getBrewsForRecipe(Recipe recipe);
 
-    List<BrewDto> getTop5BrewsForUser(String username);
+    List<Brew> getTop5BrewsForUser(String username);
 
-    BrewDto saveBrew(BrewDto brewDto, String username);
+    Brew saveBrew(Brew brew, String username);
 
-    BrewDto updateBrew(UpdateBrewDto updateBrewDto);
+    Brew updateBrew(Brew updateBrewD);
 
     void deleteBrew(Long id);
 }

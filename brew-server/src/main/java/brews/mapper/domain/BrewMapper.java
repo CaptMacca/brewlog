@@ -2,7 +2,7 @@ package brews.mapper.domain;
 
 import brews.domain.Brew;
 import brews.domain.dto.BrewDto;
-import brews.domain.dto.UpdateBrewDto;
+import brews.domain.dto.UpdateBrewRequest;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -17,23 +17,24 @@ import java.util.List;
 public interface BrewMapper {
 
     BrewDto toBrewDto(Brew brew);
+
     List<BrewDto> toBrewDtos(List<Brew> brews);
 
-    UpdateBrewDto toUpdateBrewDto(Brew brew);
-    List<UpdateBrewDto> toUpdateBrewDtos(List<Brew> brews);
+    UpdateBrewRequest toUpdateBrewDto(Brew brew);
+    List<UpdateBrewRequest> toUpdateBrewDtos(List<Brew> brews);
 
     @InheritInverseConfiguration
     Brew toBrew(BrewDto brewDto);
 
     @InheritInverseConfiguration
-    Brew updateBrewDtotoBrew(UpdateBrewDto brewDto);
+    Brew updateBrewDtotoBrew(UpdateBrewRequest brewDto);
 
     @InheritInverseConfiguration
     List<Brew> updateBrewDtostoBrews(List<BrewDto> brewDtos);
 
     @InheritInverseConfiguration
-    List<Brew> toBrews(List<UpdateBrewDto> updateBrewDtos);
+    List<Brew> toBrews(List<UpdateBrewRequest> updateBrewRequests);
 
-    void updateFromBrewDto(UpdateBrewDto brewDto, @MappingTarget Brew brew);
+    void updateFromBrewDto(UpdateBrewRequest brewDto, @MappingTarget Brew brew);
 
 }

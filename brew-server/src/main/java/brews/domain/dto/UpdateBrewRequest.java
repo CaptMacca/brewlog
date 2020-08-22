@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class UpdateBrewDto {
+public class UpdateBrewRequest {
     private Long id;
     private OffsetDateTime brewDate;
     private Integer score;

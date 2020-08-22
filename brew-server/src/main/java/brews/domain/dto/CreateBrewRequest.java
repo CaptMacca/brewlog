@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class CreateBrewDto {
+public class CreateBrewRequest {
     String username;
     BrewDto brew;
     RecipeDto recipe;

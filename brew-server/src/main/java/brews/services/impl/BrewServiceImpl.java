@@ -3,15 +3,13 @@ package brews.services.impl;
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.dto.BrewDto;
-import brews.domain.dto.UpdateBrewDto;
 import brews.exceptions.BrewsEntityNotFoundException;
-import brews.mapper.domain.BrewMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import brews.repository.UserRepository;
 import brews.services.BrewService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,50 +23,47 @@ public class BrewServiceImpl implements BrewService {
     private final RecipeRepository recipeRepository;
     private final BrewsRepository brewsRepository;
     private final UserRepository userRepository;
-    private final BrewMapper brewMapper;
 
-    public BrewServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository, BrewMapper brewMapper, UserRepository userRepository) {
+    public BrewServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository, UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
         this.brewsRepository = brewsRepository;
-        this.brewMapper = brewMapper;
         this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getAllBrews() {
-        return brewMapper.toBrewDtos(brewsRepository.findAll());
+    public List<Brew> getAllBrews() {
+        return brewsRepository.findAll();
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getAllBrewsForUser(String username) {
-        return brewMapper.toBrewDtos(brewsRepository.findBrewsByUserUsername(username));
+    public List<Brew> getAllBrewsForUser(String username) {
+        return brewsRepository.findBrewsByUserUsername(username);
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getTop5BrewsForUser(String username) {
-        return brewMapper.toBrewDtos(brewsRepository.findTop5BrewsByUserUsernameOrderByBrewDateDesc(username));
+    public List<Brew> getTop5BrewsForUser(String username) {
+        return brewsRepository.findTop5BrewsByUserUsernameOrderByBrewDateDesc(username);
     }
 
     @Override
     @Transactional
-    public BrewDto getBrew(Long id) {
-        return brewMapper.toBrewDto(brewsRepository.getOne(id));
+    public Brew getBrew(Long id) {
+        return brewsRepository.getOne(id);
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getBrewsForRecipe(Recipe recipe) {
-        return brewMapper.toBrewDtos(brewsRepository.findBrewsByRecipe(recipe));
+    public List<Brew> getBrewsForRecipe(Recipe recipe) {
+        return brewsRepository.findBrewsByRecipe(recipe);
     }
 
     @Override
     @Transactional
-    public BrewDto saveBrew(BrewDto brewDto, String username) {
-
-        Brew brew = brewMapper.toBrew(brewDto);
+    public Brew saveBrew(Brew brew, String username) {
+        log.debug("Saving brew {} for user {}", brew.getId(), username);
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
         );
@@ -80,15 +75,14 @@ public class BrewServiceImpl implements BrewService {
 
         brew = brewsRepository.save(brew);
 
-        return brewMapper.toBrewDto(brew);
-
+        return brew;
     }
 
     @Override
     @Transactional
-    public BrewDto updateBrew(UpdateBrewDto updateBrewDto) {
-
-        Long id = updateBrewDto.getId();
+    public Brew updateBrew(Brew updateBrew) {
+        log.debug("Updating brew {}", updateBrew.getId());
+        Long id = updateBrew.getId();
 
         Brew brew = brewsRepository.getOne(id);
 
@@ -96,15 +90,15 @@ public class BrewServiceImpl implements BrewService {
             throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id));
         }
 
-        brewMapper.updateFromBrewDto(updateBrewDto,brew);
+        BeanUtils.copyProperties(updateBrew, brew);
         Brew updatedBrew = brewsRepository.save(brew);
-        return brewMapper.toBrewDto(updatedBrew);
+        return updatedBrew;
     }
 
     @Override
     @Transactional
     public void deleteBrew(Long id) {
-
+        log.debug("Deleting brew with id {}", id);
         Brew existingBrew = brewsRepository.getOne(id);
 
         if (existingBrew == null) {
