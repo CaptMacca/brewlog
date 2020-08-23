@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class UpdatePasswordDto {
+public class UpdatePasswordRequest {
     private String username;
     public String currentPassword;
     public String newPassword;

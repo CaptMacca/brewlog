@@ -1,11 +1,10 @@
 package brews.services;
 
-import brews.domain.dto.UpdatePasswordDto;
-import brews.domain.dto.UserDto;
+import brews.domain.User;
 
 public interface UserService {
 
-    UserDto getCurrentUserDetails();
-    UserDto updateUserDetails(String username, UserDto userDto);
-    UpdatePasswordDto updatePassword(UpdatePasswordDto updatePasswordDto);
+    User getCurrentUserDetails();
+    User updateUserDetails(String username, User user);
+    boolean updatePassword(String oldPassword, String updatePassword);
 }

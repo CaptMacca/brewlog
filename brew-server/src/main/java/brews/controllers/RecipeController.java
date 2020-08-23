@@ -2,7 +2,7 @@ package brews.controllers;
 
 import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
-import brews.domain.dto.UpdateRatingDto;
+import brews.domain.dto.UpdateRatingRequest;
 import brews.mapper.domain.RecipeMapper;
 import brews.services.RecipeService;
 import io.swagger.annotations.ApiOperation;
@@ -72,9 +72,9 @@ public final class RecipeController {
 
     @PutMapping("{id}/rating")
     @ApiOperation(value="Update the recipe rating", authorizations = { @Authorization(value="jwtToken")})
-    public ResponseEntity<RecipeDto> updateRating(@RequestBody UpdateRatingDto updateRatingDto) {
+    public ResponseEntity<RecipeDto> updateRating(@RequestBody UpdateRatingRequest updateRatingRequest) {
         RecipeDto updatedRecipeResponse = recipeMapper.toRecipeDto(
-          recipeService.updateRating(updateRatingDto.getId(), updateRatingDto.getRating())
+          recipeService.updateRating(updateRatingRequest.getId(), updateRatingRequest.getRating())
         );
         return ResponseEntity.ok(updatedRecipeResponse);
     }

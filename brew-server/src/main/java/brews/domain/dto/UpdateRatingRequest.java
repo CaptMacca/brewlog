@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UpdateRatingDto {
+public class UpdateRatingRequest {
     private Long id;
     private Short rating;
 }
