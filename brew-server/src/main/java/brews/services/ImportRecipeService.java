@@ -1,11 +1,10 @@
 package brews.services;
 
-import brews.domain.dto.RecipeDto;
+import brews.domain.Recipe;
 
-import java.io.InputStream;
 import java.util.List;
 
 public interface ImportRecipeService {
-    List<RecipeDto> importBeerXml(InputStream contents, String user);
+    List<Recipe> importRecipes(List<Recipe> recipes, String username);
 }
 

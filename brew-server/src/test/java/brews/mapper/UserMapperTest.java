@@ -2,6 +2,7 @@ package brews.mapper;
 
 import brews.domain.User;
 import brews.domain.dto.UpdateUserRequest;
+import brews.domain.dto.UserDetailsResponse;
 import brews.mapper.domain.UserMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,18 +23,18 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUserDtoMapping() {
+    public void testUserDetailsMapping() {
         User user = new User();
         user.setEmail("joe@brewer.com");
         user.setFirstName("Joe");
         user.setSurname("Brewer");
         user.setPassword("MyPassword");
 
-        UpdateUserRequest updateUserRequest = this.userMapper.toUserDto(user);
+        UserDetailsResponse userDetailsResponse = this.userMapper.toUserDetailsResponse(user);
 
-        assertThat(updateUserRequest.getEmail()).isEqualTo("joe@brewer.com");
-        assertThat(updateUserRequest.getFirstName()).isEqualTo("Joe");
-        assertThat(updateUserRequest.getSurname()).isEqualTo("Brewer");
+        assertThat(userDetailsResponse.getEmail()).isEqualTo("joe@brewer.com");
+        assertThat(userDetailsResponse.getFirstName()).isEqualTo("Joe");
+        assertThat(userDetailsResponse.getSurname()).isEqualTo("Brewer");
     }
 
 }

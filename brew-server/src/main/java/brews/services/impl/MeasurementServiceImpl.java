@@ -2,13 +2,13 @@ package brews.services.impl;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.dto.MeasurementDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
 import brews.services.MeasurementService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,54 +21,37 @@ public class MeasurementServiceImpl implements MeasurementService {
 
     private final MeasurementRepository measurementRepository;
     private final BrewsRepository brewsRepository;
-    private final MeasurementMapper measurementMapper;
 
-    public MeasurementServiceImpl(MeasurementRepository measurementRepository, BrewsRepository brewsRepository,
-                                  MeasurementMapper measurementMapper) {
+    public MeasurementServiceImpl(MeasurementRepository measurementRepository, BrewsRepository brewsRepository) {
         this.measurementRepository = measurementRepository;
         this.brewsRepository = brewsRepository;
-        this.measurementMapper = measurementMapper;
     }
 
     @Override
     @Transactional
-    public MeasurementDto getMeasurement(Long id) {
-
+    public Measurement getMeasurement(Long id) {
         log.debug(String.format("Retrieve measurement with id: %d", id));
-        MeasurementDto measurementDto;
-
-        Measurement measurement = measurementRepository.getOne(id);
-
-        if (measurement != null) {
-            measurementDto = measurementMapper.toMeasurementDto(measurement);
-        } else {
-            throw new BrewsEntityNotFoundException(String.format("Measurement for measurement id: %d could not be found", id));
-        }
-
-        return measurementDto;
+        return measurementRepository.getOne(id);
     }
 
     @Override
     @Transactional
-    public List<MeasurementDto> getMeasurementsForBrew(Long id) {
+    public List<Measurement> getMeasurementsForBrew(Long id) {
         log.debug(String.format("Retrieving measurements for brew id : %d", id));
-        List<Measurement> measurements;
-
-        measurements = measurementRepository.findMeasurementsByBrewId(id);
-
-        return measurementMapper.toMeasurementDtos(measurements);
+        return measurementRepository.findMeasurementsByBrewId(id);
     }
 
     @Override
-    public List<MeasurementDto> saveMeasurements(List<MeasurementDto> measurements) {
-        List<MeasurementDto> savedMeasurements = new ArrayList<>();
-        for (MeasurementDto measurementDto: measurements) {
-            Long measurementId = measurementDto.getId();
-            MeasurementDto savedMeasurement = null;
+    @Transactional
+    public List<Measurement> saveMeasurements(List<Measurement> measurements) {
+        List<Measurement> savedMeasurements = new ArrayList<>();
+        for (Measurement measurement: measurements) {
+            Long measurementId = measurement.getId();
+            Measurement savedMeasurement = null;
             if (measurementId == null || measurementId <= 0) {
-                savedMeasurement = createMeasurement(measurementDto);
+                savedMeasurement = createMeasurement(measurement.getBrew().getId(), measurement);
             } else {
-                savedMeasurement = updateMeasurement(measurementDto);
+                savedMeasurement = updateMeasurement(measurement);
             }
             savedMeasurements.add(savedMeasurement);
         }
@@ -77,13 +60,9 @@ public class MeasurementServiceImpl implements MeasurementService {
 
     @Override
     @Transactional
-    public MeasurementDto createMeasurement(MeasurementDto measurementDto) {
+    public Measurement createMeasurement(Long brewId, Measurement measurement) {
 
-        log.info("Saving measurement: " + measurementDto.toString());
-        Long brewId = measurementDto.getBrewId();
-        Measurement detachedMeasurement = measurementMapper.toMeasurement(measurementDto);
-
-        Measurement newMeasurement;
+        log.info("Saving measurement: " + measurement.toString());
 
         if (brewId == null) {
             throw new IllegalArgumentException("Measurement is not linked to a brew");
@@ -92,36 +71,36 @@ public class MeasurementServiceImpl implements MeasurementService {
             if (brew == null) {
                 throw new BrewsEntityNotFoundException(String.format("Brew could not be found for brew id: %d", brewId));
             } else {
-                detachedMeasurement.setBrew(brew);
+                measurement.setBrew(brew);
             }
         }
 
-        newMeasurement = measurementRepository.saveAndFlush(detachedMeasurement);
+        Measurement newMeasurement = measurementRepository.saveAndFlush(measurement);
 
         log.debug(String.format("Saved measurement: %s", newMeasurement.toString()));
-        return measurementMapper.toMeasurementDto(newMeasurement);
+        return newMeasurement;
     }
 
 
     @Override
     @Transactional
-    public MeasurementDto updateMeasurement( MeasurementDto measurementDto) {
+    public Measurement updateMeasurement(Measurement measurement) {
 
-        log.info("Saving measurement: " + measurementDto.toString());
+        log.info("Saving measurement: " + measurement.toString());
 
         Measurement savedMeasurement;
 
-        if (measurementDto.getId() == null) {
+        if (measurement.getId() == null) {
             throw new IllegalArgumentException("Measurement does not have a measurement id");
         } else {
             log.debug("Measurement has an id, updating measurement");
-            Measurement attachedMeasurement = measurementRepository.getOne(measurementDto.getId());
-            measurementMapper.updateFromMeasurementDto(measurementDto, attachedMeasurement);
+            Measurement attachedMeasurement = measurementRepository.getOne(measurement.getId());
+            BeanUtils.copyProperties(measurement, attachedMeasurement);
             savedMeasurement = measurementRepository.save(attachedMeasurement);
         }
 
         log.debug(String.format("Saved measurement: %s", savedMeasurement.toString()));
-        return measurementMapper.toMeasurementDto(savedMeasurement);
+        return savedMeasurement;
     }
 
 

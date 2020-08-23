@@ -1,7 +1,14 @@
 package brews.controllers;
 
+import brews.domain.Recipe;
+import brews.domain.User;
+import brews.domain.beerxml.ImportedRecipe;
+import brews.domain.beerxml.ImportedRecipes;
 import brews.domain.dto.RecipeDto;
+import brews.exceptions.ImportedRecipeExistsException;
 import brews.exceptions.ImportedRecipeUploadException;
+import brews.mapper.beerxml.BeerXMLRecipeMapper;
+import brews.mapper.domain.RecipeMapper;
 import brews.services.ImportRecipeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,13 +16,19 @@ import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -25,9 +38,13 @@ import java.util.List;
 public final class UploadRecipeController {
 
     private final ImportRecipeService importRecipeService;
+    private final BeerXMLRecipeMapper beerXMLRecipeMapper;
+    private final RecipeMapper recipeMapper;
 
-    public UploadRecipeController(ImportRecipeService importRecipeService) {
+    public UploadRecipeController(ImportRecipeService importRecipeService, BeerXMLRecipeMapper beerXMLRecipeMapper, RecipeMapper recipeMapper) {
         this.importRecipeService = importRecipeService;
+        this.beerXMLRecipeMapper = beerXMLRecipeMapper;
+        this.recipeMapper = recipeMapper;
     }
 
     @PostMapping("upload")
@@ -61,14 +78,45 @@ public final class UploadRecipeController {
 
         try {
             InputStream fileContents = uploadfile.getInputStream();
-            List<RecipeDto> recipes = null;
-            if (fileContents != null) {
-                recipes = importRecipeService.importBeerXml(fileContents, user);
-            }
-
-            return recipes;
+            List<Recipe> recipes = convertBeerXmlRecipes(fileContents);
+            importRecipeService.importRecipes(recipes, user);
+            return this.recipeMapper.toRecipeDtos(recipes);
         } catch (IOException e) {
             throw new ImportedRecipeUploadException("Exception encountered importing the uploaded",e);
         }
+    }
+
+    private ImportedRecipes readBeerXML(InputStream contents) {
+
+        ImportedRecipes importedRecipes = null;
+
+        try {
+            log.debug("Unmarshalling the beerxml file");
+            JAXBContext jaxbContext = JAXBContext.newInstance(ImportedRecipes.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            importedRecipes = (ImportedRecipes) jaxbUnmarshaller.unmarshal(contents);
+
+            log.debug("Beerxml has been unmarshalled");
+            if ((importedRecipes != null) && (importedRecipes.getImportedRecipes() != null)) {
+                log.debug("Found " + importedRecipes.getImportedRecipes().size() + " recipes in the beer xml file.");
+            }
+        } catch (JAXBException e) {
+            log.error("Exception unmarshalling the beerxml file");
+        }
+
+        return importedRecipes;
+    }
+
+    private List<Recipe> convertBeerXmlRecipes(InputStream contents) {
+
+        log.debug("Importing beerxml file ");
+        ImportedRecipes importedRecipes = readBeerXML(contents);
+
+         new ArrayList<>();
+
+        log.debug("Saving recipes in database");
+        List<ImportedRecipe> candidateRecipes = importedRecipes.getImportedRecipes();
+        List<Recipe> recipes = candidateRecipes.stream().map(beerXMLRecipeMapper::map).collect(Collectors.toList());
+        return recipes;
     }
 }

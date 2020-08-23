@@ -1,8 +1,12 @@
 package brews.controllers;
 
+import brews.domain.Recipe;
+import brews.domain.beerxml.ImportedRecipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.ImportedRecipeUploadException;
 import brews.handler.BrewsControllerExceptionHandler;
+import brews.mapper.beerxml.BeerXMLRecipeMapper;
+import brews.mapper.domain.RecipeMapper;
 import brews.services.ImportRecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +30,10 @@ public class UploadRecipeControllerTest {
 
     @Mock
     ImportRecipeService importRecipeService;
+    @Mock
+    BeerXMLRecipeMapper beerXMLRecipeMapper;
+    @Mock
+    RecipeMapper recipeMapper;
 
     private MockMvc mockMvc;
 
@@ -33,7 +41,7 @@ public class UploadRecipeControllerTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        UploadRecipeController uploadRecipeController = new UploadRecipeController(importRecipeService);
+        UploadRecipeController uploadRecipeController = new UploadRecipeController(importRecipeService, beerXMLRecipeMapper, recipeMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(uploadRecipeController)
                 .setControllerAdvice(new BrewsControllerExceptionHandler())
                 .build();
@@ -46,25 +54,33 @@ public class UploadRecipeControllerTest {
         String user = "joe";
         MockMultipartFile mockMultipartFile = new MockMultipartFile("files", "domain.xml",
                 "text/plain", "domain data".getBytes());
-        List<RecipeDto> recipes = new ArrayList<>();
-        RecipeDto recipe = new RecipeDto();
+        List<RecipeDto> recipeDtos = new ArrayList<>();
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+        recipeDto.setName("Recipe");
+        recipeDtos.add(recipeDto);
+
+        List<Recipe> recipes = new ArrayList<>();
+        Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("Recipe");
+        recipes.add(recipe);
 
-        when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenReturn(recipes);
+        when(importRecipeService.importRecipes(anyList(), anyString())).thenReturn(recipes);
+        when(recipeMapper.toRecipeDtos(anyList())).thenReturn(recipeDtos);
+        doNothing().when(beerXMLRecipeMapper.map(any(ImportedRecipe.class)));
 
         MockHttpServletRequestBuilder builder =
           MockMvcRequestBuilders.multipart("/api/recipes/upload")
             .file(mockMultipartFile)
             .param("user",user);
 
-
         // When
         mockMvc.perform(builder)
                .andExpect(status().isCreated());
 
         // Then
-        verify(importRecipeService, times(1)).importBeerXml(any(InputStream.class), anyString());
+        verify(importRecipeService, times(1)).importRecipes(anyList(), anyString());
     }
 
 
@@ -90,7 +106,7 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(importRecipeService, times(0)).importBeerXml(any(InputStream.class), anyString());
+        verify(importRecipeService, times(0)).importRecipes(anyList(), anyString());
     }
 
 
@@ -101,12 +117,22 @@ public class UploadRecipeControllerTest {
         String user = "joe";
         MockMultipartFile mockMultipartFile = new MockMultipartFile("files", "",
                 "text/plain", "".getBytes());
-        List<RecipeDto> recipes = new ArrayList<>();
-        RecipeDto recipe = new RecipeDto();
+        List<RecipeDto> recipeDtos = new ArrayList<>();
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+        recipeDto.setName("Recipe");
+        recipeDtos.add(recipeDto);
+
+        List<Recipe> recipes = new ArrayList<>();
+        Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("Recipe");
+        recipes.add(recipe);
 
-        when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenReturn(recipes);
+
+        when(importRecipeService.importRecipes((anyList()), anyString())).thenReturn(recipes);
+        when(recipeMapper.toRecipeDtos(anyList())).thenReturn(recipeDtos);
+        doNothing().when(beerXMLRecipeMapper.map(any(ImportedRecipe.class)));
 
         MockHttpServletRequestBuilder builder =
           MockMvcRequestBuilders.multipart("/api/recipes/upload")
@@ -118,7 +144,7 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(importRecipeService, times(0)).importBeerXml(any(InputStream.class), anyString());
+        verify(importRecipeService, times(0)).importRecipes(anyList(), anyString());
 
     }
 
@@ -129,12 +155,21 @@ public class UploadRecipeControllerTest {
         String user = "joe";
         MockMultipartFile mockMultipartFile = new MockMultipartFile("files", "myrecipe.xml",
                 "text/plain", "domain data".getBytes());
-        List<RecipeDto> recipes = new ArrayList<>();
-        RecipeDto recipe = new RecipeDto();
+        List<RecipeDto> recipeDtos = new ArrayList<>();
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+        recipeDto.setName("Recipe");
+        recipeDtos.add(recipeDto);
+
+        List<Recipe> recipes = new ArrayList<>();
+        Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("Recipe");
+        recipes.add(recipe);
 
-        when(importRecipeService.importBeerXml(any(InputStream.class), anyString())).thenThrow(new ImportedRecipeUploadException());
+        when(importRecipeService.importRecipes((anyList()), anyString())).thenReturn(recipes);
+        when(recipeMapper.toRecipeDtos(anyList())).thenReturn(recipeDtos);
+        doNothing().when(beerXMLRecipeMapper.map(any(ImportedRecipe.class)));
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/recipes/upload")
           .file(mockMultipartFile)
@@ -145,7 +180,7 @@ public class UploadRecipeControllerTest {
                 .andExpect(status().isBadRequest());
 
         // Then
-        verify(importRecipeService, times(1)).importBeerXml(any(InputStream.class), anyString());
+        verify(importRecipeService, times(1)).importRecipes(anyList(), anyString());
     }
 
 }

@@ -1,9 +1,11 @@
 package brews.controllers;
 
+import brews.domain.Brew;
 import brews.domain.Measurement;
 import brews.domain.dto.MeasurementDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.handler.BrewsControllerExceptionHandler;
+import brews.mapper.domain.MeasurementMapper;
 import brews.services.MeasurementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -26,6 +28,8 @@ public class MeasurementControllerTest {
 
     @Mock
     MeasurementService measurementService;
+    @Mock
+    MeasurementMapper measurementMapper;
 
     private MockMvc mockMvc;
 
@@ -35,7 +39,7 @@ public class MeasurementControllerTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        MeasurementController measurementController = new MeasurementController(measurementService);
+        MeasurementController measurementController = new MeasurementController(measurementService, measurementMapper);
         objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(measurementController)
                 .setControllerAdvice(new BrewsControllerExceptionHandler())
@@ -45,12 +49,21 @@ public class MeasurementControllerTest {
     @Test
     public void testGetMeasurement() throws Exception {
         // Given
-        MeasurementDto measurement = new MeasurementDto();
+        MeasurementDto measurementDto = new MeasurementDto();
+        measurementDto.setId(1L);
+        measurementDto.setBrewId(1L);
+        measurementDto.setValue(123.00);
+
+        Brew brew = new Brew();
+        brew.setId(1L);
+
+        Measurement measurement = new Measurement();
         measurement.setId(1L);
-        measurement.setBrewId(1L);
+        measurement.setBrew(brew);
         measurement.setValue(123.00);
 
         when(measurementService.getMeasurement(anyLong())).thenReturn(measurement);
+        when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
         mockMvc.perform(get("/api/measurement/1")
@@ -67,15 +80,27 @@ public class MeasurementControllerTest {
     @Test
     public void testCreateMeasurement() throws Exception {
         // Given
-        MeasurementDto measurement = new MeasurementDto();
-        measurement.setId(-1L);
-        measurement.setBrewId(1L);
-        measurement.setValue(123.00);
+        MeasurementDto measurementDto = new MeasurementDto();
+        measurementDto.setId(-1L);
+        measurementDto.setBrewId(1L);
+        measurementDto.setValue(123.00);
 
         List<MeasurementDto> measurementDtos = new ArrayList<>();
-        measurementDtos.add(measurement);
+        measurementDtos.add(measurementDto);
 
-        when(measurementService.saveMeasurements(anyList())).thenReturn(measurementDtos);
+        Brew brew = new Brew();
+        brew.setId(1L);
+
+        Measurement measurement = new Measurement();
+        measurement.setId(1L);
+        measurement.setBrew(brew);
+        measurement.setValue(123.00);
+
+        List<Measurement> measurements = new ArrayList<>();
+        measurements.add(measurement);
+
+        when(measurementService.saveMeasurements(anyList())).thenReturn(measurements);
+        when(measurementMapper.toMeasurementDtos(anyList())).thenReturn(measurementDtos);
 
         // When
         mockMvc.perform(post("/api/measurement")
@@ -99,6 +124,7 @@ public class MeasurementControllerTest {
         measurementDtos.add(measurement);
 
         when(measurementService.saveMeasurements(anyList())).thenThrow(new IllegalArgumentException());
+        when(measurementMapper.toMeasurementDtos(anyList())).thenReturn(measurementDtos);
 
         // When
         mockMvc.perform(post("/api/measurement")
@@ -134,15 +160,28 @@ public class MeasurementControllerTest {
     @Test
     public void testUpdateMeasurement() throws Exception {
         // Given
-        MeasurementDto measurement = new MeasurementDto();
-        measurement.setId(1L);
-        measurement.setBrewId(1L);
-        measurement.setValue(123.00);
+        MeasurementDto measurementDto = new MeasurementDto();
+        measurementDto.setId(1L);
+        measurementDto.setBrewId(1L);
+        measurementDto.setValue(123.00);
 
         List<MeasurementDto> measurementDtos = new ArrayList<>();
-        measurementDtos.add(measurement);
+        measurementDtos.add(measurementDto);
 
-        when(measurementService.saveMeasurements(anyList())).thenReturn(measurementDtos);
+        Brew brew = new Brew();
+        brew.setId(1L);
+
+        Measurement measurement = new Measurement();
+        measurement.setId(1L);
+        measurement.setBrew(brew);
+        measurement.setValue(123.00);
+
+        List<Measurement> measurements = new ArrayList<>();
+        measurements.add(measurement);
+
+
+        when(measurementService.saveMeasurements(anyList())).thenReturn(measurements);
+        when(measurementMapper.toMeasurementDtos(anyList())).thenReturn(measurementDtos);
 
         // When
         mockMvc.perform(post("/api/measurement")

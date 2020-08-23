@@ -8,17 +8,15 @@ import java.util.List;
 
 public interface MeasurementService {
 
-//    List<MeasurementTypeDto> getMeasurementTypes();
+    Measurement getMeasurement(Long id);
 
-    MeasurementDto getMeasurement(Long id);
+    List<Measurement> getMeasurementsForBrew(Long id);
 
-    List<MeasurementDto> getMeasurementsForBrew(Long id);
+    List<Measurement> saveMeasurements(List<Measurement> measurements);
 
-    List<MeasurementDto> saveMeasurements(List<MeasurementDto> measurements);
+    Measurement createMeasurement(Long brewId, Measurement measurement);
 
-    MeasurementDto createMeasurement(MeasurementDto measurementDto);
-
-    MeasurementDto updateMeasurement(MeasurementDto measurementDto);
+    Measurement updateMeasurement(Measurement measurement);
 
     void deleteMeasurement(Long measurementId);
 }

@@ -3,7 +3,6 @@ package brews.services;
 import brews.domain.Brew;
 import brews.domain.Measurement;
 import brews.domain.dto.MeasurementDto;
-import brews.mapper.domain.MeasurementMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
 import brews.services.impl.MeasurementServiceImpl;
@@ -24,8 +23,6 @@ public class MeasurementServiceTest {
     MeasurementRepository measurementRepository;
     @Mock
     BrewsRepository brewsRepository;
-    @Mock
-    MeasurementMapper measurementMapper;
 
     private MeasurementService measurementService;
 
@@ -33,7 +30,7 @@ public class MeasurementServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        measurementService = new MeasurementServiceImpl(measurementRepository, brewsRepository, measurementMapper);
+        measurementService = new MeasurementServiceImpl(measurementRepository, brewsRepository);
     }
 
     @Test
@@ -47,16 +44,13 @@ public class MeasurementServiceTest {
         measurement.setId(measurementDto.getId());
 
         when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
-        when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
-        MeasurementDto test = measurementService.getMeasurement(1L);
+        Measurement test = measurementService.getMeasurement(1L);
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
         verify(measurementRepository, times(1)).getOne(anyLong());
-        verify(measurementMapper, times(1)).toMeasurementDto(any(Measurement.class));
-
     }
 
     @Test
@@ -73,16 +67,14 @@ public class MeasurementServiceTest {
         measurement.setId(measurementDto.getId());
         measurements.add(measurement);
 
-        when(measurementMapper.toMeasurementDtos(anyList())).thenReturn(measurementDtos);
         when(measurementRepository.findMeasurementsByBrewId(anyLong())).thenReturn(measurements);
 
         // When
-        List<MeasurementDto> test = measurementService.getMeasurementsForBrew(1L);
+        List<Measurement> test = measurementService.getMeasurementsForBrew(1L);
 
         // Then
         assertThat(test).hasSize(1);
         verify(measurementRepository, times(1)).findMeasurementsByBrewId(anyLong());
-        verify(measurementMapper, times(1)).toMeasurementDtos(anyList());
     }
 
     @Test
@@ -100,19 +92,15 @@ public class MeasurementServiceTest {
         measurement.setId(1L);
         measurement.setBrew(brew);
 
-        when(measurementMapper.toMeasurement(any(MeasurementDto.class))).thenReturn(measurement);
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
         when(measurementRepository.saveAndFlush(any(Measurement.class))).thenReturn(measurement);
-        when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
-        MeasurementDto fixture = measurementService.createMeasurement(measurementDto);
+        Measurement fixture = measurementService.createMeasurement(1L, measurement);
 
         // Then
         assertThat(fixture.getId()).isEqualTo(1L);
-        verify(measurementMapper, times(1)).toMeasurement(any(MeasurementDto.class));
         verify(brewsRepository, times(1)).getOne(anyLong());
-        verify(measurementMapper, times(1)).toMeasurementDto(any(Measurement.class));
     }
 
     @Test
@@ -125,21 +113,16 @@ public class MeasurementServiceTest {
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
 
-        doNothing().when(measurementMapper).updateFromMeasurementDto(measurementDto,measurement);
         when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
         when(measurementRepository.save(any(Measurement.class))).thenReturn(measurement);
-        when(measurementMapper.toMeasurementDto(any(Measurement.class))).thenReturn(measurementDto);
 
         // When
-        MeasurementDto test = measurementService.updateMeasurement(measurementDto);
+        Measurement test = measurementService.updateMeasurement(measurement);
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(measurementMapper, times(1)).updateFromMeasurementDto(any(MeasurementDto.class),any(Measurement.class));
         verify(measurementRepository, times(1)).getOne(anyLong());
         verify(measurementRepository, times(1)).save(any(Measurement.class));
-        verify(measurementMapper, times(1)).toMeasurementDto(any(Measurement.class));
-
     }
 
     @Test
