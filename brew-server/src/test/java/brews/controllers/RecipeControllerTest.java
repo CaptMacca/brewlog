@@ -1,8 +1,10 @@
 package brews.controllers;
 
+import brews.domain.Recipe;
 import brews.domain.dto.RecipeDto;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.handler.BrewsControllerExceptionHandler;
+import brews.mapper.domain.RecipeMapper;
 import brews.services.RecipeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -28,6 +30,8 @@ public class RecipeControllerTest {
 
     @Mock
     RecipeService recipeService;
+    @Mock
+    RecipeMapper recipeMapper;
 
     private MockMvc mockMvc;
 
@@ -37,7 +41,7 @@ public class RecipeControllerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        RecipeController recipeController = new RecipeController(recipeService);
+        RecipeController recipeController = new RecipeController(recipeService,recipeMapper);
         objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
                 .setControllerAdvice(new BrewsControllerExceptionHandler())
@@ -47,11 +51,11 @@ public class RecipeControllerTest {
     @Test
     public void testGetAllRecipes() throws Exception {
         // Given
-        List<RecipeDto> recipes = new ArrayList<>();
-        RecipeDto recipeDto = new RecipeDto();
-        recipeDto.setId(1L);
-        recipeDto.setName("mock");
-        recipes.add(recipeDto);
+        List<Recipe> recipes = new ArrayList<>();
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.setName("mock");
+        recipes.add(recipe);
 
         when(recipeService.getAllRecipes()).thenReturn(recipes);
 
@@ -77,14 +81,20 @@ public class RecipeControllerTest {
     @Test
     public void testGetAllRecipesForUser() throws Exception {
         // Given
-        // Given
-        List<RecipeDto> recipes = new ArrayList<>();
+        List<Recipe> recipes = new ArrayList<>();
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.setName("mock");
+        recipes.add(recipe);
+
+        List<RecipeDto> recipeDtos = new ArrayList<>();
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
         recipeDto.setName("mock");
-        recipes.add(recipeDto);
+        recipeDtos.add(recipeDto);
 
         when(recipeService.getAllRecipesForUser(anyString())).thenReturn(recipes);
+        when(recipeMapper.toRecipeDtos(anyList())).thenReturn(recipeDtos);
 
         // When
         mockMvc.perform(get("/api/recipes")
@@ -99,11 +109,17 @@ public class RecipeControllerTest {
     public void testGetRecipe() throws Exception {
 
         // Given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.setName("mock");
+
+
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(1L);
         recipeDto.setName("mock");
 
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipeDto);
+        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+        when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
 
         // When
         mockMvc.perform(get("/api/recipes/1"))
@@ -133,35 +149,52 @@ public class RecipeControllerTest {
     public void testUpdateRecipe() throws Exception {
         // Given
         Long id = 1L;
+        String recipeName = "mock";
+
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(id);
-        recipeDto.setName("mock");
+        recipeDto.setName(recipeName);
 
-        when(recipeService.updateRecipe(anyLong(), any(RecipeDto.class))).thenReturn(recipeDto);
+        Recipe recipe = new Recipe();
+        recipe.setId(id);
+        recipe.setName(recipeName);
+
+        when(recipeService.updateRecipe(anyLong(), any(Recipe.class))).thenReturn(recipe);
+        when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
+        when(recipeMapper.toRecipe(any(RecipeDto.class))).thenReturn(recipe);
 
         // When
-        mockMvc.perform(put("/api/recipes/1")
+        mockMvc.perform(put("/api/recipes/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(recipeDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("mock")));
 
-        verify(recipeService, times(1)).updateRecipe(anyLong(), any(RecipeDto.class));
+        verify(recipeService, times(1)).updateRecipe(anyLong(), any(Recipe.class));
     }
 
     @Test
     public void testUpdateNotFoundRecipe() throws Exception {
         // Given
         Long id = 1L;
+        String name = "mock";
+
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(id);
-        recipeDto.setName("mock");
+        recipeDto.setName(name);
+
+        Recipe recipe = new Recipe();
+        recipe.setId(id);
+        recipe.setName(name);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        when(recipeService.updateRecipe(anyLong(), any(RecipeDto.class))).thenThrow(new BrewsEntityNotFoundException());
+        when(recipeService.updateRecipe(anyLong(), any(Recipe.class))).thenThrow(new BrewsEntityNotFoundException());
+        when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
+        when(recipeMapper.toRecipe(any(RecipeDto.class))).thenReturn(recipe);
 
         // When
         mockMvc.perform(put("/api/recipes/1")
@@ -170,7 +203,7 @@ public class RecipeControllerTest {
                 .andExpect(status().isNotFound());
 
         //Then
-        verify(recipeService, times(1)).updateRecipe(anyLong(), any(RecipeDto.class));
+        verify(recipeService, times(1)).updateRecipe(anyLong(), any(Recipe.class));
     }
 
     @Test
