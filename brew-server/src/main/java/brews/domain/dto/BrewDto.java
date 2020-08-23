@@ -33,7 +33,7 @@ public class BrewDto {
     private String notes;
     private String tastingNotes;
     private RecipeDto recipe;
-    private UserDto user;
+    private UpdateUserRequest user;
     private Set<MeasurementDto> measurements;
     private Long versionId;
 }

@@ -4,7 +4,7 @@ import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
 import brews.domain.dto.BrewDto;
-import brews.domain.dto.UserDto;
+import brews.domain.dto.UpdateUserRequest;
 import brews.exceptions.BrewsEntityNotFoundException;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
@@ -58,15 +58,15 @@ public class BrewServiceTest {
     public void testGetBrew() {
 
         // Given
-        UserDto userDto = new UserDto();
-        userDto.setFirstName("joe");
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setFirstName("joe");
 
         User user = new User();
         user.setId(1L);
 
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(userDto);
+        brewDto.setUser(updateUserRequest);
 
         Brew brew = new Brew();
         brew.setId(1L);

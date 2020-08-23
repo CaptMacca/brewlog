@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 
 @Getter
@@ -28,7 +27,7 @@ public class RecipeDto {
     private String boilTime;
     private String notes;
     private Short rating;
-    private UserDto user;
+    private UpdateUserRequest user;
     private List<IngredientDto> ingredients;
     private List<FermentableDto> fermentables;
     private SortedSet<HopDto> hops;

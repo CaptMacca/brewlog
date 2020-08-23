@@ -1,7 +1,7 @@
 package brews.mapper;
 
 import brews.domain.User;
-import brews.domain.dto.UserDto;
+import brews.domain.dto.UpdateUserRequest;
 import brews.mapper.domain.UserMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +29,11 @@ public class UserMapperTest {
         user.setSurname("Brewer");
         user.setPassword("MyPassword");
 
-        UserDto userDto = this.userMapper.toUserDto(user);
+        UpdateUserRequest updateUserRequest = this.userMapper.toUserDto(user);
 
-        assertThat(userDto.getEmail()).isEqualTo("joe@brewer.com");
-        assertThat(userDto.getFirstName()).isEqualTo("Joe");
-        assertThat(userDto.getSurname()).isEqualTo("Brewer");
+        assertThat(updateUserRequest.getEmail()).isEqualTo("joe@brewer.com");
+        assertThat(updateUserRequest.getFirstName()).isEqualTo("Joe");
+        assertThat(updateUserRequest.getSurname()).isEqualTo("Brewer");
     }
 
 }

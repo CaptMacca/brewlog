@@ -2,7 +2,8 @@ package brews.controllers;
 
 import brews.domain.User;
 import brews.domain.dto.UpdatePasswordRequest;
-import brews.domain.dto.UserDto;
+import brews.domain.dto.UpdateUserRequest;
+import brews.domain.dto.UserDetailsResponse;
 import brews.mapper.domain.UserMapper;
 import brews.services.UserService;
 import io.swagger.annotations.Api;
@@ -26,15 +27,15 @@ public class UserController {
 
     @GetMapping()
     @ApiOperation(value="Get current user details", authorizations = { @Authorization(value = "jwtToken")})
-    public ResponseEntity<UserDto> getCurrentUserDetails() {
-        return ResponseEntity.ok(userMapper.toUserDto(userService.getCurrentUserDetails()));
+    public ResponseEntity<UserDetailsResponse> getCurrentUserDetails() {
+        return ResponseEntity.ok(userMapper.toUserDetailsResponse(userService.getCurrentUserDetails()));
     }
 
     @PutMapping()
     @ApiOperation(value="Updates a user details", authorizations = { @Authorization(value="jwtToken")})
-    public ResponseEntity<UserDto> updateUser(@PathVariable String username, @RequestBody UserDto updateUserDto) {
-        User user = userMapper.toUser(updateUserDto);
-        return ResponseEntity.ok(userMapper.toUserDto(userService.updateUserDetails(username, user)));
+    public ResponseEntity<UserDetailsResponse> updateUser(@PathVariable String username, @RequestBody UpdateUserRequest updateUserRequest) {
+        User user = userMapper.toUser(updateUserRequest);
+        return ResponseEntity.ok(userMapper.toUserDetailsResponse(userService.updateUserDetails(username, user)));
     }
 
     @PostMapping("/password")

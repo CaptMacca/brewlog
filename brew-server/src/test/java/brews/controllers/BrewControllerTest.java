@@ -114,7 +114,7 @@ public class BrewControllerTest {
     @Test
     public void testGetBrewUnknownId() throws Exception {
         // Given
-        UserDto user = new UserDto();
+        UpdateUserRequest user = new UpdateUserRequest();
         user.setFirstName("joe");
 
         BrewDto brew = new BrewDto();
@@ -150,12 +150,12 @@ public class BrewControllerTest {
         RecipeDto recipeDto = new RecipeDto();
         recipe.setId(1L);
 
-        UserDto userDto = new UserDto();
-        userDto.setFirstName("joe");
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setFirstName("joe");
 
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(userDto);
+        brewDto.setUser(updateUserRequest);
 
         CreateBrewRequest createBrew = new CreateBrewRequest();
         createBrew.setBrew(brewDto);

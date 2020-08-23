@@ -1,7 +1,8 @@
 package brews.mapper.domain;
 
 import brews.domain.User;
-import brews.domain.dto.UserDto;
+import brews.domain.dto.UpdateUserRequest;
+import brews.domain.dto.UserDetailsResponse;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -13,15 +14,15 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    UserDto toUserDto(User user);
+    UserDetailsResponse toUserDetailsResponse(User user);
 
-    List<UserDto> toUserDtos(List<User> users);
+    List<UserDetailsResponse> toUserDetailsResponse(List<User> users);
 
-    public abstract void updateFromUserDto(UserDto userDto, @MappingTarget User user);
-
-    @InheritInverseConfiguration
-    User toUser(UserDto userDto);
+    public abstract void updateFromUpdateUserRequest(UpdateUserRequest updateUserRequest, @MappingTarget User user);
 
     @InheritInverseConfiguration
-    List<User> toUsers(List<UserDto> userDtos);
+    User toUser(UpdateUserRequest updateUserRequest);
+
+    @InheritInverseConfiguration
+    List<User> toUsers(List<UpdateUserRequest> updateUserRequests);
 }
