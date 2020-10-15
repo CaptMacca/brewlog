@@ -1,8 +1,6 @@
 package brews.services;
 
 import brews.domain.Measurement;
-import brews.domain.dto.MeasurementDto;
-import brews.domain.dto.MeasurementTypeDto;
 
 import java.util.List;
 

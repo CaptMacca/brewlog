@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthState } from '@app/auth/state/auth.state';
 import { LoadBrews, RemoveBrew } from '@app/brew/state/brew.actions';
 import { BrewState } from '@app/brew/state/brew.state';
-import { Brew } from '@app/model';
+import { Brew } from '@app/brew/model';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -15,6 +15,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 })
 export class BrewListComponent implements OnInit {
   @Select(BrewState.getBrews) brews$: Observable<Brew[]>;
+  @Select(AuthState.getUsername) username$: Observable<string>;
   username: string;
   loading: Boolean = true;
   selections: Brew[] = [];
@@ -30,8 +31,10 @@ export class BrewListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.username = this.store.selectSnapshot(AuthState.getUsername);
-    this.loadBrews(this.username);
+    this.username$.subscribe(username => {
+      this.username = username;
+      this.loadBrews(username);
+    });
   }
 
   refresh() {

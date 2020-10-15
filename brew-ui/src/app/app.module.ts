@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
 import { LoginComponent } from '@app/auth/components/login/login.component';
-import { RegisterComponent } from '@app/auth/components/register/register.component';
+import { RegisterComponent } from '@app/user/components/register/register.component';
 import { AuthService } from '@app/auth/services/auth.service';
 import { BrewModule } from '@app/brew/brew.module';
 import { NavigationComponent } from '@app/navigation/navigation.component';
@@ -52,6 +52,8 @@ import { LoginLayoutComponent } from './layouts/login-layout/login-layout.compon
 import { UiModule } from '@app/common/ui/ui.module';
 import { EditRegistrationComponent } from './user/components/edit-registration/edit-registration.component';
 import { ChangePasswordComponent } from './user/components/change-password/change-password.component';
+import { UserService } from '@app/user/services/user.service';
+import { UserDetailsResolverService } from '@app/user/services/user-details-resolver.service';
 
 library.add(faEye, faDatabase, faArrowLeft, faTrash);
 library.add(faCheck, faBan, faExclamationCircle, faUpload);
@@ -102,6 +104,8 @@ registerLocaleData(en);
     AuthGuardService,
     httpInterceptorProviders,
     AuthService,
+    UserService,
+    UserDetailsResolverService,
     { provide: NZ_I18N, useValue: en_US },
     { provide: ErrorHandler, useClass: ErrorHandlerService }
   ],

@@ -1,17 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RemoveBrew, SetSavingBrew, UpdateBrew } from '@app/brew/state/brew.actions';
+import { RemoveBrew, RemoveMeasurement, SetSavingBrew, UpdateBrew } from '@app/brew/state/brew.actions';
 import { BrewState } from '@app/brew/state/brew.state';
-import { Brew, Measurement } from '@app/model';
+import { Brew, Measurement } from '@app/brew/model';
 import { Select, Store } from '@ngxs/store';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
-import { catchError, finalize, withLatestFrom } from 'rxjs/operators';
-import { MeasurementState } from '@app/brew/state/measurement.state';
-import { DeleteMeasurement, RemoveMeasurement, SaveMeasurements } from '@app/brew/state/measurement.actions';
-import { BrewDetailForm } from '@app/brew/model/brew-detail-form';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-brew-detail',
@@ -21,12 +18,10 @@ import { BrewDetailForm } from '@app/brew/model/brew-detail-form';
 })
 export class BrewDetailComponent implements OnInit {
   @Select(BrewState.getBrew) brew$: Observable<Brew>;
-  @Select(MeasurementState.getMeasurements) measurements$: Observable<Measurement[]>;
   @Select(BrewState.getSavingBrew) saving: Observable<boolean>;
 
-  brewId: number;
   brewForm: FormGroup;
-  measurementId = 0;
+  brew: Brew;
 
   constructor(
     private readonly store: Store,
@@ -45,11 +40,10 @@ export class BrewDetailComponent implements OnInit {
 
   private loadBrewForm() {
     this.brew$.pipe(
-      withLatestFrom(this.measurements$),
       catchError(err => throwError(err))
-    ).subscribe(([brew, measurements]) => {
-      this.brewId = brew.id;
-      this.populateForm(brew, measurements);
+    ).subscribe((brew: Brew) => {
+      this.brew = brew;
+      this.populateForm(brew);
     });
   }
 
@@ -58,35 +52,33 @@ export class BrewDetailComponent implements OnInit {
   }
 
   private initForm() {
-    this.brewForm = this.fb.formGroup(new BrewDetailForm());
+    const brew = new Brew();
+    const measurement = new Measurement();
+    brew.measurements = new Array<Measurement>();
+    brew.measurements.push(measurement);
+    this.brewForm = this.fb.formGroup(brew);
   }
 
-  private populateForm(brew: Brew, measurements: Measurement[]) {
-    this.brewForm.patchValue({
-      brewDate: brew.brewDate,
-      score: brew.score,
-      spargeVol: brew.spargeVol,
-      totalWater: brew.totalWater,
-      fermenterVol: brew.fermenterVol,
-      estimatedOriginalGravity: brew.estimatedOriginalGravity,
-      measuredOriginalGravity: brew.measuredOriginalGravity,
-      estimatedPreboilGravity: brew.estimatedPreboilGravity,
-      measuredPreboilGravity: brew.measuredPreboilGravity,
-      estimatedFinalGravity: brew.estimatedFinalGravity,
-      measuredFinalGravity: brew.measuredFinalGravity,
-      estimatedFermentVolume: brew.estimatedFermentVolume,
-      measuredFermentVolume: brew.measuredFermentVolume,
-      estimatedBottleVolume: brew.estimatedBottleVolume,
-      measuredBottleVolume: brew.measuredBottleVolume,
-      notes: brew.notes,
-      tastingNotes: brew.tastingNotes,
-    });
-    const measurementFormArray = new FormArray([]);
-    measurements.forEach(measurement => {
-      measurementFormArray.push(this.createMeasurementControl(measurement))
-    });
-    this.brewForm.addControl('measurements', measurementFormArray);
-    this.brewForm.markAsPristine();
+  private populateForm(brew: Brew) {
+
+    const measurementFormArray = <FormArray>this.measurementsFormArray;
+    measurementFormArray.clear();
+
+    if (brew) {
+      this.brewForm.patchValue(brew);
+
+      const measurements: Measurement[] = brew.measurements;
+
+      if (measurements && measurements.length > 0) {
+        measurements.forEach(measurement => {
+          const measurementControl = this.createMeasurementControl();
+          measurementControl.patchValue(measurement);
+          measurementFormArray.push(measurementControl);
+        });
+      }
+
+      this.brewForm.markAsPristine();
+    }
   }
 
   gotoBrews(): void {
@@ -96,7 +88,7 @@ export class BrewDetailComponent implements OnInit {
   public save(brew: Brew): void {
 
     if (brew && this.brewForm.dirty && this.brewForm.valid) {
-      brew.brewDate = this.fc['brewDate'].value;
+      brew.brewDate = new Date(this.fc['brewDate'].value);
       brew.score = this.fc['score'].value;
       brew.fermenterVol = this.fc['fermenterVol'].value;
       brew.spargeVol = this.fc['spargeVol'].value;
@@ -113,34 +105,23 @@ export class BrewDetailComponent implements OnInit {
       brew.measuredFermentVolume = this.fc['measuredFermentVolume'].value;
       brew.notes = this.fc['notes'].value;
       brew.tastingNotes = this.fc['tastingNotes'].value;
+      brew.measurements = this.extractMeasurements(this.measurementsFormArray);
 
-      const measurementsArray = this.fc['measurements'].value;
-      const measurements: Measurement[] = [];
-      if (measurementsArray) {
-        measurementsArray.forEach(m => {
-          const measurement = {
-            id: m.measurementId,
-            brewId: this.brewId,
-            measurementDate: m.measurementDate,
-            value: m.measurementValue
-          };
-          measurements.push(measurement);
-        });
-      }
       this.store.dispatch([
         new SetSavingBrew(true),
         new UpdateBrew(brew),
-        new SaveMeasurements(measurements)]).pipe(
+      ]).pipe(
+        switchMap(results => of(results[1])),
         finalize(() => this.store.dispatch(new SetSavingBrew(false)))
       ).subscribe(
-        () => {
+          () => {
           this.loadBrewForm();
           this.message.success('The brew session details have been updated');
       });
     }
   }
 
-  confirm(brew: Brew): void {
+  confirmDelete(brew: Brew): void {
     this.modalService.confirm({
       nzTitle: 'Are you sure delete this brew session?',
       nzOkText: 'Yes',
@@ -159,52 +140,70 @@ export class BrewDetailComponent implements OnInit {
     }
   }
 
-  deleteMeasurement(id: number) {
-    if (id) {
-      const measurement = this.measurements.at(id).value;
-      let removeMeasurement$: Observable<any> = undefined;
-      if (measurement.measurementId > 0) {
-        // Saved measurement delete via backend first
-        removeMeasurement$ = this.store.dispatch(new DeleteMeasurement(measurement.measurementId));
-      } else {
-        // Unsaved measurement just remove from state and FormArray
-        removeMeasurement$ = this.store.dispatch(new RemoveMeasurement(measurement));
-      }
-      removeMeasurement$.subscribe(
+  deleteMeasurement(id: number): void {
+    const measurementCtl = this.measurementsFormArray.at(id).value;
+    const measurementId = measurementCtl.id;
+    if (measurementId && measurementId > 0) {
+      // Saved measurement delete via backend first
+      const measurement: Measurement = this.brew.measurements.find(m => m.id === measurementId);
+      this.store.dispatch(new RemoveMeasurement(measurement)).subscribe(
         () => {
-          this.measurements.removeAt(id);
+          this.removeMeasurementControl(id);
           this.loadBrewForm();
-          this.message.success('Measurement removed');
-      });
+        }
+      );
+    } else {
+      // Unsaved measurement just remove from formArray
+      this.removeMeasurementControl(id);
     }
   }
 
+  private removeMeasurementControl(id: number) {
+    this.measurementsFormArray.removeAt(id);
+    this.brewForm.markAsPristine();
+    this.message.success('Measurement removed');
+  }
+
   addMeasurement() {
-    // Make new items id negative to separate from updates
     const measurement: Measurement = {
-      id: this.measurementId--,
-      brewId: this.brewId,
+      id: undefined,
       measurementDate: new Date(),
-      value: 0
+      value: 0,
+      versionId: 1
     };
     this.newMeasurement(measurement);
     this.brewForm.markAsDirty();
   }
 
   private newMeasurement(measurement: Measurement) {
-    const measurementControl = this.brewForm.controls['measurements'] as FormArray;
-    measurementControl.push(this.createMeasurementControl(measurement));
+    const measurementControl = this.createMeasurementControl();
+    const measurementFormArray = this.measurementsFormArray;
+    measurementControl.patchValue(measurement);
+    measurementFormArray.push(measurementControl);
   }
 
-  get measurements(): FormArray {
-    return this.brewForm.controls['measurements'] as FormArray;
+  get measurementsFormArray(): FormArray {
+    return <FormArray>this.brewForm.controls.measurements;
   }
 
-  private createMeasurementControl(measurement: Measurement): FormGroup {
-    return this.fb.group({
-      measurementId: measurement.id,
-      measurementDate: measurement.measurementDate,
-      measurementValue: measurement.value,
-    });
+  private createMeasurementControl(): FormGroup {
+    return this.fb.formGroup(Measurement);
+  }
+
+  private extractMeasurements(measurementsControl: AbstractControl): Measurement[] {
+    const measurementsArray = measurementsControl.value;
+    const measurements: Measurement[] = [];
+    if (measurementsArray) {
+      measurementsArray.forEach(m => {
+        const measurement = {
+          id: m.id,
+          measurementDate: m.measurementDate,
+          value: m.value,
+          versionId: m.versionId
+        };
+        measurements.push(measurement);
+      });
+    }
+    return measurements;
   }
 }

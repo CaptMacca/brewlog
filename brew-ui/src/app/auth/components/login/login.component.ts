@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthLoginInfo } from '@app/auth/model/login-info';
+import { AuthLoginInfo } from '@app/auth/model/auth-login-info';
 import { Login } from '@app/auth/state/auth.actions';
 import { Store } from '@ngxs/store';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { NzMessageService } from 'ng-zorro-antd';
-import { LoginForm } from '@app/auth/model/login-form';
 
 @Component({
   selector: 'app-login',
@@ -25,8 +24,8 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    const loginForm = new LoginForm();
-    this.form = this.fb.formGroup(loginForm);
+    const authLoginInfo = new AuthLoginInfo();
+    this.form = this.fb.formGroup(authLoginInfo);
   }
 
   get username() {
@@ -37,11 +36,19 @@ export class LoginComponent implements OnInit {
     return this.form.get('password');
   }
 
+  get remember() {
+    return this.form.get('remember');
+  }
+
   login() {
     this.submitted = true;
 
     if (this.form.dirty && this.form.valid) {
-      const loginInfo = new AuthLoginInfo(this.username.value, this.password.value);
+      const loginInfo = {
+        username: this.username.value,
+        password: this.password.value,
+        remember: this.remember.value
+      };
       this.store.dispatch(new Login(loginInfo)).subscribe(
         () => {
           this.message.success('Logged in successfully');

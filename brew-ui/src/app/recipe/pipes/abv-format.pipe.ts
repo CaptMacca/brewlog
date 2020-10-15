@@ -12,5 +12,4 @@ export class AbvFormatPipe implements PipeTransform {
       return null;
     }
   }
-
 }

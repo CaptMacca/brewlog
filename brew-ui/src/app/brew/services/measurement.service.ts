@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
-import { Measurement } from '@app/model';
+import { Measurement } from '@app/brew/model';
 
 @Injectable()
 export class MeasurementService {
@@ -10,7 +10,6 @@ export class MeasurementService {
   private measurementApi = environment.measurementApiUrl;
 
   constructor(private http: HttpClient) {}
-
 
   saveMeasurements(measurements: Measurement[]): Observable<Measurement[]> {
     const httpOptions = {

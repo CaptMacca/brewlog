@@ -1,14 +1,15 @@
 package brews.services;
 
+import brews.app.presentation.dto.user.UpdateUserDto;
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.dto.BrewDto;
-import brews.domain.dto.UpdateUserRequest;
-import brews.exceptions.BrewsEntityNotFoundException;
-import brews.repository.BrewsRepository;
-import brews.repository.RecipeRepository;
-import brews.repository.UserRepository;
+import brews.app.presentation.dto.brew.BrewDto;
+import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.infrastructure.data.jpa.repository.BrewsRepository;
+import brews.infrastructure.data.jpa.repository.MeasurementRepository;
+import brews.infrastructure.data.jpa.repository.RecipeRepository;
+import brews.infrastructure.data.jpa.repository.UserRepository;
 import brews.services.impl.BrewServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,9 @@ public class BrewServiceTest {
     @Mock
     BrewsRepository brewsRepository;
 
+    @Mock
+    MeasurementRepository measurementRepository;
+
 
     @Mock
     UserRepository userRepository;
@@ -38,13 +42,29 @@ public class BrewServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        brewService = new BrewServiceImpl(recipeRepository, brewsRepository, userRepository);
+        brewService = new BrewServiceImpl(recipeRepository, measurementRepository, brewsRepository, userRepository);
     }
 
     @Test
     public void testGetAllBrews() {
 
         // Given
+        List<Brew> brews = new ArrayList<>();
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setFirstName("joe");
+
+        Brew brew = new Brew();
+        brew.setId(1L);
+        brew.setUser(user);
+        brew.setRecipe(recipe);
+        brews.add(brew);
+
+        when(brewsRepository.findAll()).thenReturn(brews);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         // When
         List<Brew> test = brewService.getAllBrews();
@@ -58,21 +78,21 @@ public class BrewServiceTest {
     public void testGetBrew() {
 
         // Given
-        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
-        updateUserRequest.setFirstName("joe");
+        UpdateUserDto updateUserDto = new UpdateUserDto();
+        updateUserDto.setFirstName("joe");
 
         User user = new User();
         user.setId(1L);
 
         BrewDto brewDto = new BrewDto();
         brewDto.setId(1L);
-        brewDto.setUser(updateUserRequest);
 
         Brew brew = new Brew();
         brew.setId(1L);
         brew.setUser(user);
 
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         // When
         Brew test = brewService.getBrew(1L);
@@ -117,7 +137,8 @@ public class BrewServiceTest {
         recipe.setId(1L);
 
         User user = new User();
-        user.setFirstName("joe");
+        user.setId(1L);
+        user.setUsername("joe");
 
         Brew brew = new Brew();
         brew.setId(1L);
@@ -128,7 +149,7 @@ public class BrewServiceTest {
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         // When
-        Brew test = brewService.saveBrew(brew, "joe");
+        Brew test = brewService.saveBrew(brew, user);
 
         // Then
         verify(recipeRepository, times(1)).getOne(anyLong());
@@ -142,8 +163,8 @@ public class BrewServiceTest {
         recipe.setId(1L);
 
         User user = new User();
-        user.setFirstName("joe");
-
+        user.setId(1L);
+        user.setUsername("joe");
 
         Brew brew = new Brew();
         brew.setId(1L);
@@ -152,9 +173,10 @@ public class BrewServiceTest {
 
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
         when(brewsRepository.save(any(Brew.class))).thenReturn(brew);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         // When
-        Brew test = brewService.updateBrew(brew);
+        Brew test = brewService.updateBrew(1L, brew, user);
 
         // Then
         verify(brewsRepository, times(1)).getOne(anyLong());
@@ -167,18 +189,20 @@ public class BrewServiceTest {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
 
-        User User = new User();
-        User.setId(1L);
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("joe");
 
         Brew brew = new Brew();
         brew.setId(1l);
-        brew.setUser(User);
+        brew.setUser(user);
         brew.setRecipe(recipe);
 
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(brewsRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
         // When
-        brewService.updateBrew(brew);
+        brewService.updateBrew(1L, brew, user);
 
         // Then
         verify(brewsRepository, times(1)).getOne(anyLong());
@@ -193,12 +217,12 @@ public class BrewServiceTest {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
 
-        User User = new User();
-        User.setId(1L);
+        User user = new User();
+        user.setId(1L);
 
         Brew brew = new Brew();
         brew.setId(1L);
-        brew.setUser(User);
+        brew.setUser(user);
         brew.setRecipe(recipe);
 
         Set<Brew> brews = new HashSet<>();
@@ -207,6 +231,7 @@ public class BrewServiceTest {
         recipe.setBrews(brews);
 
         when(brewsRepository.getOne(anyLong())).thenReturn(brew);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         // When
         brewService.deleteBrew(1L);

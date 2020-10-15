@@ -17,7 +17,6 @@ import { SummaryComponent } from './components/brew-add/subcomponents/summary/su
 import { BrewSessionComponent } from './components/brew-detail/subcomponents/brew-session/brew-session.component';
 import { BrewNotesComponent } from './components/brew-detail/subcomponents/brew-notes/brew-notes.component';
 import { BrewMeasurementsComponent } from './components/brew-detail/subcomponents/brew-measurements/brew-measurements.component';
-import { MeasurementState } from '@app/brew/state/measurement.state';
 import { MeasurementService } from '@app/brew/services/measurement.service';
 import { BrewResolverService } from '@app/brew/services/brew-resolver.service';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
@@ -28,7 +27,7 @@ import { UiModule } from '@app/common/ui/ui.module';
     CommonModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    NgxsModule.forFeature([BrewState, MeasurementState]),
+    NgxsModule.forFeature([BrewState]),
     NgxsFormPluginModule,
     RecipeModule,
     RxReactiveFormsModule,

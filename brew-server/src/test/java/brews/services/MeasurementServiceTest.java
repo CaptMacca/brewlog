@@ -2,9 +2,9 @@ package brews.services;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.dto.MeasurementDto;
-import brews.repository.BrewsRepository;
-import brews.repository.MeasurementRepository;
+import brews.app.presentation.dto.brew.MeasurementDto;
+import brews.infrastructure.data.jpa.repository.BrewsRepository;
+import brews.infrastructure.data.jpa.repository.MeasurementRepository;
 import brews.services.impl.MeasurementServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,7 +86,6 @@ public class MeasurementServiceTest {
 
         MeasurementDto measurementDto = new MeasurementDto();
         measurementDto.setId(1L);
-        measurementDto.setBrewId(1L);
 
         Measurement measurement = new Measurement();
         measurement.setId(1L);

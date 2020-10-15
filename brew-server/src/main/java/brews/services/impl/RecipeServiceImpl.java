@@ -2,30 +2,26 @@ package brews.services.impl;
 
 import brews.domain.Brew;
 import brews.domain.Recipe;
-import brews.domain.dto.RecipeDto;
-import brews.exceptions.BrewsEntityNotFoundException;
-import brews.mapper.domain.RecipeMapper;
-import brews.repository.BrewsRepository;
-import brews.repository.RecipeRepository;
+import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.infrastructure.data.jpa.repository.BrewsRepository;
+import brews.infrastructure.data.jpa.repository.RecipeRepository;
 import brews.services.RecipeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final BrewsRepository brewsRepository;
-
-    public RecipeServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository) {
-        this.recipeRepository = recipeRepository;
-        this.brewsRepository = brewsRepository;
-    }
 
     @Override
     @Transactional
@@ -55,48 +51,38 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public Recipe getRecipeById(Long id) {
         log.debug("Retrieve recipe with id: {}", id);
-        Recipe recipe = recipeRepository.getOne(id);
+        return
+          Optional.of(recipeRepository.getOne(id)).orElseThrow(
+            BrewsEntityNotFoundException::new
+          );
+    }
 
-        if (recipe!=null) {
-           return recipe;
-        } else {
-            throw new BrewsEntityNotFoundException();
-        }
+    @Override
+    @Transactional
+    public String getNotesForRecipe(Long id) {
+        return getRecipeById(id).getNotes();
     }
 
     @Override
     @Transactional
     public Recipe updateRecipe(Long id, Recipe recipe) {
-
         log.debug(String.format("Saving recipe: %s", recipe.toString()));
-        Recipe existingRecipe = recipeRepository.getOne(id);
-
-        if (existingRecipe!=null) {
-            log.debug("Updating the recipe in the repository");
-            BeanUtils.copyProperties(recipe,existingRecipe);
-            Recipe updatedRecipe = recipeRepository.saveAndFlush(existingRecipe);
-            return updatedRecipe;
-        } else {
-            throw new BrewsEntityNotFoundException();
-        }
+        Recipe existingRecipe = getRecipeById(id);
+        BeanUtils.copyProperties(recipe,existingRecipe);
+        return recipeRepository.saveAndFlush(existingRecipe);
     }
 
     @Override
     @Transactional
     public void deleteRecipe(Long id) {
         log.debug(String.format("Deleting recipe with id: %d",id));
-        Recipe recipe = recipeRepository.getOne(id);
-
-        if (recipe == null) {
-            throw new BrewsEntityNotFoundException();
-        }
+        Recipe recipe = getRecipeById(id);
 
         // Find any associated brews and delete them
         List<Brew> brews = brewsRepository.findBrewsByRecipe(recipe);
         for(Brew brew : brews) {
             brewsRepository.delete(brew);
         }
-
         recipeRepository.delete(recipe);
     }
 
@@ -104,14 +90,8 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public Recipe updateRating(Long id, Short rating) {
         log.debug(String.format("Updating recipe id: %d with rating: %d", id, rating));
-        Recipe recipe = recipeRepository.getOne(id);
-
-        if (recipe == null) {
-            throw new BrewsEntityNotFoundException();
-        }
+        Recipe recipe = getRecipeById(id);
         recipe.setRating(rating);
-        Recipe updatedRecipe = recipeRepository.save(recipe);
-
-        return updatedRecipe;
+        return recipeRepository.save(recipe);
     }
 }

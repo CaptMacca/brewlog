@@ -1,6 +1,6 @@
 package brews;
 
-import brews.domain.beerxml.*;
+import brews.util.transformer.beerxml.model.*;
 
 import java.util.Arrays;
 

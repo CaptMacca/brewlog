@@ -27,7 +27,7 @@
     "@ngxs/form-plugin": "^3.6.1",
     "@ngxs/storage-plugin": "^3.6.1",
     "@ngxs/store": "^3.6.1",
-    "@rxweb/reactive-form-validators": "^1.9.7",
+    "@rxweb/reactive-form-validators": "^2.1.2",
     "add": "^2.0.6",
     "angular-pipes": "^9.1.0",
     "core-js": "^3.2.1",

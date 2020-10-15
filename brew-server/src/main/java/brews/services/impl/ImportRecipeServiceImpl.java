@@ -2,10 +2,11 @@ package brews.services.impl;
 
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.exceptions.ImportedRecipeExistsException;
-import brews.repository.RecipeRepository;
-import brews.repository.UserRepository;
+import brews.domain.exceptions.ImportedRecipeExistsException;
+import brews.infrastructure.data.jpa.repository.RecipeRepository;
+import brews.infrastructure.data.jpa.repository.UserRepository;
 import brews.services.ImportRecipeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,16 +21,12 @@ import java.util.Optional;
  * BrewLog App.
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class ImportRecipeServiceImpl implements ImportRecipeService {
 
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
-
-    public ImportRecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository) {
-        this.recipeRepository = recipeRepository;
-        this.userRepository = userRepository;
-    }
 
     /**
      * Import, transform and save the recipes in the xml file into our DB.
@@ -44,12 +41,12 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
         log.debug("Saving recipes in database");
 
         recipes.stream().forEach(candidateRecipe -> {
-            candidateRecipe.setUser(user);
             Optional<Recipe> existingRecipe = recipeRepository.findRecipeByNameAndUser(candidateRecipe.getName(), user);
             if (existingRecipe.isPresent()) {
                 throw new ImportedRecipeExistsException("Recipe of same name already exists in recipe database for this user");
             } else {
                 log.debug(String.format("Saving recipe: %s", candidateRecipe.getName()));
+                candidateRecipe.setUser(user);
                 recipeRepository.save(candidateRecipe);
             }
         });

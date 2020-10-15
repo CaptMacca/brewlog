@@ -12,5 +12,4 @@ export class IbuFormatPipe implements PipeTransform {
       return null;
     }
   }
-
 }

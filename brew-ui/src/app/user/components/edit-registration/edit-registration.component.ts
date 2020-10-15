@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { Select, Store } from '@ngxs/store';
 import { FormGroup } from '@angular/forms';
-import { EditRegistrationForm } from '@app/user/model/edit-registration-form';
 import { UserState } from '@app/user/state/user.state';
-import { UserDetails } from '@app/model';
+import { UserDetails } from '@app/user/model';
 import { Observable } from 'rxjs';
-import { GetCurrentUserDetails, SetSavingUser, UpdateUserDetails } from '@app/user/state/user.actions';
-import { finalize } from 'rxjs/operators';
+import { SetSavingUser, UpdateUserDetails } from '@app/user/state/user.actions';
+import { catchError, finalize } from 'rxjs/operators';
 import { NzMessageService } from 'ng-zorro-antd';
 import { AuthState } from '@app/auth/state/auth.state';
 
@@ -28,7 +27,7 @@ export class EditRegistrationComponent implements OnInit {
     private store: Store,
     private readonly fb: RxFormBuilder,
     private readonly message: NzMessageService) {
-    this.form = this.fb.formGroup(new EditRegistrationForm());
+    this.form = this.fb.formGroup(new UserDetails());
   }
 
   get fc() {
@@ -36,23 +35,30 @@ export class EditRegistrationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new GetCurrentUserDetails()).subscribe(
-      ctx => this.userDetails$.subscribe(user => this.loadForm(user))
-    );
+    this.loadForm();
   }
 
-  private loadForm(user: UserDetails) {
-    this.form.patchValue({
-      firstName: user.firstName,
-      surname: user.surname,
-      email: user.email,
-    });
-    this.form.markAsPristine();
+  private loadForm() {
+    this.userDetails$.pipe(
+      catchError(err => {
+        console.log(err);
+        throw err;
+      })).subscribe(
+      user =>  {
+          this.form.patchValue({
+            id: user.id,
+            firstName: user.firstName,
+            surname: user.surname,
+            email: user.email,
+          });
+          this.form.markAsPristine();
+      });
   }
 
   save(): void {
     if (this.form.dirty && this.form.valid) {
       const user: UserDetails = {
+        id: this.fc['id'].value,
         firstName: this.fc['firstName'].value,
         surname: this.fc['surname'].value,
         email: this.fc['email'].value,
@@ -64,9 +70,8 @@ export class EditRegistrationComponent implements OnInit {
         ]).pipe(
           finalize(() => this.store.dispatch(new SetSavingUser(false)))
         ).subscribe(
-          savedUser => {
-            console.log(savedUser);
-            this.loadForm(savedUser);
+          () => {
+            this.loadForm();
             this.message.success('User Registration has been update');
           }
         );
@@ -77,6 +82,7 @@ export class EditRegistrationComponent implements OnInit {
   reset() {
     this.userDetails$.subscribe(user => {
       this.form.reset({ value: {
+          id: user.id,
           firstName: user.firstName,
           surname: user.surname,
           email: user.email,

@@ -6,7 +6,6 @@ import { UpdatePassword } from '@app/user/state/user.actions';
 import { AuthState } from '@app/auth/state/auth.state';
 import { Observable } from 'rxjs';
 import { UserPassword } from '@app/user/model';
-import { UpdateUserPasswordForm } from '@app/user/model/update-user-password-form';
 import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
@@ -25,7 +24,7 @@ export class ChangePasswordComponent implements OnInit {
     private readonly store: Store,
     private readonly fb: RxFormBuilder,
     private readonly message: NzMessageService) {
-    this.form = this.fb.formGroup(new UpdateUserPasswordForm());
+    this.form = this.fb.formGroup(new UserPassword());
   }
 
   ngOnInit() {
@@ -44,7 +43,8 @@ export class ChangePasswordComponent implements OnInit {
 
       const updatePassword: UserPassword = {
         currentPassword: this.fc['currentPassword'].value,
-        newPassword: this.fc['newPassword'].value
+        newPassword: this.fc['newPassword'].value,
+        confirmPassword: this.fc['confirmPassword'].value
       };
       console.log(updatePassword)
       this.store.dispatch(new UpdatePassword(updatePassword)).subscribe(

@@ -1,10 +1,10 @@
 package brews.services;
 
 import brews.domain.Recipe;
-import brews.domain.dto.RecipeDto;
-import brews.exceptions.BrewsEntityNotFoundException;
-import brews.repository.BrewsRepository;
-import brews.repository.RecipeRepository;
+import brews.app.presentation.dto.recipe.RecipeDto;
+import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.infrastructure.data.jpa.repository.BrewsRepository;
+import brews.infrastructure.data.jpa.repository.RecipeRepository;
 import brews.services.impl.RecipeServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
