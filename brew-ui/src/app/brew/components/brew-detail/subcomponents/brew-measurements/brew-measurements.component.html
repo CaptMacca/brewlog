@@ -21,12 +21,30 @@
       </ng-container>
       <ng-container [formGroupName]="i">
         <td>
-          <nz-date-picker [nzFormat]="dateFormat" formControlName="measurementDate"></nz-date-picker>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="measurementDateErrorTpl">
+              <nz-date-picker [nzFormat]="dateFormat" formControlName="measurementDate"></nz-date-picker>
+              <ng-template #measurementDateErrorTpl>
+                <div *ngFor="let errorMessage of validationMessages(i,'measurementDate')">
+                  {{errorMessage}}
+                </div>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </td>
       </ng-container>
       <ng-container [formGroupName]="i">
         <td>
-          <nz-input-number formControlName="measurementValue" type="number"></nz-input-number>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="valueErrorTpl">
+              <nz-input-number formControlName="value" type="number"></nz-input-number>
+              <ng-template #valueErrorTpl>
+                <div *ngFor="let errorMessage of validationMessages(i,'value')">
+                  {{errorMessage}}
+                </div>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </td>
       </ng-container>
     </tr>

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Route, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AuthState } from '@app/auth/state/auth.state';
-import { Recipe } from '@app/model';
+import { Recipe } from '@app/recipe/model';
 import { LoadRecipes, RemoveRecipe, UpdateRecipeRating } from '@app/recipe/state/recipe.actions';
 import { RecipeState } from '@app/recipe/state/recipe.state';
 import { Select, Store } from '@ngxs/store';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { UpdateRating } from '@app/model/update-rating';
+import { RecipeRating } from '@app/recipe/model/recipe-rating';
 
 @Component({
   selector: 'app-recipe',
@@ -69,7 +69,7 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   updateRating(recipe: Recipe): void {
-    const updateRating = new UpdateRating();
+    const updateRating = new RecipeRating();
     updateRating.id = recipe.id;
     updateRating.rating = this.rating;
     this.store.dispatch(new UpdateRecipeRating(updateRating));

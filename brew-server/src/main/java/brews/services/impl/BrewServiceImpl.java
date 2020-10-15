@@ -1,116 +1,130 @@
 package brews.services.impl;
 
 import brews.domain.Brew;
+import brews.domain.Measurement;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.dto.BrewDto;
-import brews.domain.dto.UpdateBrewDto;
-import brews.exceptions.BrewsEntityNotFoundException;
-import brews.mapper.domain.BrewMapper;
-import brews.repository.BrewsRepository;
-import brews.repository.RecipeRepository;
-import brews.repository.UserRepository;
+import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.infrastructure.data.jpa.repository.BrewsRepository;
+import brews.infrastructure.data.jpa.repository.MeasurementRepository;
+import brews.infrastructure.data.jpa.repository.RecipeRepository;
+import brews.infrastructure.data.jpa.repository.UserRepository;
 import brews.services.BrewService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class BrewServiceImpl implements BrewService {
 
     private final RecipeRepository recipeRepository;
+    private final MeasurementRepository measurementRepository;
     private final BrewsRepository brewsRepository;
     private final UserRepository userRepository;
-    private final BrewMapper brewMapper;
 
-    public BrewServiceImpl(RecipeRepository recipeRepository, BrewsRepository brewsRepository, BrewMapper brewMapper, UserRepository userRepository) {
-        this.recipeRepository = recipeRepository;
-        this.brewsRepository = brewsRepository;
-        this.brewMapper = brewMapper;
-        this.userRepository = userRepository;
+    @Override
+    @Transactional
+    public List<Brew> getAllBrews() {
+        return brewsRepository.findAll();
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getAllBrews() {
-        return brewMapper.toBrewDtos(brewsRepository.findAll());
+    public List<Brew> getAllBrewsForUser(String username) {
+        return brewsRepository.findBrewsByUserUsername(username);
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getAllBrewsForUser(String username) {
-        return brewMapper.toBrewDtos(brewsRepository.findBrewsByUserUsername(username));
+    public List<Brew> getTop5BrewsForUser(String username) {
+        return brewsRepository.findTop5BrewsByUserUsernameOrderByBrewDateDesc(username);
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getTop5BrewsForUser(String username) {
-        return brewMapper.toBrewDtos(brewsRepository.findTop5BrewsByUserUsernameOrderByBrewDateDesc(username));
+    public Brew getBrew(Long id) {
+        return Optional.of(brewsRepository.getOne(id))
+          .orElseThrow(() ->
+            new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id)));
     }
 
     @Override
     @Transactional
-    public BrewDto getBrew(Long id) {
-        return brewMapper.toBrewDto(brewsRepository.getOne(id));
+    public String getNotesForBrew(Long id) {
+        return getBrew(id).getNotes();
     }
 
     @Override
     @Transactional
-    public List<BrewDto> getBrewsForRecipe(Recipe recipe) {
-        return brewMapper.toBrewDtos(brewsRepository.findBrewsByRecipe(recipe));
+    public String getTastingNotesForBrew(Long id) {
+        return getBrew(id).getTastingNotes();
     }
 
     @Override
     @Transactional
-    public BrewDto saveBrew(BrewDto brewDto, String username) {
+    public List<Brew> getBrewsForRecipe(Recipe recipe) {
+        return brewsRepository.findBrewsByRecipe(recipe);
+    }
 
-        Brew brew = brewMapper.toBrew(brewDto);
-        User user = userRepository.findByUsername(username).orElseThrow(
+    @Override
+    @Transactional
+    public Brew saveBrew(Brew brew, User user) {
+        String username = user.getUsername();
+        log.debug("Saving brew {} for user {}", brew.getId(), username);
+        User actualUser = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
         );
 
         Recipe recipe = recipeRepository.getOne(brew.getRecipe().getId());
         brew.setRecipe(recipe);
-        brew.setUser(user);
+        brew.setUser(actualUser);
         brew.setMeasurements(null);
+        brew.setVersionId(1L);
 
-        brew = brewsRepository.save(brew);
-
-        return brewMapper.toBrewDto(brew);
-
+        return brewsRepository.save(brew);
     }
 
     @Override
     @Transactional
-    public BrewDto updateBrew(UpdateBrewDto updateBrewDto) {
+    public Brew updateBrew(Long id, Brew updateBrew, User user) {
+        String username = user.getUsername();
+        log.debug("Updating brew {} for user {}", updateBrew.getId(), username);
 
-        Long id = updateBrewDto.getId();
+        Brew brew = getBrew(id);
+        User actualUser = userRepository.findByUsername(username).orElseThrow(
+          () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
+        );
 
-        Brew brew = brewsRepository.getOne(id);
-
-        if (brew == null) {
-            throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id));
+        Set<Measurement> measurements = updateBrew.getMeasurements();
+        if (measurements != null) {
+            for (Measurement measurement : updateBrew.getMeasurements()) {
+                measurement.setBrew(updateBrew);
+            }
         }
 
-        brewMapper.updateFromBrewDto(updateBrewDto,brew);
-        Brew updatedBrew = brewsRepository.save(brew);
-        return brewMapper.toBrewDto(updatedBrew);
+        updateBrew.setId(id);
+        updateBrew.setUser(actualUser);
+        updateBrew.setRecipe(brew.getRecipe());
+
+        BeanUtils.copyProperties(updateBrew, brew);
+
+        return brewsRepository.save(brew);
     }
 
     @Override
     @Transactional
     public void deleteBrew(Long id) {
-
-        Brew existingBrew = brewsRepository.getOne(id);
-
-        if (existingBrew == null) {
-            throw new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to delete.", id));
-        }
-
+        log.debug("Deleting brew with id {}", id);
+        Brew existingBrew = getBrew(id);
         brewsRepository.delete(existingBrew);
     }
 }

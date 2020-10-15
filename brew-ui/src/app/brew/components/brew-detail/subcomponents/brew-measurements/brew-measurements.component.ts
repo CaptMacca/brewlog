@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { RxFormArray, RxFormControl, RxFormGroup } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-brew-measurements',
@@ -30,7 +31,16 @@ export class BrewMeasurementsComponent implements OnInit {
   }
 
   get measurements(): FormArray {
-    return this.parentForm.controls['measurements'] as FormArray;
+    return this.parentForm.controls['measurements'] as RxFormArray;
   }
 
+  validationMessages(index, controlName: string): string[] {
+    const abstractCtl = (<RxFormGroup>this.measurements.controls[index]).controls[controlName] as RxFormControl;
+    if (abstractCtl.invalid) {
+      const messages = abstractCtl.errorMessages;
+      return messages;
+    } else {
+      return null;
+    }
+  }
 }

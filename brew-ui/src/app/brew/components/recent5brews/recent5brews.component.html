@@ -8,15 +8,15 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Style</th>
+      <th>Date</th>
       <th>Rating</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of brewsTable.data">
-      <td>{{ data.recipe.name }}</td>
+      <td><a (click)="viewBrew(data)">{{ data.recipeName }}</a></td>
       <td>{{ data.brewDate | date }}</td>
-      <td>{{ data.recipe.score }}</td>
+      <td>{{ data.score }}</td>
     </tr>
   </tbody>
 </nz-table>

@@ -10,14 +10,24 @@
     </nz-breadcrumb>
     <nz-page-header-title>Brew Details</nz-page-header-title>
     <nz-page-header-extra>
-      <button nz-button nzType="danger"  (click)="confirm(brew)">Delete</button>
-      <button nz-button (click)="save(brew)" [disabled]="!brewForm.dirty  || !brewForm.valid || (saving | async)" [nzLoading]="saving | async">Save</button>
+      <button nz-button nzType="danger"  (click)="confirmDelete(brew)">Delete</button>
+      <button nz-button (click)="save(brew)" [disabled]="!brewForm.dirty || !brewForm.valid || (saving | async)" [nzLoading]="saving | async">Save</button>
       <button nz-button nzType="primary" (click)="gotoBrews()">View Brews</button>
     </nz-page-header-extra>
   </nz-page-header>
 
   <div class="wrapper">
-    <h5>Brew Session for {{brew.recipe?.name}}</h5>
+    <div nz-row>
+      <div nz-col nzSpan="8" align="left">
+        <h3>Brew Session for {{brew.recipeName}}</h3>
+      </div>
+      <div nz-col nzSpan="8" nzOffset="8" align="right">
+        <nz-tag *ngIf="brewForm.dirty && brewForm.invalid" [nzColor]="'red'">
+          <i nz-icon nzType="close-circle"></i>
+          <span>The brew session has errors</span>
+        </nz-tag>
+      </div>
+    </div>
     <form nz-form [formGroup]="brewForm" novalidate [nzLayout]="'vertical'">
       <nz-tabset [nzTabPosition]="'top'" [nzType]="'line'">
         <nz-tab [nzTitle]="'Brew Session'">

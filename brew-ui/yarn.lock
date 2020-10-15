@@ -354,9 +354,10 @@
   dependencies:
     tslib "^1.9.0"
 
-"@rxweb/reactive-form-validators@^1.9.7":
-  version "1.9.7"
-  resolved "https://registry.yarnpkg.com/@rxweb/reactive-form-validators/-/reactive-form-validators-1.9.7.tgz#7caec3d844f00f96db58ad3f51e33e56fed8fbff"
+"@rxweb/reactive-form-validators@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@rxweb/reactive-form-validators/-/reactive-form-validators-2.1.2.tgz#3eeab7ce1b0c005abb6ddd92be0a9260f2a0c0c0"
+  integrity sha512-8TYYZnloCegoZrxgj2Ko57R/tTJO7UjBqOpRQfEYLYLJit7fepMS2okmfCq0tqNZQiUmdqs7eF1p9NrOIVqPQg==
   dependencies:
     tslib "^1.9.0"
 

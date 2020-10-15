@@ -1,9 +1,11 @@
 package brews;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+/**
+ * Returns a mock xml recipe file for unit tests
+ */
 public class MockXMLRecipe {
 
     public static InputStream getMockedXMLRecipe() {

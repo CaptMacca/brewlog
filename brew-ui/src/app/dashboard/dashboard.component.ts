@@ -6,7 +6,8 @@ import { AuthState } from '@app/auth/state/auth.state';
 import { RecipeState } from '@app/recipe/state/recipe.state';
 import { BrewState } from '@app/brew/state/brew.state';
 import { Observable } from 'rxjs';
-import { Brew, Recipe } from '@app/model';
+import { Recipe } from '@app/recipe/model';
+import { Brew } from '@app/brew/model';
 
 @Component({
   selector: 'app-dashboard',

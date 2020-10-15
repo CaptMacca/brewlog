@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import {
   NzBreadCrumbModule,
   NzButtonModule,
@@ -20,7 +21,7 @@ import {
   NzStepsModule,
   NzTabsModule,
   NzUploadModule,
-  NzDropDownModule
+  NzDropDownModule,
 } from 'ng-zorro-antd';
 
 
@@ -48,6 +49,7 @@ import {
     NzUploadModule,
     NzCardModule,
     NzDropDownModule,
+    NzTagModule,
   ],
   exports: [
     NzTableModule,
@@ -71,6 +73,7 @@ import {
     NzUploadModule,
     NzCardModule,
     NzDropDownModule,
+    NzTagModule,
   ]
 })
 export class UiModule { }

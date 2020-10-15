@@ -2,7 +2,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { patch } from '@ngxs/store/operators';
 
 import { AuthService } from '@app/auth/services/auth.service';
-import { Login, Logout, Signup } from '@app/auth/state/auth.actions';
+import { Login, Logout } from '@app/auth/state/auth.actions';
 import { tap } from 'rxjs/operators';
 import { ClearUserDetails, GetCurrentUserDetails } from '@app/user/state/user.actions';
 
@@ -71,12 +71,6 @@ export class AuthState {
         username: '',
         authorities: roles
       }))));
-  }
-
-
-  @Action(Signup)
-  Signup(ctx: StateContext<AuthStateModel>, { payload }: Signup) {
-    return this.authService.signUp(payload);
   }
 
 }

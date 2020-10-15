@@ -1,5 +1,5 @@
-import { UserPassword } from '@app/user/model';
-import { UserDetails } from '@app/model';
+import { UserDetails, UserPassword } from '@app/user/model';
+import { UserRegistration } from '@app/user/model/user-registration';
 
 export class GetCurrentUserDetails {
   static readonly type = '[User] Get Current User Details';
@@ -22,4 +22,19 @@ export class UpdatePassword {
 export class SetSavingUser {
   static readonly type = '[User] Saving User';
   constructor(public payload: Boolean) {}
+}
+
+export class Signup {
+  static readonly type = '[User] Signup';
+  constructor(public payload: UserRegistration) {}
+}
+
+export class SignupSuccess {
+  static readonly type = '[User] Signup Successful';
+  constructor(public payload: UserRegistration) {}
+}
+
+export class SignupFailed {
+  static readonly type = '[User] Signup Failed';
+  constructor(public payload: string) {}
 }

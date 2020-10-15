@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
-import { Recipe, UpdateRating } from '@app/model';
+import { Recipe, RecipeRating } from '@app/recipe/model';
 
 @Injectable()
 export class RecipeService {
@@ -39,6 +39,15 @@ export class RecipeService {
     });
   }
 
+  getRecipeNotes(id: number): Observable<string> {
+    return this.http.get(this.recipeApi + '/' + id + '/notes', {
+      headers: new HttpHeaders({
+        Accept: 'application/json'
+      }),
+      responseType: 'text',
+    });
+  }
+
   deleteRecipe(recipe: Recipe) {
     return this.http.delete(this.recipeApi + '/' + recipe.id);
   }
@@ -51,7 +60,7 @@ export class RecipeService {
     });
   }
 
-  updateRecipeRating(updateRating: UpdateRating) {
+  updateRecipeRating(updateRating: RecipeRating) {
     return this.http.put(this.recipeApi + '/' + updateRating.id + '/rating', updateRating, {
       headers: new HttpHeaders({
         ContentType: 'application/json',

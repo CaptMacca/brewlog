@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Recipe } from '@app/model';
+import { Recipe } from '@app/recipe/model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-top5recipes',
@@ -10,9 +11,15 @@ export class Top5recipesComponent implements OnInit {
 
   @Input() recipes: Recipe[];
 
-  constructor() { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit() {
+  }
+
+  viewRecipe(recipe: Recipe) {
+    if (recipe) {
+      this.router.navigate(['/main/recipes/' + recipe.id]);
+    }
   }
 
 }

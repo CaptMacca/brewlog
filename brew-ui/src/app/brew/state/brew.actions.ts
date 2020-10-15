@@ -1,4 +1,4 @@
-import { Brew, CreateBrew } from '@app/model';
+import { Brew, CreateBrew, Measurement } from '@app/brew/model';
 
 export class LoadAllBrews {
   static readonly type = '[Brew] Load All Brews';
@@ -19,11 +19,6 @@ export class LoadBrew {
   constructor(public payload: number) {}
 }
 
-export class NewBrew {
-  static readonly type = '[Brew] New Brew';
-  constructor(public payload: Brew) {}
-}
-
 export class RemoveBrew {
   static readonly type = '[Brew] Remove Brew';
   constructor(public payload: Brew) {}
@@ -42,4 +37,9 @@ export class UpdateBrew {
 export class SetSavingBrew {
   static readonly type = '[Brew] Set Saving Brew';
   constructor(public payload: boolean) {}
+}
+
+export class RemoveMeasurement {
+  static readonly type = '[Brew] Remove Measurement';
+  constructor(public payload: Measurement) {}
 }

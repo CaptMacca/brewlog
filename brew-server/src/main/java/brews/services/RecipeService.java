@@ -1,22 +1,24 @@
 package brews.services;
 
-import brews.domain.dto.RecipeDto;
+import brews.domain.Recipe;
 
 import java.util.List;
 
 public interface RecipeService {
 
-    List<RecipeDto> getAllRecipes();
+    List<Recipe> getAllRecipes();
 
-    List<RecipeDto> getAllRecipesForUser(String username);
+    List<Recipe> getAllRecipesForUser(String username);
 
-    List<RecipeDto> getTop5RatedRecipesForUser(String username);
+    List<Recipe> getTop5RatedRecipesForUser(String username);
 
-    RecipeDto getRecipeById(Long id);
+    String getNotesForRecipe(Long id);
 
-    RecipeDto updateRecipe(Long id, RecipeDto recipeDto);
+    Recipe getRecipeById(Long id);
 
-    RecipeDto updateRating(Long id, Short rating);
+    Recipe updateRecipe(Long id, Recipe recipe);
+
+    Recipe updateRating(Long id, Short rating);
 
     void deleteRecipe(Long id);
 

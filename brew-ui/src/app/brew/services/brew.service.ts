@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
 
-import { Brew, CreateBrew } from '@app/model';
+import { Brew, CreateBrew } from '@app/brew/model';
 
 @Injectable()
 export class BrewService {
@@ -43,6 +43,14 @@ export class BrewService {
     return this.http.get<Brew>(this.brewsApi + '/' + id, httpOptions);
   }
 
+  getBrewNotes(id: number): Observable<string> {
+    return this.http.get(this.brewsApi + '/' + id + '/notes', { responseType: 'text'});
+  }
+
+  getBrewTastingNotes(id: number): Observable<string> {
+    return this.http.get(this.brewsApi + '/' + id + '/tastingnotes', { responseType: 'text'});
+  }
+
   deleteBrew(id: number): Observable<Brew[]> {
     return this.http.delete<Brew[]>(this.brewsApi + '/' + id);
   }
@@ -56,7 +64,7 @@ export class BrewService {
     return this.http.post<Brew>(this.brewsApi, createBrew, httpOptions);
   }
 
-  updateBrew(brew: Brew): Observable<Brew> {
-    return this.http.put<Brew>(this.brewsApi, brew);
+  updateBrew(id: number, brew: Brew): Observable<Brew> {
+    return this.http.put<Brew>(this.brewsApi + '/' + id, brew);
   }
 }

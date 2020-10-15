@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthState } from '@app/auth/state/auth.state';
-import { Recipe } from '@app/model';
+import { Recipe } from '@app/recipe/model';
 import { LoadRecipes, RemoveRecipe } from '@app/recipe/state/recipe.actions';
 import { RecipeState } from '@app/recipe/state/recipe.state';
 import { Select, Store } from '@ngxs/store';

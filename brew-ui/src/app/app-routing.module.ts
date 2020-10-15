@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { RegisterComponent } from '@app/auth/components/register/register.component';
+import { RegisterComponent } from '@app/user/components/register/register.component';
 import { AuthGuardService } from '@app/auth/services/auth-guard.service';
 import { BrewAddComponent } from '@app/brew/components/brew-add/brew-add.component';
 import { BrewDetailComponent } from '@app/brew/components/brew-detail/brew-detail.component';
@@ -17,6 +17,7 @@ import { LoginLayoutComponent } from '@app/layouts/login-layout/login-layout.com
 import { BrewResolverService } from '@app/brew/services/brew-resolver.service';
 import { EditRegistrationComponent } from '@app/user/components/edit-registration/edit-registration.component';
 import { ChangePasswordComponent } from '@app/user/components/change-password/change-password.component';
+import { UserDetailsResolverService } from '@app/user/services/user-details-resolver.service';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'welcome/login' },
@@ -26,7 +27,7 @@ const routes: Routes = [
   ]},
   { path: 'main', component: MainLayoutComponent,  canActivateChild: [AuthGuardService], children: [
     { path: 'dashboard', component: DashboardComponent,  },
-    { path: 'edit-registration', component: EditRegistrationComponent, },
+    { path: 'edit-registration', component: EditRegistrationComponent,  resolve: { userDetails: UserDetailsResolverService}},
     { path: 'change-password', component: ChangePasswordComponent},
     { path: 'recipes',
       children: [

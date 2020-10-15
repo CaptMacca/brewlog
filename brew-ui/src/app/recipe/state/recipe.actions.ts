@@ -1,5 +1,4 @@
-import { Recipe } from '@app/model';
-import { UpdateRating } from '@app/model/update-rating';
+import { Recipe, RecipeRating } from '@app/recipe/model';
 
 export class RemoveRecipe {
   static readonly type = '[Recipe] Remove Recipe';
@@ -37,5 +36,5 @@ export class AddRecipe {
 
 export class UpdateRecipeRating {
   static readonly type = '[Recipe] Update Recipe Rating';
-  constructor(public payload: UpdateRating) {}
+  constructor(public payload: RecipeRating) {}
 }

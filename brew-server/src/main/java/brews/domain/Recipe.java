@@ -35,7 +35,7 @@ public class Recipe implements Serializable {
     private String originalGravity;
     private String finalGravity;
     private String boilTime;
-    @Lob
+    @Column(columnDefinition="TEXT")
     private String notes;
     private Short rating;
 

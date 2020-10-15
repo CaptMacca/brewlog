@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
-import { Brew } from '@app/model';
+import { Brew } from '@app/brew/model';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { LoadBrew } from '@app/brew/state/brew.actions';
