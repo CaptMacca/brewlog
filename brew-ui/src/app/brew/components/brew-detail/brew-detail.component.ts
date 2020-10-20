@@ -9,6 +9,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
+import { ConcurrentUpdateError } from '@app/common/errors/optimistic-lock-error';
 
 @Component({
   selector: 'app-brew-detail',
@@ -117,7 +118,15 @@ export class BrewDetailComponent implements OnInit {
           () => {
           this.loadBrewForm();
           this.message.success('The brew session details have been updated');
-      });
+        },
+        error => {
+          if (error instanceof ConcurrentUpdateError) {
+            this.message.error('Brew details have been updated by another user, reload the brew session and retry.');
+          } else {
+            throw error;
+          }
+        }
+      );
     }
   }
 
