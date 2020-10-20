@@ -3,6 +3,7 @@ package brews.app.presentation.rest.exceptionhandler;
 import brews.domain.exceptions.*;
 import brews.util.transformer.beerxml.exception.BeerXMLParserException;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,7 +26,7 @@ public class BrewsControllerExceptionHandler {
     @ExceptionHandler(ImportedRecipeExistsException.class)
     public final ResponseEntity<ErrorDetails> handleImportedRecipeExistsException(ImportedRecipeExistsException ex, WebRequest request) {
         log.error("Duplicate imported recipe exception: ",ex);
-        return buildResponse(ex, request, HttpStatus.NOT_FOUND);
+        return buildResponse(ex, request, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -74,6 +75,12 @@ public class BrewsControllerExceptionHandler {
     public final ResponseEntity<ErrorDetails> handleBadCredentialsExceptions(Exception ex, WebRequest request) {
         log.error("Exception processing request: ",ex);
         return buildResponse(ex, request, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(OptimisticEntityLockException.class)
+    public final ResponseEntity<ErrorDetails> handleOptimisticEntityLockExceptions(Exception ex, WebRequest request) {
+        log.error("Exception processing request: ",ex);
+        return buildResponse(ex, request, HttpStatus.CONFLICT);
     }
 
     private ResponseEntity<ErrorDetails> buildResponse(Exception ex, WebRequest request, HttpStatus httpStatus) {

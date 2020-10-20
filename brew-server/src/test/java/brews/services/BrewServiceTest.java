@@ -6,6 +6,7 @@ import brews.domain.Recipe;
 import brews.domain.User;
 import brews.app.presentation.dto.brew.BrewDto;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.domain.mapper.BrewMapper;
 import brews.infrastructure.data.jpa.repository.BrewsRepository;
 import brews.infrastructure.data.jpa.repository.MeasurementRepository;
 import brews.infrastructure.data.jpa.repository.RecipeRepository;
@@ -32,6 +33,8 @@ public class BrewServiceTest {
     @Mock
     MeasurementRepository measurementRepository;
 
+    @Mock
+    BrewMapper brewMapper;
 
     @Mock
     UserRepository userRepository;
@@ -42,7 +45,7 @@ public class BrewServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        brewService = new BrewServiceImpl(recipeRepository, measurementRepository, brewsRepository, userRepository);
+        brewService = new BrewServiceImpl(recipeRepository, brewsRepository, userRepository, brewMapper);
     }
 
     @Test

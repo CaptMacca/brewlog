@@ -13,8 +13,10 @@ import { Brew } from '@app/brew/model';
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { catchError, map, retry, tap } from 'rxjs/operators';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { MeasurementService } from '@app/brew/services/measurement.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ConcurrentUpdateError } from '@app/common/errors/optimistic-lock-error';
 
 export class BrewStateModel {
   recent5Brews: Brew[];
@@ -142,7 +144,16 @@ export class BrewState {
           brew: brew,
           brews: updateItem(b => b.id === payload.id, brew)
         }))
-      )
+      ),
+      catchError( (err: HttpErrorResponse) => {
+        if (err.status === 409) {
+          // Optimistic Lock Exception
+          throw new ConcurrentUpdateError(err.message);
+        } else {
+          console.log(err);
+          throw err;
+        }
+      })
     );
   }
 

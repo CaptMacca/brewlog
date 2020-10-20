@@ -5,6 +5,7 @@ import brews.domain.Measurement;
 import brews.domain.Recipe;
 import brews.domain.User;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.domain.mapper.BrewMapper;
 import brews.infrastructure.data.jpa.repository.BrewsRepository;
 import brews.infrastructure.data.jpa.repository.MeasurementRepository;
 import brews.infrastructure.data.jpa.repository.RecipeRepository;
@@ -27,9 +28,9 @@ import java.util.Set;
 public class BrewServiceImpl implements BrewService {
 
     private final RecipeRepository recipeRepository;
-    private final MeasurementRepository measurementRepository;
     private final BrewsRepository brewsRepository;
     private final UserRepository userRepository;
+    private final BrewMapper brewMapper;
 
     @Override
     @Transactional
