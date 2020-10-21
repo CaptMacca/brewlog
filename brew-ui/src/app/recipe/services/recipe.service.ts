@@ -41,10 +41,7 @@ export class RecipeService {
 
   getRecipeNotes(id: number): Observable<string> {
     return this.http.get(this.recipeApi + '/' + id + '/notes', {
-      headers: new HttpHeaders({
-        Accept: 'application/json'
-      }),
-      responseType: 'text',
+      responseType: 'text'
     });
   }
 
