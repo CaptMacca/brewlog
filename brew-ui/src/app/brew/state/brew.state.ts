@@ -16,7 +16,7 @@ import { catchError, map, retry, tap } from 'rxjs/operators';
 import { forkJoin, Observable, of } from 'rxjs';
 import { MeasurementService } from '@app/brew/services/measurement.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ConcurrentUpdateError } from '@app/common/errors/optimistic-lock-error';
+import { ConcurrentUpdateError } from '@app/common/errors/concurrent-update-error';
 
 export class BrewStateModel {
   recent5Brews: Brew[];
