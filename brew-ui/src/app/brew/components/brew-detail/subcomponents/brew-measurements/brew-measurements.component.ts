@@ -22,11 +22,11 @@ export class BrewMeasurementsComponent implements OnInit {
   ngOnInit() {
   }
 
-  private addMeasurement(): void {
+  addMeasurement(): void {
     this.addMeasurementEvent.emit();
   }
 
-  private deleteMeasurement(id: number): void {
+  deleteMeasurement(id: number): void {
     this.deleteMeasurementEvent.emit(id);
   }
 
@@ -37,8 +37,7 @@ export class BrewMeasurementsComponent implements OnInit {
   validationMessages(index, controlName: string): string[] {
     const abstractCtl = (<RxFormGroup>this.measurements.controls[index]).controls[controlName] as RxFormControl;
     if (abstractCtl.invalid) {
-      const messages = abstractCtl.errorMessages;
-      return messages;
+      return abstractCtl.errorMessages;
     } else {
       return null;
     }

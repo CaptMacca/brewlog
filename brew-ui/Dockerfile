@@ -1,15 +1,13 @@
-# FROM johnpapa/angular-cli as angular-built
-# Using the above image allows us toskip the angular-cli install
-FROM node:10.16 as angular-built
-WORKDIR /usr/src/app
+FROM node:12.16.1 as angular-built
+WORKDIR ./src/app
 COPY package.json package.json
-COPY package-lock.json package-lock.json
-RUN npm i -g @angular/cli@7.3.6
-RUN npm ci --production
+COPY yarn.lock yarn.lock
+RUN npm i -g @angular/cli@8.2.2
+RUN yarn install --frozen-lockfile
 COPY . .
 RUN ng build --prod --build-optimizer
 
 FROM nginx:alpine
-COPY --from=angular-built /usr/src/app/dist /usr/share/nginx/html
+COPY --from=angular-built ./src/app/dist /usr/share/nginx/html
 EXPOSE 80 443
 CMD [ "nginx", "-g", "daemon off;" ]
