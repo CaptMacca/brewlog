@@ -9,7 +9,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
-import { ConcurrentUpdateError } from '@app/common/errors/optimistic-lock-error';
+import { ConcurrentUpdateError } from '@app/common/errors/concurrent-update-error';
 
 @Component({
   selector: 'app-brew-detail',
