@@ -1,12 +1,12 @@
 package brews.app.presentation.rest.controllers;
 
-import brews.domain.Measurement;
 import brews.app.presentation.dto.brew.MeasurementDto;
+import brews.domain.Measurement;
 import brews.domain.mapper.MeasurementMapper;
 import brews.services.MeasurementService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("api/measurement")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@Api("API for creating, retrieving, deleting and updating measurements for a brew")
+@Tag(name = "Measurements", description="API for creating, retrieving, deleting and updating measurements for a brew")
 public final class MeasurementController {
 
     private final MeasurementService measurementService;
@@ -31,21 +31,21 @@ public final class MeasurementController {
 
     @GetMapping("{id}")
     @ResponseBody
-    @ApiOperation(value="Get a specific measurement identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Get a specific measurement identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public MeasurementDto getMeasurement(@PathVariable Long id) {
         return measurementMapper.toMeasurementDto(measurementService.getMeasurement(id));
     }
 
     @GetMapping("/brew/{id}")
     @ResponseBody
-    @ApiOperation(value="Get a specific measurement identified by the id",  authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Get a specific measurement identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public List<MeasurementDto> getMeasurementsForBrew(@PathVariable Long id) {
         return measurementMapper.toMeasurementDtos(measurementService.getMeasurementsForBrew(id));
     }
 
     @PostMapping()
     @ResponseBody
-    @ApiOperation(value="Saves new or updated measurements", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Saves new or updated measurements", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<List<MeasurementDto>> saveMeasurement(@RequestBody List<MeasurementDto> measurementDtos) {
         log.debug("Saving measurements");
         List<Measurement> saveMeasurement = measurementMapper.toMeasurements(measurementDtos);
@@ -54,7 +54,7 @@ public final class MeasurementController {
 
     @PutMapping("{id}")
     @ResponseBody
-    @ApiOperation(value="Updates a measurement identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Updates a measurement identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<MeasurementDto> updateMeasurement(@RequestBody MeasurementDto measurementDto) {
         log.debug(String.format("Updating measurement with id: %d", measurementDto.getId()));
         Measurement updateMeasurement = measurementMapper.toMeasurement(measurementDto);
@@ -62,7 +62,7 @@ public final class MeasurementController {
     }
 
     @DeleteMapping("{id}")
-    @ApiOperation(value="Deletes a measurement identified by the id",  authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Deletes a measurement identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<Void> deleteMeasurement(@PathVariable Long id) {
         log.debug(String.format("Deleting measurement with id: %d", id));
         this.measurementService.deleteMeasurement(id);

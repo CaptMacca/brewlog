@@ -1,16 +1,16 @@
 package brews.app.presentation.rest.controllers;
 
-import brews.app.presentation.dto.user.UserDetailsDto;
-import brews.domain.User;
 import brews.app.presentation.dto.user.UpdatePasswordRequest;
 import brews.app.presentation.dto.user.UpdateUserDto;
+import brews.app.presentation.dto.user.UserDetailsDto;
+import brews.domain.User;
 import brews.domain.mapper.UserMapper;
+import brews.services.UserService;
 import brews.util.security.jwt.request.SignUpForm;
 import brews.util.security.jwt.response.ResponseMessage;
-import brews.services.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
-@Api("API for managing user details")
+@Tag(name="User", description = "API for managing user details")
 public class UserController {
 
     private final UserService userService;
@@ -33,14 +33,14 @@ public class UserController {
 
     @GetMapping()
     @ResponseBody
-    @ApiOperation(value="Get current user details", authorizations = { @Authorization(value = "jwtToken")})
+    @Operation(description = "Get current user details", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<UserDetailsDto> getCurrentUserDetails() {
         return ResponseEntity.ok(userMapper.toUserDetailsResponse(userService.getCurrentUserDetails()));
     }
 
     @PutMapping("/{username}")
     @ResponseBody
-    @ApiOperation(value="Updates a user details", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Updates a user details", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<UserDetailsDto> updateUser(@PathVariable String username, @RequestBody UpdateUserDto updateUserDto) {
         User user = userMapper.toUser(updateUserDto);
         return ResponseEntity.ok(userMapper.toUserDetailsResponse(userService.updateUserDetails(username, user)));
@@ -48,14 +48,14 @@ public class UserController {
 
     @PostMapping("/password")
     @ResponseBody
-    @ApiOperation(value="Updates a users password", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Updates a users password", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<Boolean> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
         return ResponseEntity.ok(userService.updatePassword(updatePasswordRequest.getCurrentPassword(), updatePasswordRequest.getNewPassword()));
     }
 
     @PostMapping("/signup")
     @ResponseBody
-    @ApiOperation("Registers a new user account")
+    @Operation(description = "Registers a new user account")
     public ResponseEntity<?> registerUser(@RequestBody SignUpForm signUpRequest) {
 
         User user = new User(

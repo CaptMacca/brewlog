@@ -1,14 +1,14 @@
 package brews.app.presentation.rest.controllers;
 
-import brews.domain.Recipe;
-import brews.util.transformer.beerxml.BeerXMLTransformer;
 import brews.app.presentation.dto.recipe.RecipeDto;
+import brews.domain.Recipe;
 import brews.domain.exceptions.ImportedRecipeUploadException;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.ImportRecipeService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import brews.util.transformer.beerxml.BeerXMLTransformer;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("api/recipes")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@Api("API for uploading a recipe in beer xml format, note this only supports beer.xml v1 files")
+@Tag(name="Recipes", description = "API for uploading a recipe in beer xml format, note this only supports beer.xml v1 files")
 public final class UploadRecipeController {
 
     private final ImportRecipeService importRecipeService;
@@ -38,9 +38,9 @@ public final class UploadRecipeController {
 
     @PostMapping("upload")
     @ResponseBody
-    @ApiOperation(
-      value="Handles the upload of a beer.xml files, will fail if a recipe with the same name already exists in the repository",
-      authorizations = { @Authorization(value="jwtToken") })
+    @Operation(
+      description="Handles the upload of a beer.xml files, will fail if a recipe with the same name already exists in the repository",
+      security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<List<RecipeDto>> uploadRecipe(@RequestParam("files") MultipartFile[] uploadfiles, @RequestParam("user") String user) {
         List<RecipeDto> recipes = new ArrayList<>();
 

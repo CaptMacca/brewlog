@@ -12,9 +12,9 @@ import brews.domain.mapper.RecipeMapper;
 import brews.services.BrewService;
 import brews.services.RecipeService;
 import brews.services.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/brews")
 @CrossOrigin(origins = "*")
-@Api("API for creating, retrieving, deleting and updating a brew")
+@Tag(name="Brew", description="API for creating, retrieving, deleting and updating a brew")
 public final class BrewController {
 
     private final BrewService brewService;
@@ -44,7 +44,7 @@ public final class BrewController {
 
     @GetMapping("/all")
     @ResponseBody
-    @ApiOperation(value="Returns all brews in the repository", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Returns all brews in the repository", security = @SecurityRequirement(name="bearerAuth"))
     @RolesAllowed("ROLE_ADMIN")
     public List<BrewDto> getAllBrews() {
         return brewMapper.toBrewDtos(brewService.getAllBrews());
@@ -52,7 +52,7 @@ public final class BrewController {
 
     @GetMapping()
     @ResponseBody
-    @ApiOperation(value="Returns all brews in the repository for a given username", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Returns all brews in the repository for a given username", security = @SecurityRequirement(name="bearerAuth"))
     public List<BrewDto> getBrews() {
         User user = userService.getCurrentUserDetails();
         return brewMapper.toBrewDtos(brewService.getAllBrewsForUser(user.getUsername()));
@@ -60,35 +60,35 @@ public final class BrewController {
 
     @GetMapping(value = "{id}/notes", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    @ApiOperation(value="Returns brew notes identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Returns brew notes identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public String getNotes(@PathVariable Long id) {
         return brewService.getNotesForBrew(id);
     }
 
     @GetMapping(value = "{id}/tastingnotes", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    @ApiOperation(value="Returns brew notes identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Returns brew notes identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public String getTastingNotes(@PathVariable Long id) {
         return brewService.getTastingNotesForBrew(id);
     }
 
     @GetMapping("{id}")
     @ResponseBody
-    @ApiOperation(value="Returns an individual brew identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Returns an individual brew identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public BrewDto get(@PathVariable Long id) {
         return brewMapper.toBrewDto(brewService.getBrew(id));
     }
 
     @GetMapping("/top5")
     @ResponseBody
-    @ApiOperation(value="Returns top 5 recent brews stored in the repository for a user", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Returns top 5 recent brews stored in the repository for a user", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<List<BrewDto>> getTop5RatedBrewsForUser(@RequestParam String username) {
         return ResponseEntity.ok(brewMapper.toBrewDtos(brewService.getTop5BrewsForUser(username)));
     }
 
     @PostMapping()
     @ResponseBody
-    @ApiOperation(value="Creates a new brew", authorizations = {@Authorization(value="jwtToken")})
+    @Operation(description="Creates a new brew", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<BrewDto> create(@RequestBody CreateBrewDto createBrewRequest) {
         log.debug("Processing new brew request");
         BrewDto brewDto = createBrewRequest.getBrew();
@@ -109,7 +109,7 @@ public final class BrewController {
 
     @PutMapping("{id}")
     @ResponseBody
-    @ApiOperation(value="Updates a brew identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Updates a brew identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<UpdateBrewDto> update(@PathVariable Long id, @RequestBody UpdateBrewDto updateBrewDto) {
         Brew brew = brewMapper.updateBrewDtotoBrew(updateBrewDto);
         log.debug("Updating brew with details {} ", brew);
@@ -122,7 +122,7 @@ public final class BrewController {
     }
 
     @DeleteMapping("{id}")
-    @ApiOperation(value="Deletes a brew identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description="Deletes a brew identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         brewService.deleteBrew(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

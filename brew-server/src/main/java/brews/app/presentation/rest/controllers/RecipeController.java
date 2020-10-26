@@ -1,17 +1,17 @@
 package brews.app.presentation.rest.controllers;
 
-import brews.domain.Recipe;
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.app.presentation.dto.user.UpdateRatingRequest;
+import brews.domain.Recipe;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.RecipeService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("api/recipes")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@ApiOperation("API for updating, retrieving and deleting recipes. Recipes cannot be created," +
+@Tag(name = "Recipes", description = "API for updating, retrieving and deleting recipes. Recipes cannot be created," +
               " see the upload endpoint for importing a beer.xml file to create a recipe")
 public final class RecipeController {
 
@@ -34,7 +34,7 @@ public final class RecipeController {
 
     @GetMapping("/all")
     @ResponseBody
-    @ApiOperation(value="Returns all recipes stored in the repository", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Returns all recipes stored in the repository", security = @SecurityRequirement(name="bearerAuth"))
     @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<RecipeDto>> getAll() {
         List<RecipeDto> recipesResponse = recipeMapper.toRecipeDtos(recipeService.getAllRecipes());
@@ -43,7 +43,7 @@ public final class RecipeController {
 
     @GetMapping()
     @ResponseBody
-    @ApiOperation(value="Returns all recipes stored in the repository for a user", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Returns all recipes stored in the repository for a user", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<List<RecipeDto>> getAllRecipesForUser(@RequestParam String username) {
         List<RecipeDto> recipesResponse = recipeMapper.toRecipeDtos(recipeService.getAllRecipesForUser(username));
         return ResponseEntity.ok(recipesResponse);
@@ -51,14 +51,14 @@ public final class RecipeController {
 
     @GetMapping(value = "{id}/notes", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    @ApiOperation(value="Returns the recipe notes for a recipe", authorizations = { @Authorization(value = "jwtToken")})
+    @Operation(description = "Returns the recipe notes for a recipe", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<String> getRecipeNotes(@PathVariable long id) {
         return ResponseEntity.ok(recipeService.getNotesForRecipe(id));
     }
 
     @GetMapping("/top5")
     @ResponseBody
-    @ApiOperation(value="Returns top 5 rate recipes stored in the repository for a user", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Returns top 5 rate recipes stored in the repository for a user", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<List<RecipeDto>> getTop5RatedRecipesForUser(@RequestParam String username) {
         List<RecipeDto> recipesResponse = recipeMapper.toRecipeDtos(recipeService.getTop5RatedRecipesForUser(username));
         return ResponseEntity.ok(recipesResponse);
@@ -66,7 +66,7 @@ public final class RecipeController {
 
     @GetMapping("{id}")
     @ResponseBody
-    @ApiOperation(value="Returns a recipe identified by the id",  authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Returns a recipe identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<RecipeDto> getRecipe(@PathVariable Long id) {
         RecipeDto recipeResponse = recipeMapper.toRecipeDto(recipeService.getRecipeById(id));
         return ResponseEntity.ok(recipeResponse);
@@ -74,7 +74,7 @@ public final class RecipeController {
 
     @PutMapping("{id}")
     @ResponseBody
-    @ApiOperation(value="Updates a recipe identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Updates a recipe identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto) {
         Recipe recipe = recipeMapper.toRecipe(recipeDto);
         RecipeDto updatedRecipeResponse = recipeMapper.toRecipeDto(recipeService.updateRecipe(id, recipe));
@@ -83,7 +83,7 @@ public final class RecipeController {
 
     @PutMapping("{id}/rating")
     @ResponseBody
-    @ApiOperation(value="Update the recipe rating", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Update the recipe rating", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<RecipeDto> updateRating(@RequestBody UpdateRatingRequest updateRatingRequest) {
         RecipeDto updatedRecipeResponse = recipeMapper.toRecipeDto(
           recipeService.updateRating(updateRatingRequest.getId(), updateRatingRequest.getRating())
@@ -92,7 +92,7 @@ public final class RecipeController {
     }
 
     @DeleteMapping("{id}")
-    @ApiOperation(value="Deletes a recipe identified by the id", authorizations = { @Authorization(value="jwtToken")})
+    @Operation(description = "Deletes a recipe identified by the id", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.noContent().build();

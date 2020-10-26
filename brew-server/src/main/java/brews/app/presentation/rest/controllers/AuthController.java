@@ -3,8 +3,8 @@ package brews.app.presentation.rest.controllers;
 import brews.util.security.jwt.JwtProvider;
 import brews.util.security.jwt.request.LoginForm;
 import brews.util.security.jwt.response.JwtResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
-@Api("API for authentication and user registration")
+@Tag(name = "Auth", description = "API for authentication and user registration")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -31,7 +31,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     @ResponseBody
-    @ApiOperation("Validates the users login credentials and returns the JWT token if ok")
+    @Operation(description = "Validates the users login credentials and returns the JWT token if ok")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
