@@ -5,6 +5,7 @@ import { AuthService } from '@app/auth/services/auth.service';
 import { Login, Logout } from '@app/auth/state/auth.actions';
 import { tap } from 'rxjs/operators';
 import { ClearUserDetails, GetCurrentUserDetails } from '@app/user/state/user.actions';
+import { Injectable } from '@angular/core';
 
 export class AuthStateModel {
   loggedIn: any;
@@ -22,6 +23,7 @@ export class AuthStateModel {
     authorities: []
   }
 })
+@Injectable()
 export class AuthState {
 
   @Selector()

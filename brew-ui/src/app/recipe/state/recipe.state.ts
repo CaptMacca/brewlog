@@ -13,6 +13,7 @@ import { append, patch, removeItem } from '@ngxs/store/operators';
 import { RecipeService } from '../services/recipe.service';
 import { forkJoin, Observable } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 export class RecipeStateModel {
   top5Recipes: [];
@@ -28,6 +29,7 @@ export class RecipeStateModel {
     recipe: new Recipe()
   }
 })
+@Injectable()
 export class RecipeState {
   @Selector()
   static getRecipes(state: RecipeStateModel): Recipe[] {

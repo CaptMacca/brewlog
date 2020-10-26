@@ -2,9 +2,9 @@
   <form nzForm [formGroup]="form" class="login-form" novalidate>
     <nz-form-item>
       <!-- Username -->
-      <nz-form-control>
+      <nz-form-control [nzErrorTip]="usernameErrorTpl" >
         <nz-input-group nzPrefixIcon="user">
-          <input nz-input formControlName="username" [nzErrorTip]="usernameErrorTpl" id="username" type="text" placeholder="username"/>
+          <input nz-input formControlName="username" id="username" type="text" placeholder="username"/>
         </nz-input-group>
         <ng-template #usernameErrorTpl>
           <div *ngFor="let errorMessage of username['errorMessages']">
@@ -16,9 +16,9 @@
 
     <!-- Password -->
     <nz-form-item>
-      <nz-form-control>
+      <nz-form-control [nzErrorTip]="passwordErrorTpl">
         <nz-input-group nzPrefixIcon="lock">
-          <input nz-input type="password" [nzErrorTip]="passwordErrorTpl" formControlName="password" placeholder="Password" />
+          <input nz-input type="password"  formControlName="password" placeholder="Password" />
         </nz-input-group>
         <ng-template #passwordErrorTpl>
           <div *ngFor="let errorMessage of password['errorMessages']">

@@ -5456,12 +5456,10 @@ ng-zorro-antd@^9.3.0:
     resize-observer-polyfill "^1.5.1"
     tslib "^1.10.0"
 
-ngx-gauge@1.0.0-beta.11:
-  version "1.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/ngx-gauge/-/ngx-gauge-1.0.0-beta.11.tgz#0725fbe66235cbb04d9d11e964ba5ebff3e76935"
-  integrity sha512-/o+4DBujl5bUWfOvjbbZqqbuTwZNmFzP+JKxoCviNZbY3VowQWxCiQLSBB+j/Zc4M/MY4ecgJz+uxSLO06OQCA==
-  dependencies:
-    tslib "^1.9.0"
+ngx-gauge@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-gauge/-/ngx-gauge-1.1.0.tgz#fdc7b8fe8ecc58e694328f73c098bbf6a4126bfc"
+  integrity sha512-tclLMKz55X7nGvz10mogyl1TvH2lrI0uSEo1aCvP3h4Rrq6gwKvc2ItSRwVCuA1WgSVJYOjxzTZzUB6BiewFmw==
 
 ngxs@ngxs/store:
   version "3.6.1"
