@@ -4,28 +4,27 @@
       <!-- Username -->
       <nz-form-control>
         <nz-input-group nzPrefixIcon="user">
-          <input nz-input formControlName="username" nzHasFeedback id="username" type="text" placeholder="username"/>
+          <input nz-input formControlName="username" [nzErrorTip]="usernameErrorTpl" id="username" type="text" placeholder="username"/>
         </nz-input-group>
-        <nz-form-explain *ngIf="username.dirty && username.errors">
-          <div nzErrorTip *ngFor="let errorMessage of username['errorMessages']">
+        <ng-template #usernameErrorTpl>
+          <div *ngFor="let errorMessage of username['errorMessages']">
             {{errorMessage}}<br/>
           </div>
-        </nz-form-explain>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
     <!-- Password -->
     <nz-form-item>
-
       <nz-form-control>
         <nz-input-group nzPrefixIcon="lock">
-          <input nz-input type="password" nzHasFeedback formControlName="password" placeholder="Password" />
+          <input nz-input type="password" [nzErrorTip]="passwordErrorTpl" formControlName="password" placeholder="Password" />
         </nz-input-group>
-        <nz-form-explain *ngIf="password.dirty && password.errors">
-          <div nzErrorTip *ngFor="let errorMessage of password['errorMessages']">
+        <ng-template #passwordErrorTpl>
+          <div *ngFor="let errorMessage of password['errorMessages']">
             {{errorMessage}}<br/>
           </div>
-        </nz-form-explain>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 

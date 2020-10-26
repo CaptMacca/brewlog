@@ -34,7 +34,7 @@
     "core-js": "^3.2.1",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
-    "ng-zorro-antd": "^8.5.2",
+    "ng-zorro-antd": "^9.3.0",
     "ngx-gauge": "1.0.0-beta.11",
     "ngxs": "ngxs/store",
     "rxjs": "6.5.3",
