@@ -37,7 +37,7 @@
     "ng-zorro-antd": "^8.5.2",
     "ngx-gauge": "1.0.0-beta.11",
     "ngxs": "ngxs/store",
-    "rxjs": "^6.6.3",
+    "rxjs": "6.5.3",
     "systemjs": "^3.1.6",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
