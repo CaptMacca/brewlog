@@ -28,6 +28,15 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+
+springdoc:
+#  api-docs:
+#    path: /brewlog-openapi
+  packagesToScan: brews.app.presentation.rest.controllers,brews.app.presentation.rest.controllers.exceptionhandler
+
+
+#  pathsToMatch: /api/brews, /api/recipes, /api/measurement, /api/user, /api/auth
+
 brews:
   app:
     jwtSecret: jwtSecretKeyThatNoOneMustKnow
