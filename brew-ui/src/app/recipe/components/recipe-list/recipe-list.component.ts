@@ -5,7 +5,8 @@ import { Recipe } from '@app/recipe/model';
 import { LoadRecipes, RemoveRecipe } from '@app/recipe/state/recipe.actions';
 import { RecipeState } from '@app/recipe/state/recipe.state';
 import { Select, Store } from '@ngxs/store';
-import { NzMessageService, NzModalService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 

@@ -2,7 +2,7 @@ FROM node:12.16.1 as angular-built
 WORKDIR ./src/app
 COPY package.json package.json
 COPY yarn.lock yarn.lock
-RUN npm i -g @angular/cli@8.2.2
+RUN npm i -g @angular/cli@9.1.12
 RUN yarn install --frozen-lockfile
 COPY . .
 RUN ng build --prod --build-optimizer

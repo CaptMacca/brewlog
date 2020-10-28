@@ -6,7 +6,7 @@ import { UpdatePassword } from '@app/user/state/user.actions';
 import { AuthState } from '@app/auth/state/auth.state';
 import { Observable } from 'rxjs';
 import { UserPassword } from '@app/user/model';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-change-password',

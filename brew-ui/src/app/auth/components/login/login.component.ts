@@ -5,7 +5,7 @@ import { AuthLoginInfo } from '@app/auth/model/auth-login-info';
 import { Login } from '@app/auth/state/auth.actions';
 import { Store } from '@ngxs/store';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',

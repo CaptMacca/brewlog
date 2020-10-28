@@ -6,7 +6,8 @@ import { BrewState } from '@app/brew/state/brew.state';
 import { Brew } from '@app/brew/model';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NzMessageService, NzModalService } from 'ng-zorro-antd';
+import { NzMessageService} from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-brew-list',

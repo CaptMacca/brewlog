@@ -5,8 +5,9 @@ import { AuthState } from '@app/auth/state/auth.state';
 import { LoadRecipes } from '@app/recipe/state/recipe.actions';
 import { environment } from '@env/environment';
 import { Store } from '@ngxs/store';
-import { NzMessageService, UploadFile } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { filter, finalize } from 'rxjs/operators';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
   selector: 'app-import-recipe',
@@ -16,7 +17,7 @@ import { filter, finalize } from 'rxjs/operators';
 export class ImportRecipeComponent implements OnInit {
   private url: string = environment.recipeUploadApiUrl;
   uploading = false;
-  fileList: UploadFile[] = [];
+  fileList: NzUploadFile[] = [];
 
   constructor(
     private readonly store: Store,
@@ -27,7 +28,7 @@ export class ImportRecipeComponent implements OnInit {
 
   ngOnInit() {}
 
-  beforeUpload = (file: UploadFile): boolean => {
+  beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
   };
