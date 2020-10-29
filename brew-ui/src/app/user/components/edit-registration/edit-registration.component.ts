@@ -7,7 +7,7 @@ import { UserDetails } from '@app/user/model';
 import { Observable } from 'rxjs';
 import { SetSavingUser, UpdateUserDetails } from '@app/user/state/user.actions';
 import { catchError, finalize } from 'rxjs/operators';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthState } from '@app/auth/state/auth.state';
 
 @Component({

@@ -17,6 +17,7 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { MeasurementService } from '@app/brew/services/measurement.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConcurrentUpdateError } from '@app/common/errors/concurrent-update-error';
+import { Injectable } from '@angular/core';
 
 export class BrewStateModel {
   recent5Brews: Brew[];
@@ -41,6 +42,7 @@ export class BrewStateModel {
     }
   }
 })
+@Injectable()
 export class BrewState {
 
   @Selector()

@@ -3,7 +3,7 @@
     <img src="../assets/beer-cartoon.png" width="50" height="50" alt="">
     <span><h5 nz-title style="color: white;">Brew Log</h5></span>
   </div>
-  <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Dashboard' : ''" nzSelected>
+  <li nz-menu-item nz-tooltip nzTooltipPlacement="right" [nzTooltipTitle]="isCollapsed ? 'Dashboard' : ''" nzSelected>
     <i nz-icon nzType="home"></i>
     <span ><a style="color: white;" [routerLink]="['/main/dashboard']">Dashboard</a></span>
   </li>

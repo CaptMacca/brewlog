@@ -15,8 +15,7 @@ import { NavigationComponent } from '@app/navigation/navigation.component';
 import { RecipeModule } from '@app/recipe/recipe.module';
 import { WelcomeComponent } from '@app/welcome/welcome.component';
 import { environment } from '@env/environment.prod';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faArrowLeft,
   faBan,
@@ -28,6 +27,7 @@ import {
   faExclamationCircle,
   faEye,
   faPlus,
+  fas,
   faSave,
   faTrash,
   faUpload
@@ -38,7 +38,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule, StorageOption } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
-import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
+import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { AuthGuardService } from './auth/services/auth-guard.service';
 import { httpInterceptorProviders } from './auth/services/auth-interceptor.service';
@@ -54,10 +54,7 @@ import { EditRegistrationComponent } from './user/components/edit-registration/e
 import { ChangePasswordComponent } from './user/components/change-password/change-password.component';
 import { UserService } from '@app/user/services/user.service';
 import { UserDetailsResolverService } from '@app/user/services/user-details-resolver.service';
-
-library.add(faEye, faDatabase, faArrowLeft, faTrash);
-library.add(faCheck, faBan, faExclamationCircle, faUpload);
-library.add(faEdit, faEraser, faPlus, faBeer, faSave);
+import { NgUpperFirstPipeModule } from 'angular-pipes';
 
 registerLocaleData(en);
 
@@ -94,11 +91,11 @@ registerLocaleData(en);
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
-    NgZorroAntdModule,
     UiModule,
     IconsProviderModule,
     NgxGaugeModule,
-    RxReactiveFormsModule
+    RxReactiveFormsModule,
+    NgUpperFirstPipeModule,
   ],
   providers: [
     AuthGuardService,
@@ -112,4 +109,12 @@ registerLocaleData(en);
   bootstrap: [AppComponent],
   exports: [RecipeModule, BrewModule]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    library.addIconPacks(fas);
+    library.addIcons(
+      faEye, faDatabase, faArrowLeft, faTrash, faCheck, faBan, faExclamationCircle, faUpload,
+      faEdit, faEraser, faPlus, faBeer, faSave
+    );
+  }
+}

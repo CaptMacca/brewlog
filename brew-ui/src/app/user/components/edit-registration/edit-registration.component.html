@@ -8,7 +8,7 @@
         <a>Edit Registration</a>
       </nz-breadcrumb-item>
     </nz-breadcrumb>
-    <nz-page-header-title>Update Registration for user: {{username$ | async}}</nz-page-header-title>
+    <nz-page-header-title>Update Registration for user: {{username$ | async | upperfirst}}</nz-page-header-title>
     <nz-page-header-extra>
       <button nz-button (click)="save()" [disabled]="!form.dirty  || !form.valid || (saving$ | async)" [nzLoading]="saving$ | async">Save</button>
       <button nz-button (click)="reset()" [disabled]="!form.dirty  || !form.valid || (saving$ | async)" >Reset</button>

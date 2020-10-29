@@ -13,6 +13,7 @@ import { patch } from '@ngxs/store/operators';
 import { catchError, retry, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AuthStateModel } from '@app/auth/state/auth.state';
+import { Injectable } from '@angular/core';
 
 export class UserStateModel {
   userDetails: UserDetails;
@@ -26,7 +27,7 @@ export class UserStateModel {
     savingUser: false
   }
 })
-
+@Injectable()
 export class UserState {
 
   @Selector()

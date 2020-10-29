@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { UserRegistration } from '@app/user/model/user-registration';
 import { Store } from '@ngxs/store';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Signup } from '@app/user/state/user.actions';
 
 @Component({
