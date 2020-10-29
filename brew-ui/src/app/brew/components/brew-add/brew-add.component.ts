@@ -12,7 +12,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 import { CandidateBrew, CreateBrew, Brew } from '@app/brew/model';
 import { withLatestFrom } from 'rxjs/operators';
 
@@ -54,9 +54,9 @@ export class BrewAddComponent implements OnInit {
       this.brewForm.reset();
     }
 
-    const brewDate = moment();
+    const brewDate = new Date();
     this.brewForm.patchValue({
-      brewDate: brewDate.toDate(),
+      brewDate: brewDate,
       estimatedOriginalGravity: 0,
       estimatedPreboilGravity: 0,
       estimatedFinalGravity: 0,
