@@ -1,9 +1,6 @@
 package brews.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
@@ -14,10 +11,7 @@ import java.util.Set;
  * Domain class that represents a particular recipe
  */
 
-@Getter
-@Setter
-@EqualsAndHashCode()
-@ToString
+@Data
 @Entity
 @Table(name="recipe", schema="brews")
 public class Recipe implements Serializable {

@@ -1,18 +1,24 @@
 package brews.domain.mapper;
 
-import brews.domain.*;
 import brews.app.presentation.dto.recipe.FermentableDto;
 import brews.app.presentation.dto.recipe.HopDto;
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.app.presentation.dto.recipe.YeastDto;
+import brews.domain.Fermentable;
+import brews.domain.Hop;
+import brews.domain.Recipe;
+import brews.domain.Yeast;
 import org.mapstruct.*;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
-        uses= {IngredientMapper.class},
+        uses= {IngredientMapper.class, UserMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class RecipeMapper {
 

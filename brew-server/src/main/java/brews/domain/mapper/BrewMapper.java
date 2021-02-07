@@ -8,7 +8,7 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        uses={IngredientMapper.class, MeasurementMapper.class},
+        uses={RecipeMapper.class,IngredientMapper.class, MeasurementMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BrewMapper {
 
