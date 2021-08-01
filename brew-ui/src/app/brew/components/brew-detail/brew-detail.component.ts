@@ -5,7 +5,7 @@ import { RemoveBrew, RemoveMeasurement, SetSavingBrew, UpdateBrew } from '@app/b
 import { BrewState } from '@app/brew/state/brew.state';
 import { Brew, Measurement } from '@app/brew/model';
 import { Select, Store } from '@ngxs/store';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, ReplaySubject, throwError } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
@@ -139,6 +139,20 @@ export class BrewDetailComponent implements OnInit {
       nzOnOk: () => this.deleteBrew(brew),
       nzCancelText: 'No'
     });
+  }
+
+  confirmUnsaved(): Observable<boolean> {
+    const modalResponse = new ReplaySubject<boolean>();
+    this.modalService.confirm({
+      nzTitle: 'Are you sure you want to abandon edits to the selected brew session ?',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzOnOk: () => modalResponse.next(true),
+      nzCancelText: 'No',
+      nzOnCancel: () => modalResponse.next(false),
+    });
+
+    return modalResponse;
   }
 
   private deleteBrew(brew: Brew): void {

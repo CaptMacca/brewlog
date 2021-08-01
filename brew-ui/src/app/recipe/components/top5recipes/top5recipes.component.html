@@ -14,7 +14,9 @@
   </thead>
   <tbody>
     <tr *ngFor="let recipe of recipeTable.data">
-      <td><a (click)="viewRecipe(recipe)">{{ recipe.name }}</a></td>
+      <td>
+         <a role="link" (click)="viewRecipe(recipe)">{{ recipe.name }}</a>
+      </td>
       <td>{{ recipe.style }}</td>
       <td>{{ recipe.rating }}</td>
     </tr>

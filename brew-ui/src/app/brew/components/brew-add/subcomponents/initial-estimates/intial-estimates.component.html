@@ -1,10 +1,10 @@
 <div class="wrapper">
-  <form nz-form [formGroup]="parentForm" novalidate>
+  <form nz-form [formGroup]="parentForm"  ngxsForm="brews.initialBrewForm" novalidate>
     <!-- Brew Date -->
     <nz-form-item [formGroup]="parentForm">
       <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="brewDate" nzRequired>Brew Date</nz-form-label>
       <nz-form-control [nzErrorTip]="brewDateErrorTpl">
-        <nz-date-picker formControlName="brewDate" [nzFormat]="dateFormat"></nz-date-picker>
+        <nz-date-picker formControlName="brewDate" id="brewDate" [nzFormat]="dateFormat"></nz-date-picker>
         <ng-template #brewDateErrorTpl>
           <div *ngFor="let errorMessage of brewDate['errorMessages']">
             {{errorMessage}}<br/>

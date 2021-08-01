@@ -49,7 +49,12 @@ import { UiModule } from '@app/common/ui/ui.module';
     BrewListComponent,
     BrewDetailComponent,
     BrewAddComponent,
-    Recent5brewsComponent
+    Recent5brewsComponent,
+    IntialEstimatesComponent,
+    SummaryComponent,
+    BrewSessionComponent,
+    BrewNotesComponent,
+    BrewMeasurementsComponent
   ]
 })
 export class BrewModule {}

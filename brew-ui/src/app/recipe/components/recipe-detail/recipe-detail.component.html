@@ -71,7 +71,7 @@
           <tbody>
           <tr *ngFor="let fermentable of fermentableTable.data">
             <td>{{ fermentable.name }}</td>
-            <td>{{ fermentable.amount | round: 2 }} kg</td>
+            <td>{{ +fermentable.amount | round: 2 }} kg</td>
           </tr>
           </tbody>
         </nz-table>
@@ -112,7 +112,7 @@
           <tbody>
           <tr *ngFor="let yeast of yeastTable.data">
             <td>{{ yeast.name }}</td>
-            <td>{{ yeast.amount * 100 | round: 2 }} ml</td>
+            <td>{{ +yeast.amount * 100 | round: 2 }} ml</td>
           </tr>
           </tbody>
         </nz-table>
@@ -130,7 +130,7 @@
           <tr *ngFor="let mash of mashTable.data">
             <ng-template [ngIf]="mash">
               <td>{{ mash.name }}</td>
-              <td>{{ mash.stepTemp | round: 1 }} c</td>
+              <td>{{ +mash.stepTemp | round: 1 }} c</td>
               <td>{{ mash.stepTime }} min</td>
             </ng-template>
           </tr>

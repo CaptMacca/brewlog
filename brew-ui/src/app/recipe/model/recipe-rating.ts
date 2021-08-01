@@ -1,4 +1,6 @@
+import { Recipe } from '@app/recipe/model/recipe';
+
 export class RecipeRating {
-  id: number;
+  recipe: Recipe;
   rating: number;
 }

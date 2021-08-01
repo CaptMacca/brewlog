@@ -6,8 +6,9 @@ import { BrewState } from '@app/brew/state/brew.state';
 import { Brew } from '@app/brew/model';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NzMessageService} from 'ng-zorro-antd/message';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { finalize, startWith, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-brew-list',
@@ -15,14 +16,16 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./brew-list.component.css']
 })
 export class BrewListComponent implements OnInit {
-  @Select(BrewState.getBrews) brews$: Observable<Brew[]>;
-  @Select(AuthState.getUsername) username$: Observable<string>;
-  username: string;
-  loading: Boolean = true;
-  selections: Brew[] = [];
-  isAllDisplayDataChecked = false;
-  isIndeterminate = false;
-  mapOfCheckedId: { [key: string]: boolean } = {};
+
+  @Select(BrewState.getBrews) brews$: Observable<Brew[]>
+  @Select(AuthState.getUsername) username$: Observable<string>
+
+  loading: Boolean
+  // username: string;
+  selections: Brew[] = []
+  isAllDisplayDataChecked = false
+  isIndeterminate = false
+  mapOfCheckedId: { [key: string]: boolean } = {}
 
   constructor(
     private readonly store: Store,
@@ -32,26 +35,29 @@ export class BrewListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.username$.subscribe(username => {
-      this.username = username;
-      this.loadBrews(username);
-    });
+    this.loadBrews()
   }
 
   refresh() {
-    this.loadBrews(this.username);
+    this.loadBrews()
   }
 
   editBrew(selectedBrew: Brew): void {
     if (selectedBrew) {
-      this.router.navigate(['/main/brews/' + selectedBrew.id]);
+      this.router.navigate(['/main/brews/' + selectedBrew.id])
     }
   }
 
-  private async loadBrews(username: string) {
+  private loadBrews() {
+    const username = this.store.selectSnapshot(AuthState.getUsername);
     if (username) {
-      await this.store.dispatch(new LoadBrews(username));
-      this.loading = false;
+      this.store.dispatch(new LoadBrews(username)).pipe(
+        startWith(this.loading = true),
+        tap(() => console.log(`loading brews for user: ${username}`)),
+        finalize(() => {
+          this.loading = false
+        })
+      ).subscribe()
     }
   }
 
@@ -59,12 +65,12 @@ export class BrewListComponent implements OnInit {
     if (brew) {
       this.store.dispatch(new RemoveBrew(brew)).subscribe(
       state => this.message.success('Brew session has been successfully deleted.')
-      );
+      )
     }
   }
 
   addBrew(): void {
-    this.router.navigate(['/main/brews/add']);
+    this.router.navigate(['/main/brews/add'])
   }
 
   confirm(): void {
@@ -74,7 +80,7 @@ export class BrewListComponent implements OnInit {
       nzOkType: 'danger',
       nzOnOk: () => this.deleteBrews(),
       nzCancelText: 'No',
-    });
+    })
   }
 
   private deleteBrews(): void {
@@ -82,29 +88,29 @@ export class BrewListComponent implements OnInit {
       this.selections.forEach(b => {
         this.store.dispatch(new RemoveBrew(b));
       });
-      this.message.success('Selected Recipes have been deleted');
+      this.message.success('Selected Recipes have been deleted')
     }
   }
 
   checkAll(value: boolean, brews: Brew[]): void {
     if (value) {
-      brews.forEach(b => this.check(value, b));
+      brews.forEach(b => this.check(value, b))
     } else {
-      brews.forEach(b => this.mapOfCheckedId[b.id] = value);
-      this.selections = [];
+      brews.forEach(b => this.mapOfCheckedId[b.id] = value)
+      this.selections = []
     }
   }
 
   check(value: boolean, brew: Brew) {
-    this.mapOfCheckedId[brew.id] = value;
+    this.mapOfCheckedId[brew.id] = value
     if (!value) {
       this.selections = this.selections.filter(b => b.id !== brew.id)
       if (this.isAllDisplayDataChecked) {
-        this.isAllDisplayDataChecked = false;
+        this.isAllDisplayDataChecked = false
       }
     } else {
       if (!this.selections.find(b => b.id === brew.id)) {
-        this.selections.push(brew);
+        this.selections.push(brew)
       }
     }
   }

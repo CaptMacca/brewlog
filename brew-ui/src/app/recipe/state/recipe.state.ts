@@ -1,15 +1,7 @@
-import { Recipe, RecipeRating } from '@app/recipe/model';
-import {
-  AddRecipe,
-  LoadRecipe,
-  LoadRecipes,
-  LoadTop5Recipes,
-  RemoveRecipe,
-  SelectRecipe,
-  UpdateRecipeRating
-} from '@app/recipe/state/recipe.actions';
+import { Recipe } from '@app/recipe/model';
+import { LoadRecipe, LoadRecipes, LoadTop5Recipes, RemoveRecipe, UpdateRecipeRating } from '@app/recipe/state/recipe.actions';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { append, patch, removeItem } from '@ngxs/store/operators';
+import { patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { RecipeService } from '../services/recipe.service';
 import { forkJoin, Observable } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
@@ -74,7 +66,7 @@ export class RecipeState {
         const recipeWithNotes = {
           ...results[0],
           notes: results[1],
-        };
+        } as Recipe;
         ctx.setState(patch({
           recipe: recipeWithNotes
         }))
@@ -92,26 +84,19 @@ export class RecipeState {
     return this.recipeService.deleteRecipe(payload).subscribe(() => {
       return ctx.setState(patch({
           recipe: new Recipe(),
-          recipes: removeItem(r => r === payload.id)
+          recipes: removeItem<Recipe>(r => r.id === payload.id)
         })
       );
     });
   }
 
-  @Action(SelectRecipe)
-  SelectRecipe(ctx: StateContext<RecipeStateModel>, { payload }: SelectRecipe) {
-    return ctx.setState(patch({ recipe: payload }));
-  }
-
-  @Action(AddRecipe)
-  AddRecipe(ctx: StateContext<RecipeStateModel>, { payload }: AddRecipe) {
-    return ctx.setState(patch({ recipes: append([payload]) }));
-  }
-
   @Action(UpdateRecipeRating)
   UpdateRecipeRating(ctx: StateContext<RecipeStateModel>, { payload }: UpdateRecipeRating) {
     return this.recipeService.updateRecipeRating(payload).subscribe(
-      recipe => ctx.setState(patch({ recipe: recipe }))
+      recipe => ctx.setState(patch({
+        recipe: recipe,
+        recipes: updateItem<Recipe>(r => r.id === payload.recipe.id, payload.recipe)
+      }))
     );
   }
 }

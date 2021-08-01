@@ -14,11 +14,11 @@ export class RecipeResolverService implements Resolve<Recipe> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<Recipe> {
     const id = +route.paramMap.get('id');
-    if (isNaN(id)) {
+    if (isNaN(+id)) {
       this.router.navigate(['/main/recipes']);
       return of(null);
     } else {
-      return this.store.dispatch(new LoadRecipe(id));
+      return this.store.dispatch(new LoadRecipe(+id));
     }
    }
 }

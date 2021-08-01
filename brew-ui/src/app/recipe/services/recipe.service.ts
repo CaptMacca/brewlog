@@ -58,7 +58,7 @@ export class RecipeService {
   }
 
   updateRecipeRating(updateRating: RecipeRating) {
-    return this.http.put(this.recipeApi + '/' + updateRating.id + '/rating', updateRating, {
+    return this.http.put(this.recipeApi + '/' + updateRating.recipe.id + '/rating', updateRating, {
       headers: new HttpHeaders({
         ContentType: 'application/json',
       })

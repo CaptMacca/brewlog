@@ -25,6 +25,7 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzAnchorModule } from 'ng-zorro-antd';
 
 @NgModule({
   declarations: [],
@@ -55,6 +56,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzLayoutModule,
     NzMenuModule,
     NzToolTipModule,
+    NzAnchorModule,
   ],
   exports: [
     NzTableModule,
@@ -84,6 +86,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzUploadModule,
     NzMenuModule,
     NzToolTipModule,
+    NzAnchorModule,
   ]
 })
 export class UiModule { }
