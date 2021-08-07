@@ -9,11 +9,15 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { RecipeService } from '@app/recipe/services/recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
   styleUrls: ['./recipe-list.component.css'],
-  templateUrl: './recipe-list.component.html'
+  templateUrl: './recipe-list.component.html',
+  providers: [
+    RecipeService
+  ]
 })
 export class RecipeListComponent implements OnInit {
   @Select(RecipeState.getRecipes) recipes$: Observable<Recipe[]>;
@@ -89,7 +93,6 @@ export class RecipeListComponent implements OnInit {
   }
 
   check(value: boolean, recipe: Recipe) {
-    // TODO: untick the all selection checkbox if any of the recipes are unselected and its true
     this.mapOfCheckedId[recipe.id] = value;
     if (!value) {
       this.selections = this.selections.filter(r => r.id !== recipe.id)

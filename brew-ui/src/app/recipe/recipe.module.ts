@@ -29,14 +29,12 @@ import { UiModule } from '@app/common/ui/ui.module';
     NgxGaugeModule,
     FormsModule,
     UiModule,
-    NgRoundPipeModule,
   ],
   declarations: [
     RecipeListComponent,
     ImportRecipeComponent,
     RecipeDetailComponent,
     RecipeColourComponent,
-    RecipeListComponent,
     AbvGaugeComponent,
     IbuGaugeComponent,
     Top5recipesComponent,
@@ -53,6 +51,8 @@ import { UiModule } from '@app/common/ui/ui.module';
     AbvGaugeComponent,
     IbuGaugeComponent,
     Top5recipesComponent,
+    IbuFormatPipe,
+    AbvFormatPipe,
     SelectRecipeComponent
   ]
 })

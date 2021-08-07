@@ -12,7 +12,9 @@ export class RecipeColourComponent implements OnInit, OnChanges {
   @Input() recipeColour: string;
   @Input() imgWidth = '80';
   @Input() imgHeight = '150';
-  public cssValue: string;
+  cssValue: string;
+
+  constructor() { }
 
   ngOnInit() {}
 

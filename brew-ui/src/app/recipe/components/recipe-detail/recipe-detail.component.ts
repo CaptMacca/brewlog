@@ -25,7 +25,9 @@ export class RecipeDetailComponent implements OnInit {
     private readonly router: Router,
     private readonly message: NzMessageService,
     private readonly modalService: NzModalService,
-  ) {
+  ) { }
+
+  ngOnInit() {
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd)
     ).subscribe(
@@ -34,8 +36,6 @@ export class RecipeDetailComponent implements OnInit {
       }
     );
   }
-
-  ngOnInit() {}
 
   gotoRecipes(): void {
     this.router.navigate(['/main/recipes']);
@@ -57,7 +57,7 @@ export class RecipeDetailComponent implements OnInit {
 
   confirm(recipe: Recipe): void {
     this.modalService.confirm({
-      nzTitle: 'Are you sure delete the selected recipes?',
+      nzTitle: 'Are you sure you want to delete the recipe?',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzOnOk: () => this.deleteRecipe(recipe),
@@ -71,7 +71,7 @@ export class RecipeDetailComponent implements OnInit {
 
   updateRating(recipe: Recipe): void {
     const updateRating = new RecipeRating();
-    updateRating.id = recipe.id;
+    updateRating.recipe = recipe;
     updateRating.rating = this.rating;
     this.store.dispatch(new UpdateRecipeRating(updateRating));
   }

@@ -20,20 +20,6 @@ export class LoadTop5Recipes {
   constructor(public payload: string) {}
 }
 
-export class LoadAllRecipes {
-  static readonly type = '[Recipe] Load All Recipes';
-}
-
-export class SelectRecipe {
-  static readonly type = '[Recipe] Select Recipe';
-  constructor(public payload: Recipe) {}
-}
-
-export class AddRecipe {
-  static readonly type = '[Recipe] Add Recipe';
-  constructor(public payload: Recipe) {}
-}
-
 export class UpdateRecipeRating {
   static readonly type = '[Recipe] Update Recipe Rating';
   constructor(public payload: RecipeRating) {}

@@ -18,6 +18,7 @@ export class Top5recipesComponent implements OnInit {
 
   viewRecipe(recipe: Recipe) {
     if (recipe) {
+      console.log(recipe)
       this.router.navigate(['/main/recipes/' + recipe.id]);
     }
   }

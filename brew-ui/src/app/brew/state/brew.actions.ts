@@ -39,6 +39,11 @@ export class SetSavingBrew {
   constructor(public payload: boolean) {}
 }
 
+export class SetLoadingBrews {
+  static readonly type = '[Brew] Set Loading Brews';
+  constructor(public payload: boolean) {}
+}
+
 export class RemoveMeasurement {
   static readonly type = '[Brew] Remove Measurement';
   constructor(public payload: Measurement) {}

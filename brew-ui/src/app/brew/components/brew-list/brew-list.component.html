@@ -45,7 +45,7 @@
           [(nzChecked)]="mapOfCheckedId[brew.id]"
           (nzCheckedChange)="check($event,brew)"
         ></td>
-        <td><a (click)="editBrew(brew)">{{ brew.recipeName }}</a></td>
+        <td><a role="link" (click)="editBrew(brew)">{{ brew.recipeName }}</a></td>
         <td>{{ brew.brewDate | date: 'dd/MM/yyyy' }}</td>
         <td>{{ brew.brewer?.givenName }} {{ brew.brewer?.surname }}</td>
       </tr>

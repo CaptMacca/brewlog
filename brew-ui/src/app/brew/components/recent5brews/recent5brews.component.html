@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of brewsTable.data">
-      <td><a (click)="viewBrew(data)">{{ data.recipeName }}</a></td>
+      <td><a role="link" (click)="viewBrew(data)">{{ data.recipeName }}</a></td>
       <td>{{ data.brewDate | date }}</td>
       <td>{{ data.score }}</td>
     </tr>
