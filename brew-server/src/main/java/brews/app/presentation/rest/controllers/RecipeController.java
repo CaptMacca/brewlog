@@ -85,8 +85,10 @@ public final class RecipeController {
     @ResponseBody
     @Operation(description = "Update the recipe rating", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<RecipeDto> updateRating(@RequestBody UpdateRatingRequest updateRatingRequest) {
+        Recipe updateRecipe = recipeMapper.toRecipe(updateRatingRequest.getRecipeDto());
+        Short rating = updateRatingRequest.getRating();
         RecipeDto updatedRecipeResponse = recipeMapper.toRecipeDto(
-          recipeService.updateRating(updateRatingRequest.getId(), updateRatingRequest.getRating())
+          recipeService.updateRating(updateRecipe, rating)
         );
         return ResponseEntity.ok(updatedRecipeResponse);
     }

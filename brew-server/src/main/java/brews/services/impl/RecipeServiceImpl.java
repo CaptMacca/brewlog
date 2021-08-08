@@ -88,9 +88,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public Recipe updateRating(Long id, Short rating) {
-        log.debug(String.format("Updating recipe id: %d with rating: %d", id, rating));
-        Recipe recipe = getRecipeById(id);
+    public Recipe updateRating(Recipe recipe, Short rating) {
+        log.debug(String.format("Updating recipe id: %d with rating: %d", recipe.getId(), rating));
         recipe.setRating(rating);
         return recipeRepository.save(recipe);
     }

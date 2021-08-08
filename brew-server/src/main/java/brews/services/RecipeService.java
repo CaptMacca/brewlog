@@ -18,7 +18,7 @@ public interface RecipeService {
 
     Recipe updateRecipe(Long id, Recipe recipe);
 
-    Recipe updateRating(Long id, Short rating);
+    Recipe updateRating(Recipe recipe, Short rating);
 
     void deleteRecipe(Long id);
 
