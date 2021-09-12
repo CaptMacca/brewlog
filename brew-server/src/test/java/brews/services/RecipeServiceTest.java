@@ -1,18 +1,20 @@
 package brews.services;
 
-import brews.domain.Recipe;
 import brews.app.presentation.dto.recipe.RecipeDto;
+import brews.domain.Recipe;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
-import brews.infrastructure.data.jpa.repository.BrewsRepository;
-import brews.infrastructure.data.jpa.repository.RecipeRepository;
+import brews.repository.BrewsRepository;
+import brews.repository.RecipeRepository;
 import brews.services.impl.RecipeServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -27,9 +29,9 @@ public class RecipeServiceTest {
 
     RecipeService recipeService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         recipeService = new RecipeServiceImpl(recipeRepository, brewsRepository);
     }
@@ -107,35 +109,37 @@ public class RecipeServiceTest {
         recipe.setId(recipeDto.getId());
         recipe.setName(recipeDto.getName());
 
-        when(recipeRepository.getOne(anyLong())).thenReturn(recipe);
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
 
         // When
         Recipe test = recipeService.getRecipeById(1L);
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(recipeRepository, times(1)).getOne(anyLong());
+        verify(recipeRepository, times(1)).findById(anyLong());
     }
 
-    @Test(expected = BrewsEntityNotFoundException.class)
+    @Test()
     public void testGetUnknownRecipeById() {
+        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
+            // Given
+            RecipeDto recipeDto = new RecipeDto();
+            recipeDto.setId(1L);
+            recipeDto.setName("a recipe");
 
-        // Given
-        RecipeDto recipeDto = new RecipeDto();
-        recipeDto.setId(1L);
-        recipeDto.setName("a recipe");
+            Recipe recipe = new Recipe();
+            recipe.setId(recipeDto.getId());
+            recipe.setName(recipeDto.getName());
 
-        Recipe recipe = new Recipe();
-        recipe.setId(recipeDto.getId());
-        recipe.setName(recipeDto.getName());
+            when(recipeRepository.findById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
-        when(recipeRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+            // When
+            recipeService.getRecipeById(1L);
 
-        // When
-        recipeService.getRecipeById(1L);
+            // Then
+            verify(recipeRepository, times(1)).findById(anyLong());
+        });
 
-        // Then
-        verify(recipeRepository, times(1)).getOne(anyLong());
     }
 
     @Test
@@ -150,7 +154,7 @@ public class RecipeServiceTest {
         recipe.setId(recipeDto.getId());
         recipe.setName(recipeDto.getName());
 
-        when(recipeRepository.getOne(anyLong())).thenReturn(recipe);
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
         when(recipeRepository.saveAndFlush(any())).thenReturn(recipe);
 
         // When
@@ -158,32 +162,33 @@ public class RecipeServiceTest {
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(recipeRepository, times(1)).getOne(anyLong());
+        verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).saveAndFlush(any(Recipe.class));
 
     }
 
-    @Test(expected = BrewsEntityNotFoundException.class)
+    @Test()
     public void testUpdateUnknownRecipe() {
 
-        // Given
-        RecipeDto recipeDto = new RecipeDto();
-        recipeDto.setId(1L);
-        recipeDto.setName("a recipe");
+        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
+            // Given
+            RecipeDto recipeDto = new RecipeDto();
+            recipeDto.setId(1L);
+            recipeDto.setName("a recipe");
 
-        Recipe recipe = new Recipe();
-        recipe.setId(recipeDto.getId());
-        recipe.setName(recipeDto.getName());
+            Recipe recipe = new Recipe();
+            recipe.setId(recipeDto.getId());
+            recipe.setName(recipeDto.getName());
 
-        when(recipeRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+            when(recipeRepository.findById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
-        // When
-        recipeService.updateRecipe(1L, recipe);
+            // When
+            recipeService.updateRecipe(1L, recipe);
 
-        // Then
-        verify(recipeRepository, times(1)).getOne(anyLong());
-        verify(recipeRepository, times(0)).saveAndFlush(any(Recipe.class));
-
+            // Then
+            verify(recipeRepository, times(1)).findById(anyLong());
+            verify(recipeRepository, times(0)).saveAndFlush(any(Recipe.class));
+        });
     }
 
     @Test
@@ -193,32 +198,34 @@ public class RecipeServiceTest {
         recipe.setId(1L);
         recipe.setName("a recipe");
 
-        when(recipeRepository.getOne(anyLong())).thenReturn(recipe);
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
 
         // When
         recipeService.deleteRecipe(1L);
 
         // Then
-        verify(recipeRepository, times(1)).getOne(anyLong());
+        verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).delete(any(Recipe.class));
 
     }
 
-    @Test(expected = BrewsEntityNotFoundException.class)
+    @Test()
     public void testDeleteUnknownRecipe() {
-        // Given
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
-        recipe.setName("a recipe");
+        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
+            // Given
+            Recipe recipe = new Recipe();
+            recipe.setId(1L);
+            recipe.setName("a recipe");
 
-        when(recipeRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+            when(recipeRepository.findById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
-        // When
-        recipeService.deleteRecipe(1L);
+            // When
+            recipeService.deleteRecipe(1L);
 
-        // Then
-        verify(recipeRepository, times(1)).getOne(anyLong());
-        verify(recipeRepository, times(0)).delete(any(Recipe.class));
+            // Then
+            verify(recipeRepository, times(1)).findById(anyLong());
+            verify(recipeRepository, times(0)).delete(any(Recipe.class));
+        });
 
     }
 }

@@ -3,8 +3,8 @@ package brews.services.impl;
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
-import brews.infrastructure.data.jpa.repository.BrewsRepository;
-import brews.infrastructure.data.jpa.repository.RecipeRepository;
+import brews.repository.BrewsRepository;
+import brews.repository.RecipeRepository;
 import brews.services.RecipeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,24 +26,21 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public List<Recipe> getAllRecipes() {
         log.debug("Retrieving all recipes from the database");
-        List<Recipe> recipes = recipeRepository.findAll();
-        return recipes;
+        return recipeRepository.findAll();
     }
 
     @Override
     @Transactional
     public List<Recipe> getAllRecipesForUser(String username) {
         log.debug("Retrieve recipes for user: {}", username);
-        List<Recipe> recipes = recipeRepository.findRecipesByUserUsername(username);
-        return recipes;
+        return recipeRepository.findRecipesByUserUsername(username);
     }
 
     @Override
     @Transactional
     public List<Recipe> getTop5RatedRecipesForUser(String username) {
         log.debug("Retrieve top 5 rated recipes for user: {}", username);
-        List<Recipe> recipes = recipeRepository.findTop5RatedByUserUsernameOrderByNameDesc(username);
-        return recipes;
+        return recipeRepository.findTop5RatedByUserUsernameOrderByNameDesc(username);
     }
 
     @Override
@@ -52,7 +48,7 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe getRecipeById(Long id) {
         log.debug("Retrieve recipe with id: {}", id);
         return
-          Optional.of(recipeRepository.getOne(id)).orElseThrow(
+          recipeRepository.findById(id).orElseThrow(
             BrewsEntityNotFoundException::new
           );
     }
@@ -80,9 +76,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         // Find any associated brews and delete them
         List<Brew> brews = brewsRepository.findBrewsByRecipe(recipe);
-        for(Brew brew : brews) {
-            brewsRepository.delete(brew);
-        }
+        brewsRepository.deleteAll(brews);
         recipeRepository.delete(recipe);
     }
 

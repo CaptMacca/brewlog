@@ -3,8 +3,8 @@ package brews.util.transformer.beerxml.mapping;
 import brews.MockImportedRecipe;
 import brews.domain.*;
 import brews.util.transformer.beerxml.model.ImportedRecipe;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,7 +12,7 @@ public class BeerXMLRecipeMapperTest {
 
     private BeerXMLRecipeMapper beerXMLRecipeMapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         ImportFermentablesMapper importFermentablesMapper = new ImportFermentablesMapper();

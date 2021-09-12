@@ -1,10 +1,9 @@
 package brews.domain.mapper;
 
-import brews.domain.Mash;
 import brews.app.presentation.dto.recipe.MashDto;
-import brews.domain.mapper.MashMapper;
-import org.junit.Before;
-import org.junit.Test;
+import brews.domain.Mash;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class MashMapperTest {
 
     private MashMapper mashDtoMapping;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         this.mashDtoMapping = Mappers.getMapper(MashMapper.class);
     }

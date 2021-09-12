@@ -1,4 +1,4 @@
-package brews.infrastructure.data.jpa.repository;
+package brews.repository;
 
 import brews.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

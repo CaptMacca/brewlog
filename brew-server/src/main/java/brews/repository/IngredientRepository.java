@@ -1,4 +1,4 @@
-package brews.infrastructure.data.jpa.repository;
+package brews.repository;
 
 import brews.domain.Ingredient;
 import brews.domain.Recipe;

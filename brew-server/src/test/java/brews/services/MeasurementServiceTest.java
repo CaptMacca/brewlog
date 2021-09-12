@@ -1,18 +1,19 @@
 package brews.services;
 
+import brews.app.presentation.dto.brew.MeasurementDto;
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.app.presentation.dto.brew.MeasurementDto;
-import brews.infrastructure.data.jpa.repository.BrewsRepository;
-import brews.infrastructure.data.jpa.repository.MeasurementRepository;
+import brews.repository.BrewsRepository;
+import brews.repository.MeasurementRepository;
 import brews.services.impl.MeasurementServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -26,9 +27,9 @@ public class MeasurementServiceTest {
 
     private MeasurementService measurementService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         measurementService = new MeasurementServiceImpl(measurementRepository, brewsRepository);
     }
@@ -43,14 +44,14 @@ public class MeasurementServiceTest {
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
 
-        when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
+        when(measurementRepository.findById(anyLong())).thenReturn(Optional.of(measurement));
 
         // When
         Measurement test = measurementService.getMeasurement(1L);
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(measurementRepository, times(1)).getOne(anyLong());
+        verify(measurementRepository, times(1)).findById(anyLong());
     }
 
     @Test
@@ -91,7 +92,7 @@ public class MeasurementServiceTest {
         measurement.setId(1L);
         measurement.setBrew(brew);
 
-        when(brewsRepository.getOne(anyLong())).thenReturn(brew);
+        when(brewsRepository.findById(anyLong())).thenReturn(Optional.of(brew));
         when(measurementRepository.saveAndFlush(any(Measurement.class))).thenReturn(measurement);
 
         // When
@@ -99,7 +100,7 @@ public class MeasurementServiceTest {
 
         // Then
         assertThat(fixture.getId()).isEqualTo(1L);
-        verify(brewsRepository, times(1)).getOne(anyLong());
+        verify(brewsRepository, times(1)).findById(anyLong());
     }
 
     @Test
@@ -112,7 +113,7 @@ public class MeasurementServiceTest {
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
 
-        when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
+        when(measurementRepository.findById(anyLong())).thenReturn(Optional.of(measurement));
         when(measurementRepository.save(any(Measurement.class))).thenReturn(measurement);
 
         // When
@@ -120,7 +121,7 @@ public class MeasurementServiceTest {
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(measurementRepository, times(1)).getOne(anyLong());
+        verify(measurementRepository, times(1)).findById(anyLong());
         verify(measurementRepository, times(1)).save(any(Measurement.class));
     }
 
@@ -134,13 +135,13 @@ public class MeasurementServiceTest {
         Measurement measurement = new Measurement();
         measurement.setId(measurementDto.getId());
 
-        when(measurementRepository.getOne(anyLong())).thenReturn(measurement);
+        when(measurementRepository.findById(anyLong())).thenReturn(Optional.of(measurement));
 
         // When
         measurementService.deleteMeasurement(1L);
 
         // Then
-        verify(measurementRepository, times(1)).getOne(anyLong());
+        verify(measurementRepository, times(1)).findById(anyLong());
         verify(measurementRepository, times(1)).delete(any(Measurement.class));
 
     }

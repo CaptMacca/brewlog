@@ -1,7 +1,7 @@
 package brews.domain.mapper;
 
-import brews.domain.Mash;
 import brews.app.presentation.dto.recipe.MashDto;
+import brews.domain.Mash;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

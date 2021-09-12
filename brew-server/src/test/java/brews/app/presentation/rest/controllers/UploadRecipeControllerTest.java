@@ -1,13 +1,13 @@
 package brews.app.presentation.rest.controllers;
 
+import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.Recipe;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.ImportRecipeService;
-import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.util.transformer.beerxml.BeerXMLTransformer;
 import brews.util.transformer.beerxml.exception.BeerXMLParserException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
@@ -35,7 +35,7 @@ public class UploadRecipeControllerTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
 

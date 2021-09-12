@@ -3,8 +3,8 @@ package brews.services.impl;
 import brews.domain.Recipe;
 import brews.domain.User;
 import brews.domain.exceptions.ImportedRecipeExistsException;
-import brews.infrastructure.data.jpa.repository.RecipeRepository;
-import brews.infrastructure.data.jpa.repository.UserRepository;
+import brews.repository.RecipeRepository;
+import brews.repository.UserRepository;
 import brews.services.ImportRecipeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +40,9 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
         log.debug("Saving recipes in database");
 
-        recipes.stream().forEach(candidateRecipe -> {
-            Optional<Recipe> existingRecipe = recipeRepository.findRecipeByNameAndUser(candidateRecipe.getName(), user);
+        recipes.forEach(candidateRecipe -> {
+            Optional<Recipe> existingRecipe =
+              recipeRepository.findRecipeByNameAndUser(candidateRecipe.getName(), user);
             if (existingRecipe.isPresent()) {
                 throw new ImportedRecipeExistsException("Recipe of same name already exists in recipe database for this user");
             } else {

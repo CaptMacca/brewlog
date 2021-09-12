@@ -1,11 +1,10 @@
 package brews.domain.mapper;
 
+import brews.app.presentation.dto.brew.MeasurementDto;
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.app.presentation.dto.brew.MeasurementDto;
-import brews.domain.mapper.MeasurementMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.time.OffsetDateTime;
@@ -19,7 +18,7 @@ public class MeasurementMapperTest {
 
     private MeasurementMapper measurementMapper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.measurementMapper = Mappers.getMapper(MeasurementMapper.class);
     }
