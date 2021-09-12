@@ -3,8 +3,8 @@ package brews.services.impl;
 import brews.domain.Brew;
 import brews.domain.Measurement;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
-import brews.infrastructure.data.jpa.repository.BrewsRepository;
-import brews.infrastructure.data.jpa.repository.MeasurementRepository;
+import brews.repository.BrewsRepository;
+import brews.repository.MeasurementRepository;
 import brews.services.MeasurementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,9 +27,11 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Transactional
     public Measurement getMeasurement(Long id) {
         log.debug(String.format("Retrieve measurement with id: %d", id));
-        return Optional.of(measurementRepository.getOne(id)).orElseThrow(
-          () -> new BrewsEntityNotFoundException(String.format("Measurement for id: %d could not be found.", id))
-        );
+        return
+          measurementRepository.findById(id)
+                               .orElseThrow(
+                                    () -> new BrewsEntityNotFoundException(String.format("Measurement for id: %d could not be found.", id))
+                               );
     }
 
     @Override
@@ -62,7 +63,7 @@ public class MeasurementServiceImpl implements MeasurementService {
     public Measurement createMeasurement(Long brewId, Measurement measurement) {
         log.info("Saving measurement: " + measurement.toString());
         Brew brew =
-           Optional.of(brewsRepository.getOne(brewId)).orElseThrow(
+           brewsRepository.findById(brewId).orElseThrow(
                 () -> new BrewsEntityNotFoundException(String.format("Brew could not be found for brew id: %d", brewId)));
         return measurementRepository.saveAndFlush(measurement);
     }
@@ -72,7 +73,7 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Transactional
     public Measurement updateMeasurement(Measurement measurement) {
         log.info("Saving measurement: " + measurement.toString());
-        Measurement attachedMeasurement = measurementRepository.getOne(measurement.getId());
+        Measurement attachedMeasurement = measurementRepository.findById(measurement.getId()).get();
         BeanUtils.copyProperties(measurement, attachedMeasurement);
         return measurementRepository.save(attachedMeasurement);
     }

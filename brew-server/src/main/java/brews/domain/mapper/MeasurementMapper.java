@@ -1,8 +1,11 @@
 package brews.domain.mapper;
 
-import brews.domain.Measurement;
 import brews.app.presentation.dto.brew.MeasurementDto;
-import org.mapstruct.*;
+import brews.domain.Measurement;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 

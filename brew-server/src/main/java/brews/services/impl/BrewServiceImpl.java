@@ -6,10 +6,9 @@ import brews.domain.Recipe;
 import brews.domain.User;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
 import brews.domain.mapper.BrewMapper;
-import brews.infrastructure.data.jpa.repository.BrewsRepository;
-import brews.infrastructure.data.jpa.repository.MeasurementRepository;
-import brews.infrastructure.data.jpa.repository.RecipeRepository;
-import brews.infrastructure.data.jpa.repository.UserRepository;
+import brews.repository.BrewsRepository;
+import brews.repository.RecipeRepository;
+import brews.repository.UserRepository;
 import brews.services.BrewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -53,9 +51,11 @@ public class BrewServiceImpl implements BrewService {
     @Override
     @Transactional
     public Brew getBrew(Long id) {
-        return Optional.of(brewsRepository.getOne(id))
-          .orElseThrow(() ->
-            new BrewsEntityNotFoundException(String.format("Brew with id %d could not be found to update.", id)));
+        return
+          brewsRepository.findById(id)
+                         .orElseThrow(() ->
+                            new BrewsEntityNotFoundException(
+                              String.format("Brew with id %d could not be found to update.", id)));
     }
 
     @Override
@@ -81,9 +81,11 @@ public class BrewServiceImpl implements BrewService {
     public Brew saveBrew(Brew brew, User user) {
         String username = user.getUsername();
         log.debug("Saving brew {} for user {}", brew.getId(), username);
-        User actualUser = userRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
-        );
+        User actualUser =
+          userRepository.findByUsername(username)
+                        .orElseThrow(
+                            () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
+                        );
 
         Recipe recipe = recipeRepository.getOne(brew.getRecipe().getId());
         brew.setRecipe(recipe);
@@ -101,9 +103,11 @@ public class BrewServiceImpl implements BrewService {
         log.debug("Updating brew {} for user {}", updateBrew.getId(), username);
 
         Brew brew = getBrew(id);
-        User actualUser = userRepository.findByUsername(username).orElseThrow(
-          () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
-        );
+        User actualUser =
+          userRepository.findByUsername(username)
+                        .orElseThrow(
+                            () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
+                        );
 
         Set<Measurement> measurements = updateBrew.getMeasurements();
         if (measurements != null) {

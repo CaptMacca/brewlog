@@ -1,7 +1,8 @@
 package brews.domain;
 
-import lombok.*;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;

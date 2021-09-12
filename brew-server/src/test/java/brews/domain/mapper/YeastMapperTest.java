@@ -1,11 +1,10 @@
 package brews.domain.mapper;
 
+import brews.app.presentation.dto.recipe.YeastDto;
 import brews.domain.Ingredient;
 import brews.domain.Yeast;
-import brews.app.presentation.dto.recipe.YeastDto;
-import brews.domain.mapper.IngredientMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class YeastMapperTest {
 
     private IngredientMapper yeastDtoMapping;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         yeastDtoMapping = Mappers.getMapper(IngredientMapper.class);
     }

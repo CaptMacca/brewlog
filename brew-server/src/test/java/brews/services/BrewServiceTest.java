@@ -1,19 +1,20 @@
 package brews.services;
 
+import brews.app.presentation.dto.brew.BrewDto;
 import brews.app.presentation.dto.user.UpdateUserDto;
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.app.presentation.dto.brew.BrewDto;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
 import brews.domain.mapper.BrewMapper;
-import brews.infrastructure.data.jpa.repository.BrewsRepository;
-import brews.infrastructure.data.jpa.repository.MeasurementRepository;
-import brews.infrastructure.data.jpa.repository.RecipeRepository;
-import brews.infrastructure.data.jpa.repository.UserRepository;
+import brews.repository.BrewsRepository;
+import brews.repository.MeasurementRepository;
+import brews.repository.RecipeRepository;
+import brews.repository.UserRepository;
 import brews.services.impl.BrewServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -41,9 +42,9 @@ public class BrewServiceTest {
 
     private BrewService brewService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         brewService = new BrewServiceImpl(recipeRepository, brewsRepository, userRepository, brewMapper);
     }
@@ -94,7 +95,7 @@ public class BrewServiceTest {
         brew.setId(1L);
         brew.setUser(user);
 
-        when(brewsRepository.getOne(anyLong())).thenReturn(brew);
+        when(brewsRepository.findById(anyLong())).thenReturn(Optional.of(brew));
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         // When
@@ -102,7 +103,7 @@ public class BrewServiceTest {
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(brewsRepository, times(1)).getOne(anyLong());
+        verify(brewsRepository, times(1)).findById(anyLong());
     }
 
     @Test
@@ -174,7 +175,7 @@ public class BrewServiceTest {
         brew.setUser(user);
         brew.setRecipe(recipe);
 
-        when(brewsRepository.getOne(anyLong())).thenReturn(brew);
+        when(brewsRepository.findById(anyLong())).thenReturn(Optional.of(brew));
         when(brewsRepository.save(any(Brew.class))).thenReturn(brew);
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
@@ -182,34 +183,36 @@ public class BrewServiceTest {
         Brew test = brewService.updateBrew(1L, brew, user);
 
         // Then
-        verify(brewsRepository, times(1)).getOne(anyLong());
+        verify(brewsRepository, times(1)).findById(anyLong());
         verify(brewsRepository, times(1)).save(any(Brew.class));
     }
 
-    @Test(expected = BrewsEntityNotFoundException.class)
+    @Test()
     public void testUpdateUnknownBrew() {
-        // Given
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
+            // Given
+            Recipe recipe = new Recipe();
+            recipe.setId(1L);
 
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("joe");
+            User user = new User();
+            user.setId(1L);
+            user.setUsername("joe");
 
-        Brew brew = new Brew();
-        brew.setId(1l);
-        brew.setUser(user);
-        brew.setRecipe(recipe);
+            Brew brew = new Brew();
+            brew.setId(1l);
+            brew.setUser(user);
+            brew.setRecipe(recipe);
 
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        when(brewsRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+            when(brewsRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
-        // When
-        brewService.updateBrew(1L, brew, user);
+            // When
+            brewService.updateBrew(1L, brew, user);
 
-        // Then
-        verify(brewsRepository, times(1)).getOne(anyLong());
-        verify(brewsRepository, times(0)).saveAndFlush(any(Brew.class));
+            // Then
+            verify(brewsRepository, times(1)).getOne(anyLong());
+            verify(brewsRepository, times(0)).saveAndFlush(any(Brew.class));
+        });
     }
 
 
@@ -233,28 +236,30 @@ public class BrewServiceTest {
 
         recipe.setBrews(brews);
 
-        when(brewsRepository.getOne(anyLong())).thenReturn(brew);
+        when(brewsRepository.findById(anyLong())).thenReturn(Optional.of(brew));
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         // When
         brewService.deleteBrew(1L);
 
         // Then
-        verify(brewsRepository, times(1)).getOne(anyLong());
+        verify(brewsRepository, times(1)).findById(anyLong());
         verify(brewsRepository, times(1)).delete(any(Brew.class));
     }
 
-    @Test(expected = BrewsEntityNotFoundException.class)
+    @Test()
     public void testDeleteBrewUnknownBrew() {
 
-        // Given
-        when(brewsRepository.getOne(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
+            // Given
+            when(brewsRepository.findById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
 
-        // When
-        brewService.deleteBrew(1L);
+            // When
+            brewService.deleteBrew(1L);
 
-        // Then
-        verify(brewsRepository, times(1)).getOne(anyLong());
-        verify(brewsRepository, times(0)).delete(any(Brew.class));
+            // Then
+            verify(brewsRepository, times(1)).findById(anyLong());
+            verify(brewsRepository, times(0)).delete(any(Brew.class));
+        });
     }
 }

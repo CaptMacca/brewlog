@@ -2,8 +2,8 @@ package brews.domain.mapper;
 
 import brews.app.presentation.dto.recipe.FermentableDto;
 import brews.domain.Fermentable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class FermentableMapperTest {
     private static final String FERMENTABLE_NAME = "Maris Otter Pale Malt";
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.fermentableMapper = Mappers.getMapper(IngredientMapper.class);
     }

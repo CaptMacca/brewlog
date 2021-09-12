@@ -1,15 +1,14 @@
 package brews.domain.mapper;
 
-import brews.domain.Fermentable;
-import brews.domain.Hop;
-import brews.domain.Ingredient;
-import brews.domain.Yeast;
 import brews.app.presentation.dto.recipe.FermentableDto;
 import brews.app.presentation.dto.recipe.HopDto;
 import brews.app.presentation.dto.recipe.IngredientDto;
 import brews.app.presentation.dto.recipe.YeastDto;
+import brews.domain.Fermentable;
+import brews.domain.Hop;
+import brews.domain.Ingredient;
+import brews.domain.Yeast;
 import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

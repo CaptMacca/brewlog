@@ -2,16 +2,12 @@ package brews.domain.mapper;
 
 import brews.app.presentation.dto.brew.BrewDto;
 import brews.domain.*;
-import brews.domain.mapper.BrewMapper;
-import brews.domain.mapper.MeasurementMapper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mapstruct.factory.Mappers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -19,7 +15,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 public class BrewMapperTest {
 
     @Autowired
@@ -96,7 +92,6 @@ public class BrewMapperTest {
         assertThat(brewDto.getId()).isEqualTo(brew.getId());
         assertThat(brewDto.getRecipeId()).isNotNull();
         assertThat(brewDto.getId()).isEqualTo(1L);
-//        assertThat(brewDto.getRecipe().getIngredients()).extracting("class").contains(HopDto.class,FermentableDto.class, YeastDto.class);
         assertThat(brewDto.getMeasurements()).hasSize(1);
 
     }

@@ -2,16 +2,16 @@ package brews.domain.mapper;
 
 import brews.app.presentation.dto.user.UserDetailsDto;
 import brews.domain.User;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 public class UserMapperTest {
 
     @Autowired
@@ -23,7 +23,6 @@ public class UserMapperTest {
     })
     public static class SpringTestConfig {
     }
-
 
     @Test
     public void testUserDetailsMapping() {

@@ -1,5 +1,5 @@
 ARG BUILD_VERSION=0.0.1
-FROM gradle:6.3-jdk11 as BUILD
+FROM gradle:6.8-jdk11 as BUILD
 ADD src src
 ADD build.gradle .
 ADD gradle.properties .

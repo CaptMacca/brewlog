@@ -1,15 +1,15 @@
 package brews.app.presentation.rest.controllers;
 
+import brews.app.presentation.dto.brew.MeasurementDto;
+import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.app.presentation.dto.brew.MeasurementDto;
 import brews.domain.exceptions.BrewsEntityNotFoundException;
-import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.mapper.MeasurementMapper;
 import brews.services.MeasurementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
@@ -35,7 +35,7 @@ public class MeasurementControllerTest {
 
     private ObjectMapper objectMapper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
 

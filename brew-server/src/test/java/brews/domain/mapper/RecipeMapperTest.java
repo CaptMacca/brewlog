@@ -5,19 +5,19 @@ import brews.app.presentation.dto.recipe.HopDto;
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.app.presentation.dto.recipe.YeastDto;
 import brews.domain.*;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 public class RecipeMapperTest {
 
     @Autowired
@@ -30,7 +30,6 @@ public class RecipeMapperTest {
     })
     public static class SpringTestConfig {
     }
-
 
     @Test
     public void testRecipeDtoMapping() throws Exception {

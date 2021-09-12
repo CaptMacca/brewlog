@@ -1,11 +1,10 @@
 package brews.domain.mapper;
 
+import brews.app.presentation.dto.recipe.HopDto;
 import brews.domain.Hop;
 import brews.domain.Ingredient;
-import brews.app.presentation.dto.recipe.HopDto;
-import brews.domain.mapper.IngredientMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class HopMapperTest {
 
     private IngredientMapper hopDtoMapping;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         this.hopDtoMapping = Mappers.getMapper(IngredientMapper.class);
     }

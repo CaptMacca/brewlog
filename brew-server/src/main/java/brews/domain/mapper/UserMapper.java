@@ -1,8 +1,8 @@
 package brews.domain.mapper;
 
 import brews.app.presentation.dto.user.UpdateUserDto;
-import brews.domain.User;
 import brews.app.presentation.dto.user.UserDetailsDto;
+import brews.domain.User;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
