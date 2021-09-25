@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,29 +33,33 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
      * Import, transform and save the recipes in the xml file into our DB.
      */
     @Transactional
-    public List<Recipe> importRecipes(List<Recipe> recipes, String username) {
+    public List<Recipe> importRecipes(List<Recipe> candidateRecipes, String username) {
 
         log.debug("Retrieving user");
         User user = userRepository.findByUsername(username).orElseThrow(
-            () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));;
+            () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));
 
         log.debug("Saving recipes in database");
+        List<Recipe> recipes = new ArrayList<>();
 
-        recipes.forEach(candidateRecipe -> {
-            Optional<Recipe> existingRecipe =
-              recipeRepository.findRecipeByNameAndUser(candidateRecipe.getName(), user);
-            if (existingRecipe.isPresent()) {
-                throw new ImportedRecipeExistsException("Recipe of same name already exists in recipe database for this user");
-            } else {
-                log.debug(String.format("Saving recipe: %s", candidateRecipe.getName()));
-                candidateRecipe.setUser(user);
-                recipeRepository.save(candidateRecipe);
-            }
+        // Check if a recipe has already been uploaded
+        candidateRecipes.forEach(candidateRecipe -> {
+            recipeRepository.findRecipeByNameAndUser(candidateRecipe.getName(), user)
+              .ifPresentOrElse(
+                recipe -> {
+                  throw new ImportedRecipeExistsException("Recipe of same name already exists in recipe database for this user");
+                },
+                () -> {
+                    log.debug(String.format("Saving recipe: %s", candidateRecipe.getName()));
+                    candidateRecipe.setUser(user);
+                    recipes.add(candidateRecipe);
+                }
+            );
         });
 
-        recipeRepository.flush();
+        recipeRepository.saveAllAndFlush(recipes);
 
-        return recipes;
+        return candidateRecipes;
     }
 
 }
