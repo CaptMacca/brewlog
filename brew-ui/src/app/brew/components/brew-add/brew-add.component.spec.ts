@@ -24,7 +24,8 @@ import { SelectRecipeComponent } from '@app/recipe/components/select-recipe/sele
 import userEvent from '@testing-library/user-event';
 import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
 import { By } from '@angular/platform-browser';
-import { NzDatePickerComponent, NzInputDirective, NzInputNumberComponent, NzTableComponent } from 'ng-zorro-antd';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 
 describe('BrewAddComponent', () => {
   let component: RenderResult<BrewAddComponent>
@@ -143,7 +144,7 @@ describe('BrewAddComponent', () => {
     const estOriginalGravity = debugElement.queryAll(By.directive(NzInputNumberComponent))[1].nativeElement
     const estFinalGravity = debugElement.queryAll(By.directive(NzInputNumberComponent))[2].nativeElement
     const estFermentVol = debugElement.queryAll(By.directive(NzInputNumberComponent))[3].nativeElement
-    const estBottleVol = debugElement.queryAll(By.directive(NzInputNumberComponent))[4].nativeElement
+    const estBottleVol = debugElement.queryAll(By.directive(NzInputNumberComponent))[4].nativeElement;
     const inputValues = {
       brewDate: '26/06/2021',
       estPreBoilGravity: '1040',
