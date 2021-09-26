@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { AuthState } from '@app/auth/state/auth.state';
 import { Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Logout } from '@app/auth/state/auth.actions';
 
 @Component({

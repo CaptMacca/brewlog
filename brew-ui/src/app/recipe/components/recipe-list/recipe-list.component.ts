@@ -58,6 +58,7 @@ export class RecipeListComponent implements OnInit {
     const username = this.store.selectSnapshot(AuthState.getUsername);
     if (username) {
       this.loading = true;
+      console.log('dispatching load recipes');
       this.store.dispatch(new LoadRecipes(username)).pipe(
         finalize(() => this.loading = false )
       ).subscribe();
@@ -68,7 +69,8 @@ export class RecipeListComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Are you sure delete the selected recipes?',
       nzOkText: 'Yes',
-      nzOkType: 'danger',
+      nzOkType: 'default',
+      nzOkDanger: true,
       nzOnOk: () => this.deleteRecipes(),
       nzCancelText: 'No',
     });

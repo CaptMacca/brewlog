@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImportRecipeComponent } from './import-recipe.component';
-import { fireEvent, screen, getByPlaceholderText, getByText, render, RenderResult, within } from '@testing-library/angular';
+import { render, RenderResult } from '@testing-library/angular';
 import { UiModule } from '@app/common/ui/ui.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgxsModule, Store } from '@ngxs/store';
@@ -10,8 +10,6 @@ import { DebugElement } from '@angular/core';
 import { AuthService } from '@app/auth/services/auth.service';
 import { RecipeService } from '@app/recipe/services/recipe.service';
 import { Location } from '@angular/common';
-import { NzUploadBtnComponent, NzUploadComponent, NzUploadFile, NzUploadListComponent } from 'ng-zorro-antd/upload';
-import { By } from '@angular/platform-browser';
 
 describe('ImportRecipeComponent', () => {
   let component: RenderResult<ImportRecipeComponent>;

@@ -10,7 +10,7 @@
     </nz-breadcrumb>
     <nz-page-header-title>Brew Details</nz-page-header-title>
     <nz-page-header-extra>
-      <button nz-button nzType="danger"  (click)="confirmDelete(brew)">Delete</button>
+      <button nz-button nzDanger  (click)="confirmDelete(brew)">Delete</button>
       <button nz-button (click)="save(brew)" [disabled]="!brewForm.dirty || !brewForm.valid || (saving | async)" [nzLoading]="saving | async">Save</button>
       <button nz-button nzType="primary" (click)="gotoBrews()">View Brews</button>
     </nz-page-header-extra>

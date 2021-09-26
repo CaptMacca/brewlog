@@ -7,7 +7,7 @@ export class IbuFormatPipe implements PipeTransform {
 
   transform(value: any, ...args: any[]): any {
     if (value) {
-      return value.split(' ')
+     return value.toUpperCase().split(' ')
         .filter(a => a !== 'IBUS')
         .filter(a => a !== 'IBU')
         .join('');

@@ -109,6 +109,14 @@ export class MockRecipeService extends RecipeService {
     return of(mockRecipe);
   };
 
+  getRecipes(username: string): Observable<Recipe[]> {
+    return of(mockRecipes);
+  }
+
+  getRecipeNotes(id: number): Observable<string> {
+    return of('notes');
+  }
+
   updateRecipeRating(updateRating: RecipeRating): Observable<Recipe> {
     mockRecipe.rating = updateRating.rating
     return of(mockRecipe);

@@ -59,7 +59,8 @@ export class RecipeDetailComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Are you sure you want to delete the recipe?',
       nzOkText: 'Yes',
-      nzOkType: 'danger',
+      nzOkType: 'primary',
+      nzOkDanger: true,
       nzOnOk: () => this.deleteRecipe(recipe),
       nzCancelText: 'No',
     });

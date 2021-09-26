@@ -25,7 +25,7 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzAnchorModule } from 'ng-zorro-antd';
+import { NzAnchorModule } from 'ng-zorro-antd/anchor';
 
 @NgModule({
   declarations: [],
