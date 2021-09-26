@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
 import { BrewListComponent } from './brew-list.component'
 import { fireEvent, render, RenderResult, screen, within } from '@testing-library/angular'
@@ -69,7 +69,7 @@ describe('BrewListComponent', () => {
     ],
   }
 
-  beforeEach(async(async() => {
+  beforeEach(waitForAsync(async() => {
     component = await render(BrewListComponent, renderOptions)
   }))
 

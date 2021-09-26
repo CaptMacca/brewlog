@@ -79,7 +79,7 @@ describe('BrewResolverService', () => {
     });
   })
 
-  it('should resolve the brew from the supplied id', () =>{
+  it('should resolve the brew from the supplied id', () => {
     const brewSpy = spyOn(brewService, 'getBrew').and.returnValue(of(mockBrew));
     route.params = convertToParamMap({ id: mockBrew.id });
     resolver.resolve(route).subscribe(brew => {
