@@ -4,12 +4,12 @@ import brews.domain.Brew;
 import brews.domain.Measurement;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
 import brews.domain.mapper.BrewMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import brews.repository.UserRepository;
 import brews.services.BrewService;
+import brews.services.exceptions.BrewsEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +28,6 @@ public class BrewServiceImpl implements BrewService {
     private final RecipeRepository recipeRepository;
     private final BrewsRepository brewsRepository;
     private final UserRepository userRepository;
-    private final BrewMapper brewMapper;
 
     @Override
     @Transactional
@@ -87,7 +86,7 @@ public class BrewServiceImpl implements BrewService {
                             () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
                         );
 
-        Recipe recipe = recipeRepository.getOne(brew.getRecipe().getId());
+        Recipe recipe = recipeRepository.getById(brew.getRecipe().getId());
         brew.setRecipe(recipe);
         brew.setUser(actualUser);
         brew.setMeasurements(null);

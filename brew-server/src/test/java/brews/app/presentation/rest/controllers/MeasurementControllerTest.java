@@ -4,7 +4,7 @@ import brews.app.presentation.dto.brew.MeasurementDto;
 import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewsEntityNotFoundException;
 import brews.domain.mapper.MeasurementMapper;
 import brews.services.MeasurementService;
 import com.fasterxml.jackson.databind.ObjectMapper;

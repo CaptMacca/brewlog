@@ -8,7 +8,7 @@ import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHand
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewsEntityNotFoundException;
 import brews.domain.mapper.BrewMapper;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.BrewService;

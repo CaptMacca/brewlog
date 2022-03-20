@@ -1,7 +1,7 @@
 package brews.app.presentation.rest.exceptionhandler;
 
 import brews.domain.exceptions.*;
-import brews.util.transformer.beerxml.exception.BeerXMLParserException;
+import brews.services.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.springframework.http.HttpStatus;

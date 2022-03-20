@@ -2,10 +2,10 @@ package brews.services.impl;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
 import brews.services.MeasurementService;
+import brews.services.exceptions.BrewsEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

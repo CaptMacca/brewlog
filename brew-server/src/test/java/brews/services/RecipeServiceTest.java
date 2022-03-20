@@ -2,7 +2,7 @@ package brews.services;
 
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.domain.Recipe;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewsEntityNotFoundException;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import brews.services.impl.RecipeServiceImpl;

@@ -1,8 +1,8 @@
 package brews.app.presentation.rest.controllers;
 
-import brews.util.security.jwt.JwtProvider;
-import brews.util.security.jwt.request.LoginForm;
-import brews.util.security.jwt.response.JwtResponse;
+import brews.app.security.jwt.JwtProvider;
+import brews.app.security.jwt.request.LoginForm;
+import brews.app.security.jwt.response.JwtResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

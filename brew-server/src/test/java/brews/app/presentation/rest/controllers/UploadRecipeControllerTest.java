@@ -2,10 +2,10 @@ package brews.app.presentation.rest.controllers;
 
 import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.Recipe;
+import brews.domain.beerxml.BeerXMLTransformer;
+import brews.services.exceptions.BeerXMLParserException;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.ImportRecipeService;
-import brews.util.transformer.beerxml.BeerXMLTransformer;
-import brews.util.transformer.beerxml.exception.BeerXMLParserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

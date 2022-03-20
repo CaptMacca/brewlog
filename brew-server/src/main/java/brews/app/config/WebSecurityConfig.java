@@ -1,8 +1,8 @@
 package brews.app.config;
 
-import brews.util.security.UserDetailsServiceImpl;
-import brews.util.security.jwt.JwtAuthEntryPoint;
-import brews.util.security.jwt.JwtAuthTokenFilter;
+import brews.app.security.UserDetailsServiceImpl;
+import brews.app.security.jwt.JwtAuthEntryPoint;
+import brews.app.security.jwt.JwtAuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -3,7 +3,7 @@ package brews.app.presentation.rest.controllers;
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.Recipe;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewsEntityNotFoundException;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.RecipeService;
 import com.fasterxml.jackson.databind.ObjectMapper;

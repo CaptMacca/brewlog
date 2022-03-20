@@ -2,10 +2,10 @@ package brews.services.impl;
 
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.exceptions.ImportedRecipeExistsException;
 import brews.repository.RecipeRepository;
 import brews.repository.UserRepository;
 import brews.services.ImportRecipeService;
+import brews.services.exceptions.ImportedRecipeExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

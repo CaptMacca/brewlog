@@ -5,7 +5,7 @@ import brews.app.presentation.dto.user.UpdateUserDto;
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewsEntityNotFoundException;
 import brews.domain.mapper.BrewMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;

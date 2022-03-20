@@ -1,5 +1,5 @@
 ARG BUILD_VERSION=0.0.1
-FROM gradle:6.8-jdk11 as BUILD
+FROM gradle:6.9-jdk11 as BUILD
 ADD src src
 ADD build.gradle .
 ADD gradle.properties .
@@ -10,7 +10,7 @@ FROM amazoncorretto:11-alpine-jdk as BUILDER
 ARG BUILD_VERSION
 WORKDIR application
 COPY --from=BUILD /home/gradle/build/libs/gradle-${BUILD_VERSION}.jar app.jar
-RUN java -Djarmode=layertools -jar app.jar extract
+RUN java -D jarmode=layertools -jar app.jar extract
 
 FROM amazoncorretto:11-alpine-jdk
 WORKDIR application
