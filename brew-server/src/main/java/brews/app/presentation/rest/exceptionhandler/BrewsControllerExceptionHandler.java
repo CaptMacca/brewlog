@@ -26,7 +26,7 @@ public class BrewsControllerExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ResponseEntity<ErrorDetails> handleRecipeNotFoundException(BrewsEntityNotFoundException ex, WebRequest request) {
         log.error("Entity not found exception: ",ex);
-        return buildResponse(ex, "Brew not found", HttpStatus.BAD_REQUEST);
+        return buildResponse(ex, "Brew not found", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ImportedRecipeExistsException.class)
