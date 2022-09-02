@@ -16,7 +16,7 @@ spring:
       ddl-auto: validate
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
-    show-sql: true
+    show-sql: false
     database: postgresql
     properties:
       hibernate:

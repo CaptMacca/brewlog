@@ -1,9 +1,12 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://10.1.1.79:5432/brewdb
+    url: jdbc:postgresql://localhost:5432/brewdb
     username: springboot
     password: springboot
+
+  jpa:
+    show-sql: true
 
 brews:
   app:

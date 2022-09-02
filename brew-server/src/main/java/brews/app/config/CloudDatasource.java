@@ -4,7 +4,6 @@ import brews.app.condition.CloudContextCondition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-
 import javax.sql.DataSource;
 
 /**

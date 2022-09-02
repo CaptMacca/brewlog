@@ -26,7 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 @Tag(name="User", description = "API for managing user details")
-public class UserController {
+public final class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;

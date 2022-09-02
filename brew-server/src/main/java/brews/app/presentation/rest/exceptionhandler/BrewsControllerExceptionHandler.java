@@ -1,6 +1,5 @@
 package brews.app.presentation.rest.exceptionhandler;
 
-import brews.domain.exceptions.*;
 import brews.services.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
@@ -18,9 +17,16 @@ import java.util.Date;
 @Slf4j
 public class BrewsControllerExceptionHandler {
 
-    @ExceptionHandler(BrewsEntityNotFoundException.class)
+    @ExceptionHandler(BrewEntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public final ResponseEntity<ErrorDetails> handleRecipeNotFoundException(BrewsEntityNotFoundException ex, WebRequest request) {
+    public final ResponseEntity<ErrorDetails> handleBrewNotFoundException(BrewEntityNotFoundException ex, WebRequest request) {
+        log.error("Entity not found exception: ",ex);
+        return buildResponse(ex, request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RecipeEntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public final ResponseEntity<ErrorDetails> handleRecipeNotFoundException(RecipeEntityNotFoundException ex, WebRequest request) {
         log.error("Entity not found exception: ",ex);
         return buildResponse(ex, request, HttpStatus.NOT_FOUND);
     }

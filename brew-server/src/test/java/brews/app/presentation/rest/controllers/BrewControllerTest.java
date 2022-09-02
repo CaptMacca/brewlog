@@ -8,7 +8,7 @@ import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHand
 import brews.domain.Brew;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.services.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewEntityNotFoundException;
 import brews.domain.mapper.BrewMapper;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.BrewService;
@@ -137,7 +137,7 @@ public class BrewControllerTest {
         BrewDto brew = new BrewDto();
         brew.setId(1L);
 
-        when(brewService.getBrew(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+        when(brewService.getBrew(anyLong())).thenThrow(new BrewEntityNotFoundException());
 
         // When
         mockMvc.perform(get("/api/brews/1222222222"))
@@ -310,7 +310,7 @@ public class BrewControllerTest {
         user.setUsername("joe");
 
         when(userService.getCurrentUserDetails()).thenReturn(user);
-        when(brewService.updateBrew(anyLong(), any(Brew.class), any(User.class))).thenThrow(new BrewsEntityNotFoundException());
+        when(brewService.updateBrew(anyLong(), any(Brew.class), any(User.class))).thenThrow(new BrewEntityNotFoundException());
         when(brewMapper.updateBrewDtotoBrew(any(UpdateBrewDto.class))).thenReturn(brew);
         when(brewMapper.toBrewDto(any(Brew.class))).thenReturn(brewDto);
 
@@ -338,7 +338,7 @@ public class BrewControllerTest {
     @Test
     public void CannotDeleteBrewWithUnknowId() throws Exception {
         //Given
-        doThrow(new BrewsEntityNotFoundException()).when(brewService).deleteBrew(anyLong());
+        doThrow(new BrewEntityNotFoundException()).when(brewService).deleteBrew(anyLong());
 
         // When
         mockMvc.perform(delete("/api/brews/1")).andExpect(status().isNotFound());

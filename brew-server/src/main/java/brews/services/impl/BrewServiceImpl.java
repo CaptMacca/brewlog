@@ -4,12 +4,11 @@ import brews.domain.Brew;
 import brews.domain.Measurement;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.domain.mapper.BrewMapper;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import brews.repository.UserRepository;
 import brews.services.BrewService;
-import brews.services.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -53,8 +52,8 @@ public class BrewServiceImpl implements BrewService {
         return
           brewsRepository.findById(id)
                          .orElseThrow(() ->
-                            new BrewsEntityNotFoundException(
-                              String.format("Brew with id %d could not be found to update.", id)));
+                            new BrewEntityNotFoundException(
+                              String.format("Brew with id %d could not be found.", id)));
     }
 
     @Override
@@ -110,9 +109,9 @@ public class BrewServiceImpl implements BrewService {
 
         Set<Measurement> measurements = updateBrew.getMeasurements();
         if (measurements != null) {
-            for (Measurement measurement : updateBrew.getMeasurements()) {
-                measurement.setBrew(updateBrew);
-            }
+            updateBrew
+              .getMeasurements()
+              .forEach(measurement -> measurement.setBrew(updateBrew));
         }
 
         updateBrew.setId(id);

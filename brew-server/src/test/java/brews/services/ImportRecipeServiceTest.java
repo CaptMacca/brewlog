@@ -6,20 +6,22 @@ import brews.MockXMLRecipe;
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.domain.Recipe;
 import brews.domain.User;
-import brews.services.exceptions.ImportedRecipeExistsException;
-import brews.domain.mapper.RecipeMapper;
-import brews.repository.RecipeRepository;
-import brews.repository.UserRepository;
-import brews.services.impl.ImportRecipeServiceImpl;
 import brews.domain.beerxml.mapping.BeerXMLRecipeMapper;
 import brews.domain.beerxml.model.ImportedRecipe;
 import brews.domain.beerxml.model.ImportedRecipes;
+import brews.domain.mapper.RecipeMapper;
+import brews.repository.RecipeRepository;
+import brews.repository.UserRepository;
+import brews.services.exceptions.ImportedRecipeExistsException;
+import brews.services.exceptions.UserEntityNotFoundException;
+import brews.services.impl.ImportRecipeServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class ImportRecipeServiceTest {
     }
 
     @Test
-    public void testImportRecipe() {
+    public void ImportRecipeSucceeds() {
 
         // Given
         Recipe mockRecipe = MockRecipe.getRecipe();
@@ -82,7 +84,7 @@ public class ImportRecipeServiceTest {
     }
 
     @Test()
-    public void testImportExistingRecipe() {
+    public void ImportExistingRecipeThrowsImportRecipeExistsException() {
 
         Assertions.assertThrows(ImportedRecipeExistsException.class, () -> {
             // Given
@@ -116,4 +118,38 @@ public class ImportRecipeServiceTest {
         });
     }
 
+    @Test()
+    public void ImportRecipeBadUserThrowsUserEntityNotFoundException() {
+
+        Assertions.assertThrows(UserEntityNotFoundException.class, () -> {
+            // Given
+            InputStream mockedFile = MockXMLRecipe.getMockedXMLRecipe();
+
+            User mockBrewer = new User();
+            mockBrewer.setId(1L);
+            mockBrewer.setUsername("joe");
+
+            ImportedRecipes mockImportedRecipes = MockImportedRecipes.getImportedRecipes();
+            Recipe mockRecipe = MockRecipe.getRecipe();
+
+            List<Recipe> recipes = new ArrayList<>();
+            recipes.add(mockRecipe);
+
+
+            when(beerXMLRecipeMapper.map(any(ImportedRecipe.class))).thenReturn(mockRecipe);
+            when(recipeRepository.findRecipeByNameAndUser(anyString(), any(User.class))).thenReturn(Optional.of(mockRecipe));
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
+            // When
+            recipes = importRecipeService.importRecipes(recipes, "mock");
+
+            // Then - Should throw the exception
+            verify(beerXMLRecipeMapper, times(1)).map(any(ImportedRecipe.class));
+            verify(recipeRepository, times(1)).findRecipeByNameAndUser(anyString(), any(User.class));
+            verify(recipeRepository, times(0)).save(any(Recipe.class));
+            verify(recipeRepository, times(0)).flush();
+            verify(recipeMapper, times(0)).toRecipeDtos(anyList());
+            verify(userRepository, times(1)).findByUsername(anyString());
+        });
+    }
 }

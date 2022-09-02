@@ -5,7 +5,7 @@ import brews.domain.Recipe;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
 import brews.services.RecipeService;
-import brews.services.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.RecipeEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -49,7 +49,7 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug("Retrieve recipe with id: {}", id);
         return
           recipeRepository.findById(id).orElseThrow(
-            BrewsEntityNotFoundException::new
+            RecipeEntityNotFoundException::new
           );
     }
 
@@ -76,7 +76,9 @@ public class RecipeServiceImpl implements RecipeService {
 
         // Find any associated brews and delete them
         List<Brew> brews = brewsRepository.findBrewsByRecipe(recipe);
-        brewsRepository.deleteAll(brews);
+        if (!brews.isEmpty()) {
+            brewsRepository.deleteAll(brews);
+        }
         recipeRepository.delete(recipe);
     }
 

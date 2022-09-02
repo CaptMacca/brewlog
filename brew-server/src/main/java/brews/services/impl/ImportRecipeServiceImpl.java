@@ -6,6 +6,7 @@ import brews.repository.RecipeRepository;
 import brews.repository.UserRepository;
 import brews.services.ImportRecipeService;
 import brews.services.exceptions.ImportedRecipeExistsException;
+import brews.services.exceptions.UserEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,7 +37,7 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
         log.debug("Retrieving user");
         User user = userRepository.findByUsername(username).orElseThrow(
-            () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));;
+            () -> new UserEntityNotFoundException("User Not Found with -> username or email : " + username));;
 
         log.debug("Saving recipes in database");
 

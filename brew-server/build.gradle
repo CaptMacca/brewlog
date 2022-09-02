@@ -1,5 +1,5 @@
 plugins {
-  id 'org.springframework.boot' version '2.5.+'
+  id 'org.springframework.boot' version '2.6.+'
   id 'io.spring.dependency-management' version '1.0.+'
   id 'java'
   id 'net.ltgt.apt' version '0.21'
@@ -43,7 +43,6 @@ repositories {
 }
 
 bootJar {
-  layered()
 }
 
 dependencies {
@@ -61,6 +60,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     runtimeOnly 'org.postgresql:postgresql'
+    testRuntimeOnly 'com.h2database:h2'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
