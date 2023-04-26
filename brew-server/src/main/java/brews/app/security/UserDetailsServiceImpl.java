@@ -24,4 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return UserPrinciple.build(user);
     }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 }

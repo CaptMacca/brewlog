@@ -1,13 +1,17 @@
 package brews.app.security.jwt.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+@RequiredArgsConstructor
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
     private String username;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public JwtResponse(String accessToken, String username, Collection<? extends GrantedAuthority> authorities) {
@@ -40,7 +44,13 @@ public class JwtResponse {
         this.username = username;
     }
 
+    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
 }

@@ -44,7 +44,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void GetAllBrewsSucceeds() {
+    public void givenBrewsGetAllSucceeds() {
 
         // Given
         List<Brew> brews = new ArrayList<>();
@@ -73,7 +73,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void GetAllBrewsForKnownUserSucceeds() {
+    public void givenKnownUserGetAllForUserSucceeds() {
 
         // Given
         List<Brew> brews = new ArrayList<>();
@@ -102,7 +102,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void GetKnownBrewSucceeds() {
+    public void givenKnownBrewGetBrewSucceeds() {
 
         // Given
         UpdateUserDto updateUserDto = new UpdateUserDto();
@@ -130,7 +130,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void findTop5BrewsByUsername() throws Exception {
+    public void givenBrewsFindTop5BrewsForUsernameSucceeds() throws Exception {
 
         // Given
         List<Brew> brews = new ArrayList<>();
@@ -145,6 +145,7 @@ public class BrewServiceTest {
         brew.setId(1L);
         brew.setUser(user);
         brew.setRecipe(recipe);
+
         brews.add(brew);
 
         when(brewsRepository.findTop5BrewsByUserUsernameOrderByBrewDateDesc(anyString())).thenReturn(brews);
@@ -159,7 +160,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void FindAllBrewsForRecipeSucceeds() throws Exception {
+    public void givenBrewsFindAllBrewsForRecipeSucceeds() throws Exception {
 
         // Given
         List<Brew> brews = new ArrayList<>();
@@ -186,7 +187,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void SaveBrewSucceeds() {
+    public void saveBrewSucceeds() {
 
         // Given
         Recipe recipe = new Recipe();
@@ -216,12 +217,12 @@ public class BrewServiceTest {
         Brew test = brewService.saveBrew(brew, user);
 
         // Then
-        verify(recipeRepository, times(1)).getById(anyLong());
+        verify(recipeRepository, times(1)).getReferenceById(anyLong());
         verify(brewsRepository, times(1)).save(any(Brew.class));
     }
 
     @Test
-    public void SaveBrewWithUnknownUserThrowsUserNameNotFound() throws Exception {
+    public void givenUnknownUserSaveBrewThrowsUserNameNotFoundException() throws Exception {
         Assertions.assertThrows(UsernameNotFoundException.class, () -> {
             // Given
             Recipe recipe = new Recipe();
@@ -255,7 +256,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void UpdateKnownBrewSucceeds() {
+    public void givenKnownBrewUpdateSucceeds() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -290,7 +291,7 @@ public class BrewServiceTest {
     }
 
     @Test()
-    public void UpdateUnknownBrewThrowsBrewsEntityNotFoundException() {
+    public void givenUnknownBrewUpdateThrowsBrewEntityNotFoundException() {
         Assertions.assertThrows(BrewEntityNotFoundException.class, () -> {
             // Given
             Recipe recipe = new Recipe();
@@ -318,7 +319,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void DeleteKnownBrewSucceeds() {
+    public void givenKnownBrewDeleteSucceeds() {
 
         // Given
         Recipe recipe = new Recipe();
@@ -349,7 +350,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void UpdateBrewWithUnknownUserThrowsUserNotFoundException() {
+    public void givenUnknownUserUpdateThrowsUserNameNotFoundException() {
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> {
             // Given
@@ -381,7 +382,7 @@ public class BrewServiceTest {
     }
 
     @Test()
-    public void DeleteUnknownBrewThrowsBrewsEntityNotFound() throws Exception {
+    public void givenUnknownBrewUpdateThrowsBrewsEntityNotFoundException() throws Exception {
 
         Assertions.assertThrows(BrewEntityNotFoundException.class, () -> {
             // Given
@@ -397,7 +398,7 @@ public class BrewServiceTest {
     }
 
     @Test
-    public void GetNotesSucceeded() throws Exception {
+    public void givenBrewGetNotesSucceeds() throws Exception {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -422,7 +423,7 @@ public class BrewServiceTest {
    }
 
     @Test
-    public void GetTastingNotesSucceeded() throws Exception {
+    public void givenBrewGetTastingNotesSucceeds() throws Exception {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);

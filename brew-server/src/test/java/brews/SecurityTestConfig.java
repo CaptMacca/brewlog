@@ -1,27 +1,28 @@
-package brews.app.config;
+package brews;
 
-import brews.app.security.UserDetailsServiceImpl;
-import brews.app.security.jwt.JwtAuthEntryPoint;
+import brews.app.security.UserPrinciple;
 import brews.app.security.jwt.JwtAuthTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig {
+import java.util.Arrays;
+
+@TestConfiguration
+public class SecurityTestConfig {
 
     private static final String[] AUTH_WHITELIST = {
       "/api/auth/**",
@@ -36,25 +37,55 @@ public class WebSecurityConfig {
       "/webjars/**"
     };
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    @Bean
+    @Primary
+    public UserDetailsService mockUserDetailsService() {
 
-    @Autowired
-    private JwtAuthEntryPoint unauthorizedHandler;
+        PasswordEncoder encoder =new BCryptPasswordEncoder();
+
+        UserPrinciple basicActiveUser =
+          new UserPrinciple(1L, "joe", "brewer","joe@company.com", "joe@company.com",
+            encoder.encode("password1234"),
+            Arrays.asList(
+                new SimpleGrantedAuthority("ROLE_USER")
+            )
+        );
+
+        UserPrinciple managerActiveUser =
+          new UserPrinciple(2L, "admin", "", "admin@company.com", "admin@company.com",
+            encoder.encode("password1234"),
+            Arrays.asList(
+                new SimpleGrantedAuthority("ROLE_USER,"),
+                new SimpleGrantedAuthority("ROLE_MANAGER")
+            )
+        );
+
+
+
+        return new InMemoryUserDetailsManager(Arrays.asList(
+          basicActiveUser, managerActiveUser
+        ));
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {
         return new JwtAuthTokenFilter();
     }
 
-    public DaoAuthenticationProvider authenticationProvider() throws Exception {
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
 
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
         authenticationProvider
-                .setUserDetailsService(userDetailsService);
+          .setUserDetailsService(mockUserDetailsService());
         authenticationProvider
-                .setPasswordEncoder(passwordEncoder());
+          .setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
 
@@ -64,12 +95,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.cors().and().csrf().disable()
             .authorizeRequests()
             .antMatchers(AUTH_WHITELIST)
@@ -79,8 +105,8 @@ public class WebSecurityConfig {
             .and()
             .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
             .authenticationProvider(authenticationProvider())
-            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().build();
     }
+
 }

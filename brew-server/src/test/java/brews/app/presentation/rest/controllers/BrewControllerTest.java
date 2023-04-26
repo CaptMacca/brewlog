@@ -66,6 +66,32 @@ public class BrewControllerTest {
     }
 
     @Test
+    public void WillSucceedForGetAllBrews() throws Exception {
+
+        // Given
+        User user = new User();
+        user.setFirstName("joe");
+        user.setUsername("joe");
+        user.setSurname("brewer");
+        user.setEmail("user@somewhere.com");
+
+        List<Brew> brews = new ArrayList<>();
+        Brew brew = new Brew();
+        brew.setId(1L);
+        brew.setUser(user);
+        brews.add(brew);
+
+        when(brewService.getAllBrews()).thenReturn(brews);
+
+        // When
+        mockMvc.perform(get("/api/brews/all"))
+          .andExpect(status().isOk());
+
+        // Then
+        verify(brewService).getAllBrews();
+    }
+
+    @Test
     public void WillSucceedForGetBrews() throws Exception {
 
         // Given

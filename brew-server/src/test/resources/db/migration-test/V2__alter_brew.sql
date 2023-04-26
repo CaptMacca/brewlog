@@ -19,4 +19,4 @@ ALTER TABLE brews.brew
   );
 
 ALTER TABLE brews.measurement
-  DROP COLUMN type;
+  DROP COLUMN "type";

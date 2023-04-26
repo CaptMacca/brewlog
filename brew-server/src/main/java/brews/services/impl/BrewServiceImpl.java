@@ -85,7 +85,7 @@ public class BrewServiceImpl implements BrewService {
                             () -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)
                         );
 
-        Recipe recipe = recipeRepository.getById(brew.getRecipe().getId());
+        Recipe recipe = recipeRepository.getReferenceById(brew.getRecipe().getId());
         brew.setRecipe(recipe);
         brew.setUser(actualUser);
         brew.setMeasurements(null);

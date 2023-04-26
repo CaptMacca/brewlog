@@ -1,5 +1,5 @@
 CREATE TABLE brews.users (
-  id BIGSERIAL PRIMARY KEY,
+  id bigint auto_increment PRIMARY KEY,
   username VARCHAR(50) NOT NULL UNIQUE ,
   first_name VARCHAR(50) NOT NULL,
   surname VARCHAR(50) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE brews.users (
 );
 
 CREATE TABLE brews.roles (
-  id BIGSERIAL PRIMARY KEY,
+  id bigint auto_increment PRIMARY KEY,
   role_name VARCHAR(60) NOT NULL
 );
 

@@ -36,7 +36,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipes_getallrecipes_succeeds() {
+    public void givenRecipesGetAllRecipesSucceeds() {
         // Given
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe = new Recipe();
@@ -55,7 +55,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipes_and_valid_user_getallrecipesforuser_succeeds() {
+    public void givenRecipesAndValidUserGetAllRecipesForUserSucceeds() {
         // Given
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe = new Recipe();
@@ -76,7 +76,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipes_getTop5Recipes_succeeds() {
+    public void givenRecipesGetTop5RecipesSucceeds() {
         // Given
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe = new Recipe();
@@ -97,7 +97,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipe_GetRecipeById_succeeds() {
+    public void givenRecipeGetRecipeByIdSucceeds() {
 
         // Given
         RecipeDto recipeDto = new RecipeDto();
@@ -119,7 +119,7 @@ public class RecipeServiceTest {
     }
 
     @Test()
-    public void given_unknown_recipe_throws_recipenotfoundexception() {
+    public void givenUnknownRecipeGetRecipeThrowsRecipeNotFoundException() {
         Assertions.assertThrows(RecipeEntityNotFoundException.class, () -> {
             // Given
             RecipeDto recipeDto = new RecipeDto();
@@ -142,7 +142,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipe_getnotes_succeeds() {
+    public void givenRecipeGetNotesSucceeds() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1l);
@@ -160,7 +160,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipe_updateRecipe_succeeds() {
+    public void givenRecipeUpdateRecipeSucceeds() {
 
         // Given
         RecipeDto recipeDto = new RecipeDto();
@@ -184,7 +184,7 @@ public class RecipeServiceTest {
     }
 
     @Test()
-    public void given_unknown_recipe_getRecipeById_throws_recipenotfoundexception() {
+    public void givenUnknownRecipeGetRecipeByIdThrowsRecipeNotFoundException() {
 
         Assertions.assertThrows(RecipeEntityNotFoundException.class, () -> {
             // Given
@@ -208,7 +208,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipe_DeleteRecipe_succeeds() {
+    public void givenRecipeDeleteRecipeSucceeds() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -226,7 +226,7 @@ public class RecipeServiceTest {
     }
 
     @Test()
-    public void givenRecipe_WithNoBrews_DeleteSucceeds() {
+    public void givenRecipeWithNoBrewsDeleteSucceeds() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -246,7 +246,7 @@ public class RecipeServiceTest {
     }
 
     @Test()
-    public void givenRecipe_WithBrews_DeleteSucceeds_and_brews_deleted() {
+    public void givenRecipeWithBrewsDeleteSucceedsAndAllBrewsDeleted() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -275,7 +275,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_invalid_recipe_delete_throws_recipeNotFoundException() {
+    public void givenInvalidRecipeDeleteThrowsRecipeNotFoundException() {
         Assertions.assertThrows(RecipeEntityNotFoundException.class, () -> {
             // Given
             Recipe recipe = new Recipe();
@@ -290,7 +290,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void given_recipe_UpdateRating_succeeds() {
+    public void givenRecipeUpdateRatingSucceeds() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);

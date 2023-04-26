@@ -52,7 +52,7 @@ public class ImportRecipeServiceTest {
     }
 
     @Test
-    public void ImportRecipeSucceeds() {
+    public void givenValidRecipeImportSucceeds() {
 
         // Given
         Recipe mockRecipe = MockRecipe.getRecipe();
@@ -84,7 +84,7 @@ public class ImportRecipeServiceTest {
     }
 
     @Test()
-    public void ImportExistingRecipeThrowsImportRecipeExistsException() {
+    public void givenExistingRecipeImportThrowsImportRecipeExistsException() {
 
         Assertions.assertThrows(ImportedRecipeExistsException.class, () -> {
             // Given
@@ -119,7 +119,7 @@ public class ImportRecipeServiceTest {
     }
 
     @Test()
-    public void ImportRecipeBadUserThrowsUserEntityNotFoundException() {
+    public void givenUnknownUserImportThrowsUserEntityNotFoundException() {
 
         Assertions.assertThrows(UserEntityNotFoundException.class, () -> {
             // Given
