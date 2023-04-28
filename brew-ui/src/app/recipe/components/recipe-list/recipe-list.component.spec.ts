@@ -8,13 +8,21 @@ import { UiModule } from '@app/common/ui/ui.module'
 import { ImportRecipeComponent } from '@app/recipe/components/import-recipe/import-recipe.component'
 import { RecipeDetailComponent } from '@app/recipe/components/recipe-detail/recipe-detail.component'
 import { RecipeResolverService } from '@app/recipe/services/recipe-resolver.service'
-import { mockAuthService, MockAuthState, mockRecipes, MockRecipeService, MockRecipeState } from '@app/recipe/spec/mock.recipe.components'
+import {
+  mockAuthService,
+  MockAuthState,
+  mockRecipe,
+  mockRecipes,
+  MockRecipeService,
+  MockRecipeState
+} from '@app/recipe/spec/mock.recipe.components'
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, RenderResult, screen, within } from '@testing-library/angular'
 import { HttpClientModule } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { Location } from '@angular/common'
 import { DebugElement } from '@angular/core'
+import { of } from 'rxjs';
 
 describe('RecipeListComponent', () => {
   let component: RenderResult<RecipeListComponent>
@@ -69,6 +77,7 @@ describe('RecipeListComponent', () => {
     instance = fixture.componentInstance as RecipeListComponent
     debugElement = fixture.debugElement
     location = TestBed.inject(Location)
+    spyOnProperty(instance, 'recipes$').and.returnValue(of(mockRecipes));
   })
 
   it('should create the component', async() => {

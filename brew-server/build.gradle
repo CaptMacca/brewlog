@@ -59,6 +59,7 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:${openapiVersion}"
     implementation "org.springdoc:springdoc-openapi-security:${openapiVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    implementation "org.projectlombok:lombok-mapstruct-binding:${mapstructBindingVersion}"
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 

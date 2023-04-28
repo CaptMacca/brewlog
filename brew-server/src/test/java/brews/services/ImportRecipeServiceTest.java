@@ -71,14 +71,13 @@ public class ImportRecipeServiceTest {
         when(recipeMapper.toRecipeDtos(anyList())).thenReturn(Arrays.asList(recipeDto));
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(mockUser));
 
-        ArgumentCaptor<Recipe> recipeArgumentCaptor = ArgumentCaptor.forClass(Recipe.class);
+        ArgumentCaptor<List<Recipe>> recipeArgumentCaptor = ArgumentCaptor.forClass(List.class);
         // When
         recipes = importRecipeService.importRecipes(recipes,"joe");
 
         // Then
         verify(recipeRepository, times(1)).findRecipeByNameAndUser(anyString(), any(User.class));
-        verify(recipeRepository, times(1)).save(recipeArgumentCaptor.capture());
-        verify(recipeRepository, times(1)).flush();
+        verify(recipeRepository, times(1)).saveAllAndFlush(recipeArgumentCaptor.capture());
         verify(userRepository, times(1)).findByUsername(anyString());
 
     }
@@ -111,7 +110,7 @@ public class ImportRecipeServiceTest {
             // Then - Should throw the exception
             verify(beerXMLRecipeMapper, times(1)).map(any(ImportedRecipe.class));
             verify(recipeRepository, times(1)).findRecipeByNameAndUser(anyString(), any(User.class));
-            verify(recipeRepository, times(0)).save(any(Recipe.class));
+            verify(recipeRepository, times(0)).saveAllAndFlush(anyList());
             verify(recipeRepository, times(0)).flush();
             verify(recipeMapper, times(0)).toRecipeDtos(anyList());
             verify(userRepository, times(1)).findByUsername(anyString());

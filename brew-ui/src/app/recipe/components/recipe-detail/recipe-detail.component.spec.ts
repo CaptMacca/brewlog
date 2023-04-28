@@ -20,7 +20,7 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { FormsModule } from '@angular/forms';
 import { NgRoundPipeModule } from 'angular-pipes';
 import { By } from '@angular/platform-browser';
-import { NzRateComponent, NzTableComponent } from 'ng-zorro-antd';
+import { NzTableComponent } from 'ng-zorro-antd/table';
 import { of } from 'rxjs';
 import { Location } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -31,6 +31,7 @@ import { BrewDetailComponent } from '@app/brew/components/brew-detail/brew-detai
 import { BrewResolverService } from '@app/brew/services/brew-resolver.service';
 import { BrewEditGuard } from '@app/brew/services/brew-guard.service';
 import { DebugElement } from '@angular/core';
+import { NzRateComponent } from 'ng-zorro-antd/rate';
 
 describe('RecipeDetailComponent', () => {
   let component: RenderResult<RecipeDetailComponent>;

@@ -135,7 +135,8 @@ export class BrewDetailComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Are you sure delete this brew session?',
       nzOkText: 'Yes',
-      nzOkType: 'danger',
+      nzOkType: 'default',
+      nzOkDanger: true,
       nzOnOk: () => this.deleteBrew(brew),
       nzCancelText: 'No'
     });
@@ -146,7 +147,8 @@ export class BrewDetailComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Are you sure you want to abandon edits to the selected brew session ?',
       nzOkText: 'Yes',
-      nzOkType: 'danger',
+      nzOkType: 'default',
+      nzOkDanger: true,
       nzOnOk: () => modalResponse.next(true),
       nzCancelText: 'No',
       nzOnCancel: () => modalResponse.next(false),

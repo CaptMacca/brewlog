@@ -9,7 +9,7 @@
   </nz-breadcrumb>
   <nz-page-header-title>View Recipes</nz-page-header-title>
   <nz-page-header-extra>
-    <button nz-button nzType="danger" [disabled]="selections.length === 0" (click)="confirm()">Delete Selected</button>
+    <button nz-button nzType="default" nzDanger [disabled]="selections.length === 0" (click)="confirm()">Delete Selected</button>
     <button nz-button (click)="importRecipes()">Import Recipe</button>
     <button nz-button nzType="primary" (click)="refresh()">Refresh</button>
   </nz-page-header-extra>

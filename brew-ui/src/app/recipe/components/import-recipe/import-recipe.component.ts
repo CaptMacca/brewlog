@@ -38,7 +38,7 @@ export class ImportRecipeComponent implements OnInit {
     const username = this.store.selectSnapshot(AuthState.getUsername);
     this.uploading = true;
     const formData = new FormData();
-    // tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.fileList.forEach((file: any) => {
       formData.append('files', file);
     });

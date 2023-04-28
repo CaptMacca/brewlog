@@ -77,7 +77,8 @@ export class BrewListComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Are you sure delete the selected brews?',
       nzOkText: 'Yes',
-      nzOkType: 'danger',
+      nzOkType: 'default',
+      nzOkDanger: true,
       nzOnOk: () => this.deleteBrews(),
       nzCancelText: 'No',
     })
