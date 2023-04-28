@@ -88,11 +88,10 @@ public class BrewMapperTest {
         BrewDto brewDto = brewMapper.toBrewDto(brew);
 
         // Then
-        assertThat(brewDto).isInstanceOf(BrewDto.class);
-        assertThat(brewDto.getId()).isEqualTo(brew.getId());
-        assertThat(brewDto.getRecipeId()).isNotNull();
-        assertThat(brewDto.getId()).isEqualTo(1L);
-        assertThat(brewDto.getMeasurements()).hasSize(1);
+        assertThat(brewDto).as("check valid BrewDto").isNotNull().isInstanceOf(BrewDto.class);
+        assertThat(brewDto.getId()).as("check has id").isEqualTo(brew.getId()).isEqualTo(1L);
+        assertThat(brewDto.getRecipeId()).as("check valid Recipe").isNotNull();
+        assertThat(brewDto.getMeasurements()).as("check has measurements").hasSize(brew.getMeasurements().size());
 
     }
 }

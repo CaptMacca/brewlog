@@ -5,10 +5,6 @@ server:
 spring:
   application:
     name: brewlog
-  datasource:
-    url: jdbc:postgresql://10.1.1.79:5432/brewdb
-    username: springboot
-    password: springboot
 
   # Flyway
   flyway:
@@ -20,7 +16,7 @@ spring:
       ddl-auto: validate
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
-    show-sql: true
+    show-sql: false
     database: postgresql
     properties:
       hibernate:
@@ -30,14 +26,4 @@ spring:
             non_contextual_creation: true
 
 springdoc:
-#  api-docs:
-#    path: /brewlog-openapi
   packagesToScan: brews.app.presentation.rest.controllers,brews.app.presentation.rest.controllers.exceptionhandler
-
-
-#  pathsToMatch: /api/brews, /api/recipes, /api/measurement, /api/user, /api/auth
-
-brews:
-  app:
-    jwtSecret: jwtSecretKeyThatNoOneMustKnow
-    jwtExpiration: 86400

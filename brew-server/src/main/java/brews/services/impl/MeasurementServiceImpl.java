@@ -2,10 +2,10 @@ package brews.services.impl;
 
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
 import brews.repository.BrewsRepository;
 import brews.repository.MeasurementRepository;
 import brews.services.MeasurementService;
+import brews.services.exceptions.BrewEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +30,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         return
           measurementRepository.findById(id)
                                .orElseThrow(
-                                    () -> new BrewsEntityNotFoundException(String.format("Measurement for id: %d could not be found.", id))
+                                    () -> new BrewEntityNotFoundException(String.format("Measurement for id: %d could not be found.", id))
                                );
     }
 
@@ -64,7 +64,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         log.info("Saving measurement: " + measurement.toString());
         Brew brew =
            brewsRepository.findById(brewId).orElseThrow(
-                () -> new BrewsEntityNotFoundException(String.format("Brew could not be found for brew id: %d", brewId)));
+                () -> new BrewEntityNotFoundException(String.format("Brew could not be found for brew id: %d", brewId)));
         return measurementRepository.saveAndFlush(measurement);
     }
 

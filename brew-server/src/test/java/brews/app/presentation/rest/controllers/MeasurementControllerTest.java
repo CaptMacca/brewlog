@@ -4,7 +4,7 @@ import brews.app.presentation.dto.brew.MeasurementDto;
 import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.Brew;
 import brews.domain.Measurement;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewEntityNotFoundException;
 import brews.domain.mapper.MeasurementMapper;
 import brews.services.MeasurementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -142,7 +142,7 @@ public class MeasurementControllerTest {
 
         List<MeasurementDto> measurementDtos = new ArrayList<>();
 
-        when(measurementService.saveMeasurements(anyList())).thenThrow(new BrewsEntityNotFoundException());
+        when(measurementService.saveMeasurements(anyList())).thenThrow(new BrewEntityNotFoundException());
 
         // When
         mockMvc.perform(post("/api/measurement")
@@ -201,7 +201,7 @@ public class MeasurementControllerTest {
         List<MeasurementDto> measurementDtos = new ArrayList<>();
         measurementDtos.add(measurement);
 
-        when(measurementService.saveMeasurements(anyList())).thenThrow(new BrewsEntityNotFoundException());
+        when(measurementService.saveMeasurements(anyList())).thenThrow(new BrewEntityNotFoundException());
 
         // When
         mockMvc.perform(post("/api/measurement")
@@ -230,7 +230,7 @@ public class MeasurementControllerTest {
     public void testDeleteUnknownMeasurement() throws Exception {
 
         // Given
-        doThrow(new BrewsEntityNotFoundException()).when(measurementService).deleteMeasurement(anyLong());
+        doThrow(new BrewEntityNotFoundException()).when(measurementService).deleteMeasurement(anyLong());
 
         // When
         mockMvc.perform(delete("/api/measurement/1"))
