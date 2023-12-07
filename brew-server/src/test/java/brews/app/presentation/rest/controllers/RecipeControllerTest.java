@@ -3,7 +3,7 @@ package brews.app.presentation.rest.controllers;
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.app.presentation.rest.exceptionhandler.BrewsControllerExceptionHandler;
 import brews.domain.Recipe;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
+import brews.services.exceptions.BrewEntityNotFoundException;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.RecipeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -135,7 +135,7 @@ public class RecipeControllerTest {
         recipeDto.setId(1L);
         recipeDto.setName("mock");
 
-        when(recipeService.getRecipeById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+        when(recipeService.getRecipeById(anyLong())).thenThrow(new BrewEntityNotFoundException());
 
         // When
         mockMvc.perform(get("/api/recipes/1"))
@@ -192,7 +192,7 @@ public class RecipeControllerTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        when(recipeService.updateRecipe(anyLong(), any(Recipe.class))).thenThrow(new BrewsEntityNotFoundException());
+        when(recipeService.updateRecipe(anyLong(), any(Recipe.class))).thenThrow(new BrewEntityNotFoundException());
         when(recipeMapper.toRecipeDto(any(Recipe.class))).thenReturn(recipeDto);
         when(recipeMapper.toRecipe(any(RecipeDto.class))).thenReturn(recipe);
 
@@ -220,7 +220,7 @@ public class RecipeControllerTest {
     @Test
     public void testDeleteNotFoundRecipe() throws Exception {
         // Given
-        doThrow(new BrewsEntityNotFoundException()).when(recipeService).deleteRecipe(anyLong());
+        doThrow(new BrewEntityNotFoundException()).when(recipeService).deleteRecipe(anyLong());
 
         //When
         mockMvc.perform(delete("/api/recipes/1")).andExpect(status().isNotFound());

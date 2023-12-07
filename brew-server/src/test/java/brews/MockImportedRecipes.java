@@ -1,7 +1,7 @@
 package brews;
 
-import brews.util.transformer.beerxml.model.ImportedRecipe;
-import brews.util.transformer.beerxml.model.ImportedRecipes;
+import brews.domain.beerxml.model.ImportedRecipe;
+import brews.domain.beerxml.model.ImportedRecipes;
 
 import java.util.ArrayList;
 import java.util.List;

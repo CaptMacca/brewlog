@@ -15,8 +15,8 @@ public class FermentableMapperTest {
 
     private IngredientMapper fermentableMapper;
 
-    private static final Long FERMENTABLE_ID_VAL = new Long(1L);
-    private static final Double FERMENTABLE_AMOUNT = new Double(1.0d);
+    private static final Long FERMENTABLE_ID_VAL = 1L;
+    private static final Double FERMENTABLE_AMOUNT = 1.0d;
     private static final String FERMENTABLE_NAME = "Maris Otter Pale Malt";
 
 

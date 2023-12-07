@@ -1,10 +1,11 @@
 package brews.services;
 
 import brews.app.presentation.dto.recipe.RecipeDto;
+import brews.domain.Brew;
 import brews.domain.Recipe;
-import brews.domain.exceptions.BrewsEntityNotFoundException;
 import brews.repository.BrewsRepository;
 import brews.repository.RecipeRepository;
+import brews.services.exceptions.RecipeEntityNotFoundException;
 import brews.services.impl.RecipeServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -37,7 +36,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void testGetAllRecipes() {
+    public void givenRecipesGetAllRecipesSucceeds() {
         // Given
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe = new Recipe();
@@ -56,7 +55,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void testGetAllRecipesForUser() {
+    public void givenRecipesAndValidUserGetAllRecipesForUserSucceeds() {
         // Given
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe = new Recipe();
@@ -77,7 +76,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void testTop5Recipes() {
+    public void givenRecipesGetTop5RecipesSucceeds() {
         // Given
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe = new Recipe();
@@ -94,11 +93,11 @@ public class RecipeServiceTest {
 
         // Then
         assertThat(test).isNotEmpty();
-        verify(recipeRepository, times(1)).findTop5RatedByUserUsernameOrderByNameDesc(anyString());
+        verify(recipeRepository).findTop5RatedByUserUsernameOrderByNameDesc(anyString());
     }
 
     @Test
-    public void testGetRecipeById() {
+    public void givenRecipeGetRecipeByIdSucceeds() {
 
         // Given
         RecipeDto recipeDto = new RecipeDto();
@@ -116,12 +115,12 @@ public class RecipeServiceTest {
 
         // Then
         assertThat(test.getId()).isEqualTo(1L);
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository).findById(anyLong());
     }
 
     @Test()
-    public void testGetUnknownRecipeById() {
-        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
+    public void givenUnknownRecipeGetRecipeThrowsRecipeNotFoundException() {
+        Assertions.assertThrows(RecipeEntityNotFoundException.class, () -> {
             // Given
             RecipeDto recipeDto = new RecipeDto();
             recipeDto.setId(1L);
@@ -131,19 +130,37 @@ public class RecipeServiceTest {
             recipe.setId(recipeDto.getId());
             recipe.setName(recipeDto.getName());
 
-            when(recipeRepository.findById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+            when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
             // When
             recipeService.getRecipeById(1L);
 
             // Then
-            verify(recipeRepository, times(1)).findById(anyLong());
+            verify(recipeRepository).findById(anyLong());
         });
 
     }
 
     @Test
-    public void testUpdateRecipe() {
+    public void givenRecipeGetNotesSucceeds() {
+        // Given
+        Recipe recipe = new Recipe();
+        recipe.setId(1l);
+        recipe.setName("recipe");
+        recipe.setNotes("recipe notes");
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        // When
+        String recipeNotes = recipeService.getNotesForRecipe(anyLong());
+
+        // Then
+        verify(recipeRepository).findById(anyLong());
+        assertThat(recipeNotes).isEqualTo("recipe notes");
+    }
+
+    @Test
+    public void givenRecipeUpdateRecipeSucceeds() {
 
         // Given
         RecipeDto recipeDto = new RecipeDto();
@@ -164,13 +181,12 @@ public class RecipeServiceTest {
         assertThat(test.getId()).isEqualTo(1L);
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).saveAndFlush(any(Recipe.class));
-
     }
 
     @Test()
-    public void testUpdateUnknownRecipe() {
+    public void givenUnknownRecipeGetRecipeByIdThrowsRecipeNotFoundException() {
 
-        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
+        Assertions.assertThrows(RecipeEntityNotFoundException.class, () -> {
             // Given
             RecipeDto recipeDto = new RecipeDto();
             recipeDto.setId(1L);
@@ -180,7 +196,7 @@ public class RecipeServiceTest {
             recipe.setId(recipeDto.getId());
             recipe.setName(recipeDto.getName());
 
-            when(recipeRepository.findById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+            when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
             // When
             recipeService.updateRecipe(1L, recipe);
@@ -192,7 +208,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void testDeleteRecipe() {
+    public void givenRecipeDeleteRecipeSucceeds() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -210,22 +226,62 @@ public class RecipeServiceTest {
     }
 
     @Test()
-    public void testDeleteUnknownRecipe() {
-        Assertions.assertThrows(BrewsEntityNotFoundException.class, () -> {
-            // Given
-            Recipe recipe = new Recipe();
-            recipe.setId(1L);
-            recipe.setName("a recipe");
+    public void givenRecipeWithNoBrewsDeleteSucceeds() {
+        // Given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.setName("a recipe");
 
-            when(recipeRepository.findById(anyLong())).thenThrow(new BrewsEntityNotFoundException());
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(brewsRepository.findBrewsByRecipe(any(Recipe.class))).thenReturn(new ArrayList<Brew>());
 
-            // When
-            recipeService.deleteRecipe(1L);
+        // When
+        recipeService.deleteRecipe(1L);
 
-            // Then
-            verify(recipeRepository, times(1)).findById(anyLong());
-            verify(recipeRepository, times(0)).delete(any(Recipe.class));
-        });
+        // Then
+        verify(recipeRepository).findById(anyLong());
+        verify(brewsRepository).findBrewsByRecipe(any(Recipe.class));
+        verify(recipeRepository).delete(any(Recipe.class));
+        verify(brewsRepository, times(0)).deleteAll(anyList());
+    }
+
+    @Test()
+    public void givenRecipeWithBrewsDeleteSucceedsAndAllBrewsDeleted() {
+        // Given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.setName("a recipe");
+
+        Brew brew = new Brew();
+        brew.setId(1L);
+        brew.setRecipe(recipe);
+
+        Set<Brew> brews = new HashSet<>();
+        brews.add(brew);
+
+        recipe.setBrews(brews);
 
     }
+
+    @Test()
+    public void givenRecipeUpdateRatingSucceeds() {
+        // Given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.setName("a recipe");
+        recipe.setRating((short) 2);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeRepository.saveAndFlush(any())).thenReturn(recipe);
+
+        // When
+        Recipe test = recipeService.updateRating(1L, (short) 5.0);
+
+        // Then
+        assertThat(test.getId()).isEqualTo(1L);
+        assertThat(test.getRating()).isEqualTo((short) 5.0);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).saveAndFlush(any(Recipe.class));
+    }
+
 }

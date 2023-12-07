@@ -3,10 +3,10 @@ package brews.services.impl;
 import brews.domain.Role;
 import brews.domain.RoleName;
 import brews.domain.User;
-import brews.domain.exceptions.*;
 import brews.repository.RoleRepository;
 import brews.repository.UserRepository;
 import brews.services.UserService;
+import brews.services.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -26,6 +26,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private static final String ADMIN_ROLE_NAME = RoleName.ROLE_ADMIN.name();
+    private static final String USER_ROLE_NAME = RoleName.ROLE_USER.name();
+
 
     @Override
     public User getCurrentUserDetails() {
@@ -78,20 +82,18 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
+
         Set<Role> savedRoles = new HashSet<>();
         if (roles != null) {
             roles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN)
-                          .orElseThrow(() -> new RoleDoesntExistException("Fail! -> Cause: Admin Role could not be found."));
-                        savedRoles.add(adminRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER)
-                          .orElseThrow(() -> new RoleDoesntExistException("Fail! -> Cause: User Role could not be found."));
-                        savedRoles.add(userRole);
+                if (ADMIN_ROLE_NAME.equals(role)) {
+                    Role adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN)
+                      .orElseThrow(() -> new RoleDoesntExistException("Fail! -> Cause: Admin Role could not be found."));
+                    savedRoles.add(adminRole);
+                } else if (USER_ROLE_NAME.equals(role)) {
+                    Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER)
+                      .orElseThrow(() -> new RoleDoesntExistException("Fail! -> Cause: User Role could not be found."));
+                    savedRoles.add(userRole);
                 }
             });
 

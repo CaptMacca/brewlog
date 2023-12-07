@@ -35,7 +35,7 @@ public class MeasurementServiceTest {
     }
 
     @Test
-    public void testGetMeasurement() {
+    public void givenMeasurementGetMeasurementSucceeds() {
 
         // Given
         MeasurementDto measurementDto = new MeasurementDto();
@@ -55,7 +55,7 @@ public class MeasurementServiceTest {
     }
 
     @Test
-    public void testGetMeasurementsForBrew() {
+    public void givenMeasurmentAndBrewGetMeasurementsForBrewSucceeds() {
 
         // Given
         List<MeasurementDto> measurementDtos = new ArrayList<>();
@@ -79,7 +79,7 @@ public class MeasurementServiceTest {
     }
 
     @Test
-    public void testCreateMeasurement() {
+    public void givenValidMeasurementCreateMeasurementSucceeds() {
 
         // Given
         Brew brew = new Brew();
@@ -104,7 +104,7 @@ public class MeasurementServiceTest {
     }
 
     @Test
-    public void testUpdateMeasurement() {
+    public void givenMeasurmentUpdateMeasurementSucceeds() {
 
         // Given
         MeasurementDto measurementDto = new MeasurementDto();
@@ -126,7 +126,7 @@ public class MeasurementServiceTest {
     }
 
     @Test
-    public void testDeleteMeasurement() {
+    public void givenMeasurementDeleteMeasurementSucceeds() {
 
         // Given
         MeasurementDto measurementDto = new MeasurementDto();

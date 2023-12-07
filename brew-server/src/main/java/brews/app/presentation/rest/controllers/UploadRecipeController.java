@@ -2,10 +2,10 @@ package brews.app.presentation.rest.controllers;
 
 import brews.app.presentation.dto.recipe.RecipeDto;
 import brews.domain.Recipe;
-import brews.domain.exceptions.ImportedRecipeUploadException;
+import brews.services.exceptions.ImportedRecipeUploadException;
 import brews.domain.mapper.RecipeMapper;
 import brews.services.ImportRecipeService;
-import brews.util.transformer.beerxml.BeerXMLTransformer;
+import brews.domain.beerxml.BeerXMLTransformer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

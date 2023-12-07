@@ -1,21 +1,21 @@
 plugins {
-  id 'org.springframework.boot' version '2.5.4'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'java'
-  id 'net.ltgt.apt' version '0.21'
+  id 'org.springframework.boot' version '2.7.+'
+  id 'io.spring.dependency-management' version '1.0.15.RELEASE'
   id 'com.github.johnrengelman.processes' version '0.5.0'
-  id 'org.springdoc.openapi-gradle-plugin' version '1.3.0'
+  id 'org.springdoc.openapi-gradle-plugin' version '1.3.+'
 }
+
 
 group = 'steve.com'
 version = '0.0.1-SNAPSHOT'
 
 description = "brewlog"
 
-def javaVersion = 11
-
-sourceCompatibility = javaVersion
-targetCompatibility = javaVersion
+java {
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
+}
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
@@ -26,12 +26,13 @@ tasks.withType(Test) {
 }
 
 ext {
-  mapstructVersion = "1.4.2.Final"
-  mapstructBindingVersion = "0.2.0"
-  lombokVersion = '1.18.12'
-  openapiVersion = "1.5.10"
+  mapstructVersion = "1.5.3.Final"
+  lombokVersion = "1.18.22"
+  lombokMapstructBindingVersion = "0.2.0"
+  openapiVersion = "1.6.9"
   jsonwebtokenVersion = "0.9.1"
-  assertjVersion = "3.20.2"
+  assertjVersion = "3.23.1"
+  testContainersVersion = "1.19.3"
 }
 
 configurations {
@@ -46,7 +47,6 @@ repositories {
 }
 
 bootJar {
-  layered()
 }
 
 dependencies {
@@ -60,17 +60,23 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:${openapiVersion}"
     implementation "org.springdoc:springdoc-openapi-security:${openapiVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    implementation "org.projectlombok:lombok-mapstruct-binding:${mapstructBindingVersion}"
+    implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    implementation platform("org.testcontainers:testcontainers-bom:${testContainersVersion}")
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     runtimeOnly 'org.postgresql:postgresql'
+//    testRuntimeOnly 'com.h2database:h2'
 
+    testImplementation "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "org.testcontainers:testcontainers"
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:postgresql"
 
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
-    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 }
 

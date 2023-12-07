@@ -6,8 +6,8 @@ import brews.app.presentation.dto.user.UserDetailsDto;
 import brews.domain.User;
 import brews.domain.mapper.UserMapper;
 import brews.services.UserService;
-import brews.util.security.jwt.request.SignUpForm;
-import brews.util.security.jwt.response.ResponseMessage;
+import brews.app.security.jwt.request.SignUpForm;
+import brews.app.security.jwt.response.ResponseMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 @Tag(name="User", description = "API for managing user details")
-public class UserController {
+public final class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;

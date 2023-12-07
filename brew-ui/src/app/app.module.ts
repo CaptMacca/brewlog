@@ -1,4 +1,4 @@
-import { registerLocaleData } from '@angular/common';
+ import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import { ErrorHandler, NgModule } from '@angular/core';

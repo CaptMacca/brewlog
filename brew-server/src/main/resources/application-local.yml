@@ -1,0 +1,16 @@
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/brewdb
+    username: springboot
+    password: springboot
+
+  jpa:
+    show-sql: true
+
+brews:
+  app:
+    jwtSecret: jwtSecretKeyThatNoOneMustKnow
+    jwtExpiration: 86400
+    cors:
+      origins: http://localhost:4200/*,http://192.168.99.100:4200
