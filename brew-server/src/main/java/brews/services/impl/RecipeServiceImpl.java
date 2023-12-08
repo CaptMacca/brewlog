@@ -88,6 +88,6 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug(String.format("Updating recipe id: %d with rating: %d", id, rating));
         Recipe recipe = getRecipeById(id);
         recipe.setRating(rating);
-        return recipeRepository.save(recipe);
+        return recipeRepository.saveAndFlush(recipe);
     }
 }

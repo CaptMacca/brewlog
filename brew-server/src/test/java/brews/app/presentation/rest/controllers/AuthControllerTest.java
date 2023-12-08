@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
@@ -125,7 +126,25 @@ class AuthControllerTest {
           .andExpect(jsonPath("$.accessToken").value(mockToken));
     }
 
+    @Test
     public void givenInvalidUserWillFailLogin() throws Exception {
+        User user = new User();
+        user.setUsername("joe@company.com");
+        user.setPassword("password1234");
 
+        LoginForm loginForm = new LoginForm();
+        loginForm.setUsername(user.getUsername());
+        loginForm.setPassword(user.getPassword());
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
+        given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).willThrow(new BadCredentialsException("Invalid username/password supplied"));
+
+        String content = objectMapper.writeValueAsString(loginForm);
+
+        mockMvc.perform(post("/api/auth/signin").with(csrf().asHeader()).contentType("application/json")
+          .content(content))
+          .andExpect(status().isForbidden());
     }
 }

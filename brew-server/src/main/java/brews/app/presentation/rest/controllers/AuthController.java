@@ -47,7 +47,7 @@ public class AuthController {
 
         JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getUsername(), new ArrayList<>(userDetails.getAuthorities()));
 
-          log.debug("JwtResponse: {}", jwtResponse);
+        log.debug("JwtResponse: {}", jwtResponse);
 
         return ResponseEntity.ok(jwtResponse);
     }

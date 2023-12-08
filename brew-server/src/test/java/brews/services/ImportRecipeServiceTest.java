@@ -71,13 +71,13 @@ public class ImportRecipeServiceTest {
         when(recipeMapper.toRecipeDtos(anyList())).thenReturn(Arrays.asList(recipeDto));
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(mockUser));
 
-        ArgumentCaptor<List<Recipe>> recipeArgumentCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<Recipe> recipeArgumentCaptor = ArgumentCaptor.forClass(Recipe.class);
         // When
         recipes = importRecipeService.importRecipes(recipes,"joe");
 
         // Then
         verify(recipeRepository, times(1)).findRecipeByNameAndUser(anyString(), any(User.class));
-        verify(recipeRepository, times(1)).saveAllAndFlush(recipeArgumentCaptor.capture());
+        verify(recipeRepository, times(recipes.size())).save(recipeArgumentCaptor.capture());
         verify(userRepository, times(1)).findByUsername(anyString());
 
     }

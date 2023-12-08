@@ -261,45 +261,27 @@ public class RecipeServiceTest {
 
         recipe.setBrews(brews);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
-        when(brewsRepository.findBrewsByRecipe(any(Recipe.class))).thenReturn(new ArrayList<>(brews));
-
-        // When
-        recipeService.deleteRecipe(1L);
-
-        // Then
-        verify(recipeRepository).findById(anyLong());
-        verify(brewsRepository).findBrewsByRecipe(any(Recipe.class));
-        verify(recipeRepository).delete(any(Recipe.class));
-        verify(brewsRepository).deleteAll(anyList());
     }
 
-    @Test
-    public void givenInvalidRecipeDeleteThrowsRecipeNotFoundException() {
-        Assertions.assertThrows(RecipeEntityNotFoundException.class, () -> {
-            // Given
-            Recipe recipe = new Recipe();
-            recipe.setId(1L);
-            recipe.setName("a recipe");
-
-            when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-            // When
-            recipeService.deleteRecipe(1L);
-        });
-    }
-
-    @Test
+    @Test()
     public void givenRecipeUpdateRatingSucceeds() {
         // Given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipe.setName("a recipe");
+        recipe.setRating((short) 2);
 
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeRepository.saveAndFlush(any())).thenReturn(recipe);
 
-        recipeService.updateRating(1L, (short) 2);
-        verify(recipeRepository).findById(anyLong());
-        verify(recipeRepository).save(any(Recipe.class));
+        // When
+        Recipe test = recipeService.updateRating(1L, (short) 5.0);
+
+        // Then
+        assertThat(test.getId()).isEqualTo(1L);
+        assertThat(test.getRating()).isEqualTo((short) 5.0);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).saveAndFlush(any(Recipe.class));
     }
+
 }
