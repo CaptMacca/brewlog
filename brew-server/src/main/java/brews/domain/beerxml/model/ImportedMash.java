@@ -1,6 +1,6 @@
 package brews.domain.beerxml.model;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 import java.util.List;
 
 /**

@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
+import jakarta.annotation.security.RolesAllowed;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public final class RecipeController {
         return ResponseEntity.ok(recipesResponse);
     }
 
-    @GetMapping(value = "{id}/notes", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "{id}/notes")
     @ResponseBody
     @Operation(description = "Returns the recipe notes for a recipe", security = @SecurityRequirement(name="bearerAuth"))
     public ResponseEntity<String> getRecipeNotes(@PathVariable long id) {

@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Getter
