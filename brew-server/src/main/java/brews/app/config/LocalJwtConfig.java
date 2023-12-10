@@ -12,15 +12,9 @@ import org.springframework.stereotype.Component;
 @Conditional(LocalContextCondition.class)
 public class LocalJwtConfig implements JwtConfig {
 
-    @Value("${brews.app.jwtSecret}")
-    private String jwtSecret;
 
     @Value("${brews.app.jwtExpiration}")
     private Integer jwtExpiration;
-
-    public String getJwtSecretKey() {
-        return this.jwtSecret;
-    }
 
     public Integer getJwtExpiration() {
         return this.jwtExpiration;

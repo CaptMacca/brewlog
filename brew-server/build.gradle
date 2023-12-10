@@ -1,11 +1,10 @@
 plugins {
   id 'java'
-  id 'org.springframework.boot' version '2.7.+'
-  id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-  id 'com.github.johnrengelman.processes' version '0.5.0'
-  id 'org.springdoc.openapi-gradle-plugin' version '1.3.+'
+  id 'org.springframework.boot' version '3.0.+'
+  id 'io.spring.dependency-management' version '1.1.4'
+//  id 'com.github.johnrengelman.processes' version '0.5.0'
+  id 'org.springdoc.openapi-gradle-plugin' version '1.8.+'
 }
-
 
 group = 'steve.com'
 version = '0.0.1-SNAPSHOT'
@@ -26,11 +25,12 @@ tasks.withType(Test) {
 }
 
 ext {
-  mapstructVersion = "1.5.3.Final"
-  lombokVersion = "1.18.22"
+  mapstructVersion = "1.5.5.Final"
+  lombokVersion = "1.18.30"
   lombokMapstructBindingVersion = "0.2.0"
-  openapiVersion = "1.6.9"
-  jsonwebtokenVersion = "0.9.1"
+  openapiVersion = "1.7.+"
+  openapiWebmvcVersion = "2.3.+"
+  jsonwebtokenVersion = "0.12.+"
   assertjVersion = "3.23.1"
   testContainersVersion = "1.19.3"
 }
@@ -55,10 +55,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation "io.jsonwebtoken:jjwt:${jsonwebtokenVersion}"
+    implementation "io.jsonwebtoken:jjwt-api:${jsonwebtokenVersion}"
+    implementation "io.jsonwebtoken:jjwt-impl:${jsonwebtokenVersion}"
+    implementation "io.jsonwebtoken:jjwt-jackson:${jsonwebtokenVersion}"
     implementation 'org.flywaydb:flyway-core'
-    implementation "org.springdoc:springdoc-openapi-ui:${openapiVersion}"
-    implementation "org.springdoc:springdoc-openapi-security:${openapiVersion}"
+    implementation 'org.postgresql:postgresql'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiWebmvcVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     implementation platform("org.testcontainers:testcontainers-bom:${testContainersVersion}")
@@ -66,7 +68,6 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     runtimeOnly 'org.postgresql:postgresql'
-//    testRuntimeOnly 'com.h2database:h2'
 
     testImplementation "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -98,7 +98,7 @@ public class SecurityTestConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.cors().and().csrf().disable()
             .authorizeRequests()
-            .antMatchers(AUTH_WHITELIST)
+            .requestMatchers(AUTH_WHITELIST)
             .permitAll()
             .anyRequest()
             .authenticated()

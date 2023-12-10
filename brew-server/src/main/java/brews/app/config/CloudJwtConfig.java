@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 @Conditional(CloudContextCondition.class)
 public class CloudJwtConfig implements JwtConfig {
 
-    @Override
-    public String getJwtSecretKey() {
-        return null;
-    }
 
     public Integer getJwtExpiration() {
         return null;

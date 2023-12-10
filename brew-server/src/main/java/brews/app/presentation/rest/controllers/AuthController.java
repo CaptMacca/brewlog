@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +32,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
-    @PostMapping(value = "/signin", consumes = {"*/*"})
+    @PostMapping(value = "/signin")
     @ResponseBody
     @Operation(description = "Validates the users login credentials and returns the JWT token if ok")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {

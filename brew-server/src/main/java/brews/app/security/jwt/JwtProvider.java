@@ -2,13 +2,16 @@ package brews.app.security.jwt;
 
 import brews.app.config.JwtConfig;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Date;
 
 @Component
@@ -21,21 +24,23 @@ public class JwtProvider {
 
     private int defaultJwtExpiration = 86500;
 
+    Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
     public String generateJwtToken(Authentication authentication) {
 
-        User userPrincipal = (User) authentication.getPrincipal();
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject((authentication.getName()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + getJwtTokenExpiration().intValue() *1000))
-                .signWith(SignatureAlgorithm.HS512, getJwtSecretKey())
+                .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(getJwtSecretKey()).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(key).build().parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature -> Message: {} ", e.getMessage());
@@ -54,14 +59,12 @@ public class JwtProvider {
 
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser()
-                .setSigningKey(getJwtSecretKey())
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }
 
-    private String getJwtSecretKey() {
-        return this.jwtConfig.getJwtSecretKey();
-    }
     private Integer getJwtTokenExpiration() {
         Integer expiration = this.jwtConfig.getJwtExpiration();
         return (expiration == null ? defaultJwtExpiration : expiration);
