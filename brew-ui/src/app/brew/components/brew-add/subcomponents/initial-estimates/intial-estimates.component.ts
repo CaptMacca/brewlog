@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-intial-estimates',
@@ -7,7 +7,7 @@ import { AbstractControl, FormGroup } from '@angular/forms';
   styleUrls: ['./intial-estimates.component.css']
 })
 export class IntialEstimatesComponent implements OnInit {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
   dateFormat = 'dd/MM/yyyy';
 
   constructor() { }

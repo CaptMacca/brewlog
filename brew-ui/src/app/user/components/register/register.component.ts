@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserRegistration } from '@app/user/model/user-registration';
 import { Store } from '@ngxs/store';
@@ -14,7 +14,7 @@ import { Signup } from '@app/user/state/user.actions';
 })
 export class RegisterComponent implements OnInit {
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   submitted = false;
   readonly DEFAULT_ROLES = ['user'];
 

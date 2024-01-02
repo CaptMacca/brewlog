@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-brew-notes',
@@ -9,7 +9,7 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 export class BrewNotesComponent implements OnInit {
 
   @Input()
-  parentForm: FormGroup;
+  parentForm: UntypedFormGroup;
 
   constructor() { }
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { RxFormArray, RxFormControl, RxFormGroup } from '@rxweb/reactive-form-validators';
 
 @Component({
@@ -10,7 +10,7 @@ import { RxFormArray, RxFormControl, RxFormGroup } from '@rxweb/reactive-form-va
 export class BrewMeasurementsComponent implements OnInit {
 
   @Input()
-  parentForm: FormGroup;
+  parentForm: UntypedFormGroup;
   @Output()
   deleteMeasurementEvent = new EventEmitter<number>();
   @Output()
@@ -30,7 +30,7 @@ export class BrewMeasurementsComponent implements OnInit {
     this.deleteMeasurementEvent.emit(id);
   }
 
-  get measurements(): FormArray {
+  get measurements(): UntypedFormArray {
     return this.parentForm.controls['measurements'] as RxFormArray;
   }
 

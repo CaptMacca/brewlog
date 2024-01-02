@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthLoginInfo } from '@app/auth/model/auth-login-info';
 import { Login } from '@app/auth/state/auth.actions';
@@ -13,7 +13,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   submitted = false;
 
   constructor(

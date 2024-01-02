@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { UpdatePassword } from '@app/user/state/user.actions';
 import { AuthState } from '@app/auth/state/auth.state';
 import { Observable } from 'rxjs';
@@ -18,7 +18,7 @@ export class ChangePasswordComponent implements OnInit {
   @Select(AuthState.getUsername) username$: Observable<string>;
   saving$: Observable<boolean>;
   username: string;
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(
     private readonly store: Store,
