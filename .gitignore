@@ -165,8 +165,6 @@ e2e/*.map
 .DS_Store
 Thumbs.db
 
-# Angular 13+ cache
-.angular/cache
 
 
 # End of https://www.gitignore.io/api/java,maven,gradle,intellij+all

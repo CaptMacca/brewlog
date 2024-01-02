@@ -85,11 +85,8 @@ describe('BrewAddComponent', () => {
     ],
   }
 
-  beforeEach(waitForAsync(async() => {
+  beforeEach(async() => {
     component = await render(BrewAddComponent, renderOptions)
-  }))
-
-  beforeEach(() => {
     fixture = component.fixture
     instance = fixture.componentInstance as BrewAddComponent
     debugElement = fixture.debugElement
