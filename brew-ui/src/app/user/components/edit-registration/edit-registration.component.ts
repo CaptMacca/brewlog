@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { Select, Store } from '@ngxs/store';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { UserState } from '@app/user/state/user.state';
 import { UserDetails } from '@app/user/model';
 import { Observable } from 'rxjs';
@@ -21,7 +21,7 @@ export class EditRegistrationComponent implements OnInit {
   @Select(UserState.savingUser) saving$: Observable<boolean>;
   @Select(AuthState.getUsername) username$: Observable<string>;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(
     private store: Store,

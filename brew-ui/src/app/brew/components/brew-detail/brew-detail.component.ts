@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RemoveBrew, RemoveMeasurement, SetSavingBrew, UpdateBrew } from '@app/brew/state/brew.actions';
 import { BrewState } from '@app/brew/state/brew.state';
@@ -22,7 +22,7 @@ export class BrewDetailComponent implements OnInit {
   @Select(BrewState.getBrew) brew$: Observable<Brew>;
   @Select(BrewState.getSavingBrew) saving: Observable<boolean>;
 
-  brewForm: FormGroup;
+  brewForm: UntypedFormGroup;
   brew: Brew;
 
   constructor(
@@ -63,7 +63,7 @@ export class BrewDetailComponent implements OnInit {
 
   private populateForm(brew: Brew) {
 
-    const measurementFormArray = <FormArray>this.measurementsFormArray;
+    const measurementFormArray = <UntypedFormArray>this.measurementsFormArray;
     measurementFormArray.clear();
 
     if (brew) {
@@ -208,11 +208,11 @@ export class BrewDetailComponent implements OnInit {
     measurementFormArray.push(measurementControl);
   }
 
-  get measurementsFormArray(): FormArray {
-    return <FormArray>this.brewForm.controls.measurements;
+  get measurementsFormArray(): UntypedFormArray {
+    return <UntypedFormArray>this.brewForm.controls.measurements;
   }
 
-  private createMeasurementControl(): FormGroup {
+  private createMeasurementControl(): UntypedFormGroup {
     return this.fb.formGroup(Measurement);
   }
 

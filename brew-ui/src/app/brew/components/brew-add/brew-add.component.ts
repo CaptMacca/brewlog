@@ -11,7 +11,7 @@ import { Observable } from 'rxjs'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { RxFormBuilder } from '@rxweb/reactive-form-validators'
-import { AbstractControl, FormGroup } from '@angular/forms'
+import { AbstractControl, UntypedFormGroup } from '@angular/forms'
 import { Brew, CandidateBrew, CreateBrew } from '@app/brew/model'
 import { withLatestFrom } from 'rxjs/operators'
 import { UpdateFormDirty } from '@ngxs/form-plugin'
@@ -26,7 +26,7 @@ export class BrewAddComponent implements OnInit {
   @Select(AuthState.getUsername) username$: Observable<string>
   selectedRecipe: Recipe
   current = 0
-  brewForm: FormGroup
+  brewForm: UntypedFormGroup
   brew: Brew
 
   constructor(

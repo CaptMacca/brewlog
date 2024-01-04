@@ -3,7 +3,7 @@
     <nz-form-item [formGroup]="parentForm">
       <nz-form-label nzFor="brewNotes">Brew Notes</nz-form-label>
       <nz-form-control>
-        <textarea rows="10" id="brewNotes" nz-input formControlName="notes"></textarea>
+        <textarea rows="10" id="brewNotes" nz-input formControlName="notes" data-test-id="notes"></textarea>
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -14,7 +14,7 @@
     <nz-form-item [formGroup]="parentForm">
       <nz-form-label nzFor="tastingNotes">Tasting Notes</nz-form-label>
       <nz-form-control>
-        <textarea rows="10" id="tastingNotes" nz-input formControlName="tastingNotes"></textarea>
+        <textarea rows="10" id="tastingNotes" nz-input formControlName="tastingNotes" data-test-id="tastingNotes"></textarea>
       </nz-form-control>
     </nz-form-item>
   </div>

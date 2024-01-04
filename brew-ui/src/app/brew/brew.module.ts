@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrewAddComponent } from '@app/brew/components/brew-add/brew-add.component';
 import { BrewDetailComponent } from '@app/brew/components/brew-detail/brew-detail.component';
 import { BrewListComponent } from '@app/brew/components/brew-list/brew-list.component';
@@ -12,11 +12,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { RecipeModule } from '@app/recipe/recipe.module';
-import { IntialEstimatesComponent } from './components/brew-add/subcomponents/initial-estimates/intial-estimates.component';
-import { SummaryComponent } from './components/brew-add/subcomponents/summary/summary.component';
-import { BrewSessionComponent } from './components/brew-detail/subcomponents/brew-session/brew-session.component';
-import { BrewNotesComponent } from './components/brew-detail/subcomponents/brew-notes/brew-notes.component';
-import { BrewMeasurementsComponent } from './components/brew-detail/subcomponents/brew-measurements/brew-measurements.component';
+import { IntialEstimatesComponent } from '@app/brew/components/brew-add/subcomponents/initial-estimates/intial-estimates.component';
+import { SummaryComponent } from '@app/brew/components/brew-add/subcomponents/summary/summary.component';
+import { BrewSessionComponent } from '@app/brew/components/brew-detail/subcomponents/brew-session/brew-session.component';
+import { BrewNotesComponent } from '@app/brew/components/brew-detail/subcomponents/brew-notes/brew-notes.component';
+import { BrewMeasurementsComponent } from '@app/brew/components/brew-detail/subcomponents/brew-measurements/brew-measurements.component';
 import { MeasurementService } from '@app/brew/services/measurement.service';
 import { BrewResolverService } from '@app/brew/services/brew-resolver.service';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
@@ -26,6 +26,7 @@ import { UiModule } from '@app/common/ui/ui.module';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     FontAwesomeModule,
     NgxsModule.forFeature([BrewState]),
     NgxsFormPluginModule,

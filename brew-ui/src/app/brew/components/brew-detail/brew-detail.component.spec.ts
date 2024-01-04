@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { BrewDetailComponent } from './brew-detail.component';
+import { BrewDetailComponent } from '@app/brew/components/brew-detail/brew-detail.component';
 import { render, RenderResult } from '@testing-library/angular';
 import { Location } from '@angular/common';
 import { DebugElement } from '@angular/core';
@@ -85,11 +85,8 @@ describe('BrewDetailComponent', () => {
     ],
   }
 
-  beforeEach(waitForAsync(async() => {
+  beforeEach(async() => {
     component = await render(BrewDetailComponent, renderOptions)
-  }))
-
-  beforeEach(() => {
     fixture = component.fixture
     instance = fixture.componentInstance as BrewDetailComponent
     debugElement = fixture.debugElement

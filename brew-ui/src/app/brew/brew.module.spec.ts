@@ -1,4 +1,4 @@
-import { BrewModule } from './brew.module';
+import { BrewModule } from '@app/brew/brew.module';
 
 describe('BrewModule', () => {
   let brewsModule: BrewModule;
