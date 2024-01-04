@@ -21,7 +21,7 @@ export class UpdatePassword {
 
 export class SetSavingUser {
   static readonly type = '[User] Saving User';
-  constructor(public payload: Boolean) {}
+  constructor(public payload: boolean) {}
 }
 
 export class Signup {
