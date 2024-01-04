@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BrewAddComponent } from './brew-add.component';
+import { BrewAddComponent } from '@app/brew/components/brew-add/brew-add.component';
 import { render, RenderResult, screen, within } from '@testing-library/angular';
 import { Location } from '@angular/common';
 import { DebugElement } from '@angular/core';
@@ -23,9 +23,6 @@ import { SummaryComponent } from '@app/brew/components/brew-add/subcomponents/su
 import { SelectRecipeComponent } from '@app/recipe/components/select-recipe/select-recipe.component';
 import userEvent from '@testing-library/user-event';
 import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
-import { By } from '@angular/platform-browser';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 
 describe('BrewAddComponent', () => {
   let component: RenderResult<BrewAddComponent>

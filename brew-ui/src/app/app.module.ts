@@ -107,7 +107,7 @@ registerLocaleData(en);
     { provide: ErrorHandler, useClass: ErrorHandlerService }
   ],
   bootstrap: [AppComponent],
-  exports: [RecipeModule, BrewModule]
+  exports: [RecipeModule, BrewModule, UiModule]
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
