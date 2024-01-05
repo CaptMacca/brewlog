@@ -65,7 +65,9 @@ describe('IntialEstimatesComponent', () => {
       estimatedBottleVolume: 4
     })
     await component.rerender({
-      parentForm: parentForm
+      componentProperties: {
+        parentForm: parentForm
+      }
     })
     expect(debugElement.query(By.css('#brewDate')).query(By.css('input')).nativeElement.value).toEqual(currentDate.toLocaleDateString('en-AU'))
     expect(debugElement.query(By.css('#estimatedPreBoilGravity')).query(By.css('input')).nativeElement.value).toEqual('1.04')

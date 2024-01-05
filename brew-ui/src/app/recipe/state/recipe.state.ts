@@ -8,7 +8,7 @@ import { catchError, map, retry } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
 export class RecipeStateModel {
-  top5Recipes: [];
+  top5Recipes: Recipe[];
   recipes: Recipe[];
   recipe: Recipe;
 }
@@ -93,7 +93,7 @@ export class RecipeState {
   @Action(UpdateRecipeRating)
   UpdateRecipeRating(ctx: StateContext<RecipeStateModel>, { payload }: UpdateRecipeRating) {
     return this.recipeService.updateRecipeRating(payload).subscribe(
-      recipe => ctx.setState(patch({
+      (recipe: Recipe) => ctx.setState(patch({
         recipe: recipe,
         recipes: updateItem<Recipe>(r => r.id === payload.recipe.id, payload.recipe)
       }))

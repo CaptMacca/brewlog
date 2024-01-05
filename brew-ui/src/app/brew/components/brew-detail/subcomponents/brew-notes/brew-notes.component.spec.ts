@@ -57,7 +57,9 @@ describe('BrewNotesComponent', () => {
       tastingNotes: 'test tasting notes'
     })
     await component.rerender({
-      parentForm: parentForm
+      componentProperties: {
+        parentForm: parentForm
+      }
     })
     expect(debugElement.query(By.css('#brewNotes')).nativeElement.value).toEqual('test notes')
     expect(debugElement.query(By.css('#tastingNotes')).nativeElement.value).toEqual('test tasting notes')
