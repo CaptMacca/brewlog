@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate } from '@angular/router';
+
 import { BrewDetailComponent } from '@app/brew/components/brew-detail/brew-detail.component';
 import { Observable, of } from 'rxjs';
 
 @Injectable()
-export class BrewEditGuard implements CanDeactivate<BrewDetailComponent> {
+export class BrewEditGuard  {
 
   constructor() {}
 

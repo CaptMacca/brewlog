@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivateChild, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/services/auth.service';
 import { AuthState } from '@app/auth/state/auth.state';
 import { Store } from '@ngxs/store';
@@ -7,7 +7,7 @@ import { Logout } from '../state/auth.actions';
 
 
 @Injectable()
-export class AuthGuardService implements CanActivateChild {
+export class AuthGuardService  {
 
   constructor(private readonly router: Router, private readonly store: Store, private readonly authService: AuthService) {}
 

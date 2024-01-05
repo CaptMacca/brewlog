@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Brew } from '@app/brew/model';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { LoadBrew } from '@app/brew/state/brew.actions';
 
 @Injectable()
-export class BrewResolverService implements Resolve<Brew> {
+export class BrewResolverService  {
 
   constructor(private router: Router, private readonly store: Store) { }
 
