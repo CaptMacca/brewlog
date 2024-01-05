@@ -1,4 +1,4 @@
- import { registerLocaleData } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -54,7 +54,7 @@ import { EditRegistrationComponent } from './user/components/edit-registration/e
 import { ChangePasswordComponent } from './user/components/change-password/change-password.component';
 import { UserService } from '@app/user/services/user.service';
 import { UserDetailsResolverService } from '@app/user/services/user-details-resolver.service';
-import { NgUpperFirstPipeModule } from 'angular-pipes';
+import { NgMathPipesModule, NgStringPipesModule } from 'ngx-pipes';
 
 registerLocaleData(en);
 
@@ -95,7 +95,8 @@ registerLocaleData(en);
     IconsProviderModule,
     NgxGaugeModule,
     RxReactiveFormsModule,
-    NgUpperFirstPipeModule,
+    NgStringPipesModule,
+    NgMathPipesModule
   ],
   providers: [
     AuthGuardService,

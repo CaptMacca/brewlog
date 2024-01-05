@@ -13,17 +13,18 @@ import { RecipeService } from '@app/recipe/services/recipe.service';
 import { RecipeState } from '@app/recipe/state/recipe.state';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxsModule } from '@ngxs/store';
-import { NgRoundPipeModule } from 'angular-pipes';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { IbuFormatPipe } from '@app/recipe/pipes/ibu-format.pipe';
 import { AbvFormatPipe } from '@app/recipe/pipes/abv-format.pipe';
 import { SelectRecipeComponent } from '@app/recipe/components/select-recipe/select-recipe.component';
 import { UiModule } from '@app/common/ui/ui.module';
+import { NgMathPipesModule, NgStringPipesModule } from 'ngx-pipes';
 
 @NgModule({
   imports: [
     BrowserModule,
-    NgRoundPipeModule,
+    NgStringPipesModule,
+    NgMathPipesModule,
     FontAwesomeModule,
     NgxsModule.forFeature([RecipeState]),
     NgxGaugeModule,

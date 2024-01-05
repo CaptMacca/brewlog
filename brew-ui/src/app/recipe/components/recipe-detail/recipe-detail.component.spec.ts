@@ -2,7 +2,7 @@ import { RecipeDetailComponent } from './recipe-detail.component';
 import { NgxsModule, Store } from '@ngxs/store';
 import { RecipeService } from '@app/recipe/services/recipe.service';
 import { mockAuthService, MockAuthState, mockRecipe, MockRecipeService, MockRecipeState } from '@app/recipe/spec/mock.recipe.components';
-import { fireEvent, logRoles, render, RenderResult, screen, within } from '@testing-library/angular';
+import { fireEvent, render, RenderResult, screen, within } from '@testing-library/angular';
 import { RecipeListComponent } from '@app/recipe/components/recipe-list/recipe-list.component';
 import { UiModule } from '@app/common/ui/ui.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -18,7 +18,6 @@ import { AbvFormatPipe } from '@app/recipe/pipes/abv-format.pipe';
 import { RecipeColourComponent } from '@app/recipe/components/recipe-colour/recipe-colour.component';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { FormsModule } from '@angular/forms';
-import { NgRoundPipeModule } from 'angular-pipes';
 import { By } from '@angular/platform-browser';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { of } from 'rxjs';
@@ -32,6 +31,7 @@ import { BrewResolverService } from '@app/brew/services/brew-resolver.service';
 import { BrewEditGuard } from '@app/brew/services/brew-guard.service';
 import { DebugElement } from '@angular/core';
 import { NzRateComponent } from 'ng-zorro-antd/rate';
+import { NgMathPipesModule } from 'ngx-pipes';
 
 describe('RecipeDetailComponent', () => {
   let component: RenderResult<RecipeDetailComponent>;
@@ -49,7 +49,7 @@ describe('RecipeDetailComponent', () => {
       HttpClientTestingModule,
       FormsModule,
       NgxGaugeModule,
-      NgRoundPipeModule,
+      NgMathPipesModule,
     ],
     routes: [
       {
