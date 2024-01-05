@@ -22,7 +22,6 @@ describe('ImportRecipeComponent', () => {
   beforeEach(async () => {
     recipeComponentSpy = jasmine.createSpy();
     component = await render(ImportRecipeComponent, {
-      detectChanges: true,
       imports: [
         NgxsModule.forRoot([MockRecipeState, MockAuthState]),
         UiModule,

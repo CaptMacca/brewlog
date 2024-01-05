@@ -117,7 +117,7 @@ describe('BrewAddComponent', () => {
   })
 
   it('should display the list of recipes on first page', () => {
-    const brewsTable = component.getByRole(/table/)
+    const brewsTable = component.getByRole('table')
     const [columnNames, ...rows] = within(brewsTable).getAllByRole('row')
     expect(columnNames.innerText).toContain('Recipe Name')
     expect(columnNames.innerText).toContain('Style')

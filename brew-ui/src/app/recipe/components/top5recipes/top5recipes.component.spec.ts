@@ -25,7 +25,6 @@ describe('Top5RecipesComponent', () => {
   beforeEach(async() => {
     recipeComponentSpy = jasmine.createSpy();
     component = await render(Top5recipesComponent, {
-      detectChanges: true,
       imports: [
         NgxsModule.forRoot([MockRecipeState, MockAuthState]),
         UiModule,

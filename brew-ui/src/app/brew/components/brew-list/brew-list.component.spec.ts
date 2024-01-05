@@ -86,7 +86,7 @@ describe('BrewListComponent', () => {
     expect(screen.getByText(/My Recipe 1/i))
     expect(screen.getByText(/My Recipe 2/i))
     expect(screen.getByText(/My Recipe 5/i))
-    const brewsTable = component.getByRole(/table/)
+    const brewsTable = component.getByRole('table')
     const [columnNames, ...rows] = within(brewsTable).getAllByRole('row')
     expect(rows.length).toEqual(mockBrews.length)
     expect(columnNames.innerText).toContain('Recipe Name')

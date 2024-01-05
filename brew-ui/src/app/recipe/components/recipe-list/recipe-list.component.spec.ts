@@ -87,7 +87,7 @@ describe('RecipeListComponent', () => {
   it('should render the list of recipes', async() => {
     expect(screen.getByText(/My First Recipe/i)).toBeTruthy()
     expect(screen.getByText(/My Fifth Recipe/i)).toBeTruthy()
-    const recipeTable = component.getByRole(/table/)
+    const recipeTable = component.getByRole("table")
     const [columnNames, ...rows] = within(recipeTable).getAllByRole('row')
     expect(rows.length).toEqual(mockRecipes.length)
     expect(columnNames.innerText).toContain('Recipe Name')

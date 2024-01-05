@@ -18,7 +18,6 @@ describe('SelectRecipeComponent', () => {
   beforeEach(async() => {
 
     component = await render(SelectRecipeComponent, {
-      detectChanges: true,
       imports: [
         UiModule,
       ],
