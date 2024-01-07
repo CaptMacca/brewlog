@@ -20,7 +20,7 @@ export class BrewListComponent implements OnInit {
   @Select(BrewState.getBrews) brews$: Observable<Brew[]>
   @Select(AuthState.getUsername) username$: Observable<string>
 
-  loading: Boolean
+  loading: boolean
   // username: string;
   selections: Brew[] = []
   isAllDisplayDataChecked = false
@@ -63,9 +63,9 @@ export class BrewListComponent implements OnInit {
 
   private deleteBrew(brew: Brew): void {
     if (brew) {
-      this.store.dispatch(new RemoveBrew(brew)).subscribe(
-      state => this.message.success('Brew session has been successfully deleted.')
-      )
+      this.store.dispatch(new RemoveBrew(brew)).subscribe({
+        next: () => this.message.success('Brew session has been successfully deleted.')
+      })
     }
   }
 

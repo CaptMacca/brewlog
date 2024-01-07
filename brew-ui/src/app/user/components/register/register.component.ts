@@ -66,15 +66,15 @@ export class RegisterComponent implements OnInit {
         confirm: this.confirm.value,
         roles: this.DEFAULT_ROLES
       };
-      this.store.dispatch(new Signup(userRegistration)).subscribe(
-        () => {
+      this.store.dispatch(new Signup(userRegistration)).subscribe({
+        next: ()=> {
           this.message.success('Your account has been registered and you can now login !');
           this.backToWelcome();
         },
-        () => {
+        error: () => {
           this.message.error('Your registration attempt has failed !');
         }
-      );
+      });
     }
   }
 

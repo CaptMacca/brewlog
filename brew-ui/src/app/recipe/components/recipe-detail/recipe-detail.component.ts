@@ -30,11 +30,11 @@ export class RecipeDetailComponent implements OnInit {
   ngOnInit() {
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd)
-    ).subscribe(
-      (event) => {
-        const recipe = this.recipe$.subscribe((r: Recipe) => this.rating = r.rating);
+    ).subscribe({
+      next: () => {
+        this.recipe$.subscribe((r: Recipe) => this.rating = r.rating);
       }
-    );
+    });
   }
 
   gotoRecipes(): void {
@@ -46,13 +46,13 @@ export class RecipeDetailComponent implements OnInit {
     this.store.dispatch([
       new RemoveRecipe(recipe),
       new LoadRecipes(username)
-    ]).subscribe(
-      state => {
+    ]).subscribe({
+      next: ()=>  {
         this.message.success('Recipe has been deleted.');
         this.gotoRecipes();
       },
-      err => this.message.error('Problem deleting the recipe')
-    );
+      error: () => this.message.error('Problem deleting the recipe')
+  });
   }
 
   confirm(recipe: Recipe): void {

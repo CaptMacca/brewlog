@@ -47,10 +47,10 @@ export class ChangePasswordComponent implements OnInit {
         confirmPassword: this.fc['confirmPassword'].value
       };
       console.log(updatePassword)
-      this.store.dispatch(new UpdatePassword(updatePassword)).subscribe(
-        result => this.message.success('Your password has been successfully updated'),
-        err => this.message.error('Your password could not be updated')
-      );
+      this.store.dispatch(new UpdatePassword(updatePassword)).subscribe({
+        next: () => this.message.success('Your password has been successfully updated'),
+        error: () => this.message.error('Your password could not be updated')
+      });
     }
   }
 
