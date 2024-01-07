@@ -115,19 +115,19 @@ export class BrewDetailComponent implements OnInit {
       ]).pipe(
         switchMap(results => of(results[1])),
         finalize(() => this.store.dispatch(new SetSavingBrew(false)))
-      ).subscribe(
-          () => {
-          this.loadBrewForm();
-          this.message.success('The brew session details have been updated');
-        },
-        error => {
-          if (error instanceof ConcurrentUpdateError) {
-            this.message.error('Brew details have been updated by another user, reload the brew session and retry.');
-          } else {
-            throw error;
+      ).subscribe({
+          next: () => {
+            this.loadBrewForm();
+            this.message.success('The brew session details have been updated');
+          },
+          error: (error) => {
+            if (error instanceof ConcurrentUpdateError) {
+              this.message.error('Brew details have been updated by another user, reload the brew session and retry.');
+            } else {
+              throw error;
+            }
           }
-        }
-      );
+      });
     }
   }
 

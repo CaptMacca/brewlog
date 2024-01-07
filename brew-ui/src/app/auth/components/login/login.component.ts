@@ -49,13 +49,13 @@ export class LoginComponent implements OnInit {
         password: this.password.value,
         remember: this.remember.value
       };
-      this.store.dispatch(new Login(loginInfo)).subscribe(
-        () => {
+      this.store.dispatch(new Login(loginInfo)).subscribe({
+        next: () => {
           this.message.success('Logged in successfully');
           this.router.navigate(['/main/dashboard']);
         },
-        err => this.message.error('Login was unsuccessful'),
-        );
+        error: () => this.message.error('Login was unsuccessful'),
+    });
     }
   }
 

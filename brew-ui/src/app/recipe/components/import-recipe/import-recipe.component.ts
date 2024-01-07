@@ -53,16 +53,15 @@ export class ImportRecipeComponent implements OnInit {
           this.uploading = false;
           this.fileList = [];
         })
-      ).subscribe(
-        () => {},
-        () => {
+      ).subscribe({
+        error: () => {
           this.message.error('upload failed.');
         },
-        () => {
+        complete: () => {
           this.message.success(`All Recipe file(s) have been uploaded`);
           this.store.dispatch(new LoadRecipes(username));
         }
-      );
+    });
   }
 
   gotoRecipes() {

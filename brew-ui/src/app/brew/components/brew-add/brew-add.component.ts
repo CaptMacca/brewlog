@@ -121,16 +121,16 @@ export class BrewAddComponent implements OnInit {
             dirty: false,
             path: 'brews.initialBrewForm'
           })]
-        ).subscribe(
-          state => {
-            const brew = this.store.selectSnapshot(BrewState.getBrew)
-            this.message.success('A new brew session has been saved')
-            this.router.navigate(['/main/brews/' + brew.id])
-          },
-          error => {
-            this.message.error('Creation of brew session failed')
-          }
-        )
+        ).subscribe({
+            next: () => {
+              const brew = this.store.selectSnapshot(BrewState.getBrew)
+              this.message.success('A new brew session has been saved')
+              this.router.navigate(['/main/brews/' + brew.id])
+            },
+            error: () =>  {
+              this.message.error('Creation of brew session failed')
+            }
+        })
       }
     } else {
       this.backToBrewsList()
