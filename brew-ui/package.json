@@ -32,7 +32,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jwt-decode": "^3.1.2",
     "karma-cli": "^2.0.0",
-    "ng-zorro-antd": "^17.3.0",
+    "ng-zorro-antd": "^17.4.1",
     "ngx-gauge": "^9.0.0",
     "ngx-pipes": "^3.2.2",
     "rxjs": "7.4",
