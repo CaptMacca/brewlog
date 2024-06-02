@@ -32,6 +32,7 @@ import { BrewEditGuard } from '@app/brew/services/brew-guard.service';
 import { DebugElement } from '@angular/core';
 import { NzRateComponent } from 'ng-zorro-antd/rate';
 import { NgMathPipesModule } from 'ngx-pipes';
+import { NzRowDirective } from 'ng-zorro-antd/grid';
 
 describe('RecipeDetailComponent', () => {
   let component: RenderResult<RecipeDetailComponent>;
@@ -140,18 +141,16 @@ describe('RecipeDetailComponent', () => {
     });
 
     it('should render the fermentables tab', async() => {
-      await fireEvent.click(tabs[0]);
-      table = debugElement.query(By.directive(NzTableComponent));
-      [columns, ...rows] = within(table.nativeElement).getAllByRole('row');
+      fireEvent.click(tabs[0]);
+      [columns, ...rows] = screen.getAllByRole('row');
       expect(rows.length).toEqual(mockRecipe.fermentables.length);
       expect(columns.innerText).toContain('Name');
       expect(columns.innerText).toContain('Amount');
     });
 
     it('should render the hops tab', async() => {
-      await fireEvent.click(tabs[1]);
-      table = debugElement.query(By.directive(NzTableComponent));
-      [columns, ...rows] = within(table.nativeElement).getAllByRole('row');
+      fireEvent.click(tabs[1]);
+      [columns, ...rows] = screen.getAllByRole('row');
       expect(rows.length).toEqual(mockRecipe.hops.length);
       expect(columns.innerText).toContain('Name');
       expect(columns.innerText).toContain('Amount');
@@ -160,18 +159,16 @@ describe('RecipeDetailComponent', () => {
     });
 
     it('should render the yeast tab', async() => {
-      await fireEvent.click(tabs[2]);
-      table = debugElement.query(By.directive(NzTableComponent));
-      [columns, ...rows] = within(table.nativeElement).getAllByRole('row');
+      fireEvent.click(tabs[2]);
+      [columns, ...rows] = screen.getAllByRole('row');
       expect(rows.length).toEqual(mockRecipe.yeasts.length);
       expect(columns.innerText).toContain('Name');
       expect(columns.innerText).toContain('Amount');
     });
 
     it('should render the mash tab', async() => {
-      await fireEvent.click(tabs[3]);
-      table = debugElement.query(By.directive(NzTableComponent));
-      [columns, ...rows] = within(table.nativeElement).getAllByRole('row');
+      fireEvent.click(tabs[3]);
+      [columns, ...rows] = screen.getAllByRole('row');
       expect(rows.length).toEqual(mockRecipe.mashes.length);
       expect(columns.innerText).toContain('Name');
       expect(columns.innerText).toContain('Step Temp');
