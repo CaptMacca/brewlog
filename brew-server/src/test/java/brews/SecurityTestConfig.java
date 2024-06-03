@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -96,17 +97,16 @@ public class SecurityTestConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.cors().and().csrf().disable()
-            .authorizeRequests()
-            .requestMatchers(AUTH_WHITELIST)
-            .permitAll()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-            .authenticationProvider(authenticationProvider())
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and().build();
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.cors(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(a -> {
+              a.requestMatchers(AUTH_WHITELIST).permitAll();
+              a.anyRequest().authenticated();
+          });
+        http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.authenticationProvider(authenticationProvider());
+        return http.build();
     }
 
 }
