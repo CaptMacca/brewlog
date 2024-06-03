@@ -1,18 +1,19 @@
 ARG BUILD_VERSION=0.0.1
-FROM gradle:6.9-jdk11 as BUILD
+FROM gradle:7.6-jdk17 as BUILD
+WORKDIR /usr/app/
 ADD src src
 ADD build.gradle .
 ADD gradle.properties .
-
 RUN gradle build -x test
 
-FROM amazoncorretto:11-alpine-jdk as BUILDER
+FROM amazoncorretto:17-alpine-jdk as BUILDER
 ARG BUILD_VERSION
+ENV APP_HOME=/usr/app
 WORKDIR application
-COPY --from=BUILD /home/gradle/build/libs/gradle-${BUILD_VERSION}.jar app.jar
-RUN java -D jarmode=layertools -jar app.jar extract
+COPY --from=BUILD ${APP_HOME}/build/libs/app-${BUILD_VERSION}-SNAPSHOT.jar app.jar
+RUN java -Djarmode=layertools -jar app.jar extract
 
-FROM amazoncorretto:11-alpine-jdk
+FROM amazoncorretto:17-alpine-jdk
 WORKDIR application
 EXPOSE 8080
 COPY --from=BUILDER application/dependencies/ ./
