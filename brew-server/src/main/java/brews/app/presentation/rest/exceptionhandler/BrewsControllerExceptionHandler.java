@@ -3,6 +3,7 @@ package brews.app.presentation.rest.exceptionhandler;
 import brews.services.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -117,7 +118,7 @@ public class BrewsControllerExceptionHandler {
     @ResponseBody
     public final ResponseEntity<ErrorDetails> handleOptimisticEntityLockExceptions(Exception ex, WebRequest request) {
         log.error("Exception processing request: ",ex);
-        List<String> messages = Arrays.asList("Data has been updated by another user");
+        List<String> messages = List.of("Data has been updated by another user");
         return buildResponse(ex, "Optimistic Lock Failure", HttpStatus.CONFLICT);
     }
 
@@ -129,7 +130,7 @@ public class BrewsControllerExceptionHandler {
         List<String> errors = ex.getBindingResult()
           .getFieldErrors()
           .stream()
-          .map(x -> x.getDefaultMessage())
+          .map(DefaultMessageSourceResolvable::getDefaultMessage)
           .collect(Collectors.toList());
 
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), "Validation Failed", errors);
