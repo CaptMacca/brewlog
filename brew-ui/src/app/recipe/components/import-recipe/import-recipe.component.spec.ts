@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImportRecipeComponent } from './import-recipe.component';
-import { render, RenderResult } from '@testing-library/angular';
+import { fireEvent, render, RenderResult, screen } from '@testing-library/angular';
 import { UiModule } from '@app/common/ui/ui.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgxsModule, Store } from '@ngxs/store';
@@ -10,6 +10,7 @@ import { DebugElement } from '@angular/core';
 import { AuthService } from '@app/auth/services/auth.service';
 import { RecipeService } from '@app/recipe/services/recipe.service';
 import { Location } from '@angular/common';
+import userEvent from '@testing-library/user-event';
 
 describe('ImportRecipeComponent', () => {
   let component: RenderResult<ImportRecipeComponent>;
@@ -67,24 +68,29 @@ describe('ImportRecipeComponent', () => {
 
 
   // TODO: Get upload tests to work
-  // it('should upload a single recipe', async () => {
-  //   const componentSpy = spyOn(instance, 'handleUpload').and.callThrough();
-  //   const uploadSpy = spyOn(instance, 'beforeUpload').and.callThrough();
-  //   const uploader = debugElement.query(By.directive(NzUploadBtnComponent)).nativeElement;
-  //   //const uploader = component.getByRole('button', { name: 'Select File' });
-  //   // const uploader = screen.getByText('Click or drag file to this area to upload')
-  //   //   .closest('input');
-  //   fireEvent.click(uploader);
-  //   fireEvent.change(uploader, {
-  //     target: {
-  //       file: [new File(['(⌐□_□)'], 'mybeer.xml', { type: 'application/xml' })]
-  //     }
-  //   });
-  //   console.log(fixture.componentInstance.fileList);
-  //   console.log(uploader);
-  //   expect(componentSpy).toHaveBeenCalled();
-  //   expect(uploadSpy).toHaveBeenCalled();
-  // });
+  it('should upload a single recipe', async () => {
+    const componentSpy = spyOn(instance, 'handleUpload').and.callThrough();
+    const uploadSpy = spyOn(instance, 'beforeUpload').and.callThrough();
+    // const uploader = debugElement.query(By.directive(NzUploadBtnComponent)).nativeElement;
+    pageObject = new NzUploadPageObject();
+    instance.beforeUpload()fileList= [{
+      file: [new File(['(⌐□_□)'], 'mybeer.xml', { type: 'application/xml' })]
+    ]
+    const uploader = component.getAllByRole('button', { name: 'Select File' })[0];
+    // const uploader = screen.getByText('Click or drag file to this area to upload')
+    //   .closest('input');
+    fireEvent.change(uploader, {
+      target: {
+        file: [new File(['(⌐□_□)'], 'mybeer.xml', { type: 'application/xml' })]
+      }
+    });
+    console.log(uploader);
+    userEvent.click(screen.getByRole('button', { name: 'Upload' }));
+    console.log(fixture.componentInstance.fileList);
+    console.log(uploader);
+    expect(componentSpy).toHaveBeenCalled();
+    expect(uploadSpy).toHaveBeenCalled();
+  });
 
   // it('should navigate to the list of recipes', async () => {
   //   const componentSpy = spyOn(instance, 'gotoRecipes').and.callThrough();
