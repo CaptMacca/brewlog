@@ -218,7 +218,7 @@ public class BrewServiceTest {
 
         // Then
         verify(recipeRepository, times(1)).getReferenceById(anyLong());
-        verify(brewsRepository, times(1)).save(any(Brew.class));
+        verify(brewsRepository, times(1)).saveAndFlush(any(Brew.class));
     }
 
     @Test
@@ -287,7 +287,7 @@ public class BrewServiceTest {
 
         // Then
         verify(brewsRepository, times(1)).findById(anyLong());
-        verify(brewsRepository, times(1)).save(any(Brew.class));
+        verify(brewsRepository, times(1)).saveAndFlush(any(Brew.class));
     }
 
     @Test()

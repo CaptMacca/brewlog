@@ -39,23 +39,22 @@ public class UserDetailsServiceImplTest {
 
 
     @Test
+    public void given_user_it_saves() {
+        User user = getUser();
+        when(userRepository.save(user)).thenReturn(user);
+
+        User savedUser = userRepository.save(user);
+
+        assertThat(savedUser).isNotNull();
+    }
+
+    @Test
     public void given_validusername_succeeds()  {
 
-        String username = "user";
+        User user = getUser();
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
-        User user = new User();
-        user.setId(1L);
-        user.setUsername(username);
-        user.setRoles(new HashSet<>());
-        user.setFirstName("first name");
-        user.setSurname("surname");
-        user.setPassword("a password");
-        user.setEmail("an email");
-
-
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
 
         assertThat(userDetails).isNotNull().hasFieldOrProperty("username");
     }
@@ -68,5 +67,20 @@ public class UserDetailsServiceImplTest {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         });
+    }
+
+    private User getUser() {
+        String username = "user";
+
+        User user = new User();
+        user.setId(1L);
+        user.setUsername(username);
+        user.setRoles(new HashSet<>());
+        user.setFirstName("first name");
+        user.setSurname("surname");
+        user.setPassword("a password");
+        user.setEmail("an email");
+
+        return user;
     }
 }

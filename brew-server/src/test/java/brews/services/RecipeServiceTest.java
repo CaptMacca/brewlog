@@ -60,6 +60,7 @@ public class RecipeServiceTest {
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe = new Recipe();
         recipe.setId(1L);
+
         recipe.setName("a recipe");
         recipes.add(recipe);
 
