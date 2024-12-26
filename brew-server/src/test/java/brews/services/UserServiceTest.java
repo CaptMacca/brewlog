@@ -171,7 +171,7 @@ public class UserServiceTest {
         user.setRoles(roles);
 
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.saveAndFlush(user)).thenReturn(user);
 
         User updatedUser = userService.updateUserDetails("joe@company.com", user);
 
@@ -240,14 +240,14 @@ public class UserServiceTest {
 
         when(roleRepository.findByRoleName(RoleName.ROLE_USER)).thenReturn(Optional.of(mockUserRole()));
         when(roleRepository.findByRoleName(RoleName.ROLE_ADMIN)).thenReturn(Optional.of(mockAdminRole()));
-        when(userRepository.save(any(User.class))).thenReturn(mockUser());
+        when(userRepository.saveAndFlush(any(User.class))).thenReturn(mockUser());
 
         User registeredUser = userService.registerUser(userCandidate, roles);
         assertNotNull(registeredUser);
         verify(roleRepository, times(2)).findByRoleName(any(RoleName.class));
         verify(userRepository).existsByEmail(userCandidate.getEmail());
         verify(userRepository).existsByUsername(userCandidate.getUsername());
-        verify(userRepository).save(userCandidate);
+        verify(userRepository).saveAndFlush(userCandidate);
     }
 
     @Test

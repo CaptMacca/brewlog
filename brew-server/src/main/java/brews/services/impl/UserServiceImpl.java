@@ -42,12 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserDetails(String username, User user){
+    public User updateUserDetails(String username, User user) {
         User existingUser = getUser(username);
         existingUser.setEmail(user.getEmail());
         existingUser.setFirstName(user.getFirstName());
         existingUser.setSurname(user.getSurname());
-        return userRepository.save(existingUser);
+        return userRepository.saveAndFlush(existingUser);
     }
 
     @Override
@@ -82,8 +82,23 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
+        setRoles(user,roles);
+        return userRepository.saveAndFlush(user);
+    }
 
+    private Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    private User getUser(String username) {
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UserEntityNotFoundException("The user could not be found"));
+    }
+
+    private void setRoles(User user, Set<String> roles) {
         Set<Role> savedRoles = new HashSet<>();
+
         if (roles != null) {
             roles.forEach(role -> {
                 if (ADMIN_ROLE_NAME.equals(role)) {
@@ -99,16 +114,5 @@ public class UserServiceImpl implements UserService {
 
             user.setRoles(savedRoles);
         }
-        return userRepository.save(user);
-    }
-
-    private Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
-
-    private User getUser(String username) {
-        return userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UserEntityNotFoundException("The user could not be found"));
     }
 }

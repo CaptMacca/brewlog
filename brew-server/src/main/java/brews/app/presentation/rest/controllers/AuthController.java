@@ -3,6 +3,7 @@ package brews.app.presentation.rest.controllers;
 import brews.app.security.jwt.JwtProvider;
 import brews.app.security.jwt.request.LoginForm;
 import brews.app.security.jwt.response.JwtResponse;
+import brews.services.exceptions.UserNotAuthenticatedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -36,20 +38,27 @@ public class AuthController {
     @ResponseBody
     @Operation(description = "Validates the users login credentials and returns the JWT token if ok")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtProvider.generateJwtToken(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        String jwt = jwtProvider.generateJwtToken(authentication);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getUsername(), new ArrayList<>(userDetails.getAuthorities()));
 
-        JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getUsername(), new ArrayList<>(userDetails.getAuthorities()));
+            log.debug("JwtResponse: {}", jwtResponse);
 
-        log.debug("JwtResponse: {}", jwtResponse);
-
-        return ResponseEntity.ok(jwtResponse);
+            return ResponseEntity.ok(jwtResponse);
+        } catch (AuthenticationException e) {
+            log.error("Error authenticating user: ", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Error authenticating user: ", e);
+            throw new UserNotAuthenticatedException("Authentication failed");
+        }
     }
 
 }

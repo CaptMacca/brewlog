@@ -91,7 +91,7 @@ public class BrewServiceImpl implements BrewService {
         brew.setMeasurements(null);
         brew.setVersionId(1L);
 
-        return brewsRepository.save(brew);
+        return brewsRepository.saveAndFlush(brew);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class BrewServiceImpl implements BrewService {
 
         BeanUtils.copyProperties(updateBrew, brew);
 
-        return brewsRepository.save(brew);
+        return brewsRepository.saveAndFlush(brew);
     }
 
     @Override

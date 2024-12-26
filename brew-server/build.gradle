@@ -1,6 +1,6 @@
 plugins {
   id 'java'
-  id 'org.springframework.boot' version '3.2.+'
+  id 'org.springframework.boot' version '3.3.+'
   id 'io.spring.dependency-management' version '1.1.4'
   id 'org.springdoc.openapi-gradle-plugin' version '1.8.+'
 }
@@ -31,7 +31,7 @@ ext {
   openapiWebmvcVersion = "2.3.+"
   jsonwebtokenVersion = "0.12.+"
   assertjVersion = "3.23.1"
-  testContainersVersion = "1.19.3"
+  testContainersVersion = "1.19.+"
 }
 
 configurations {
@@ -58,6 +58,7 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-impl:${jsonwebtokenVersion}"
     implementation "io.jsonwebtoken:jjwt-jackson:${jsonwebtokenVersion}"
     implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
     implementation 'org.postgresql:postgresql'
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiWebmvcVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"

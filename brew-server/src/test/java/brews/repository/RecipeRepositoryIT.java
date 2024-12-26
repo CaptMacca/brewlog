@@ -42,7 +42,7 @@ public class RecipeRepositoryIT {
     UserRepository userRepository;
 
     @Container
-    static PostgreSQLContainer postgres = new PostgreSQLContainer(DockerImageName.parse("postgres:15.1"))
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15.1"))
             .withDatabaseName("brews")
             .withUsername("brews")
             .withPassword("brews");

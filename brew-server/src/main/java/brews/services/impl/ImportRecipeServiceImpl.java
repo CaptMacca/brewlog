@@ -37,13 +37,14 @@ public class ImportRecipeServiceImpl implements ImportRecipeService {
 
         log.debug("Retrieving user");
         User user = userRepository.findByUsername(username).orElseThrow(
-            () -> new UserEntityNotFoundException("User Not Found with -> username or email : " + username));;
+            () -> new UserEntityNotFoundException("User Not Found with -> username or email : " + username));
 
         log.debug("Saving recipes in database");
 
         recipes.forEach(candidateRecipe -> {
             Optional<Recipe> existingRecipe =
-              recipeRepository.findRecipeByNameAndUser(candidateRecipe.getName(), user);
+              recipeRepository.
+                findRecipeByNameAndUser(candidateRecipe.getName(), user);
             if (existingRecipe.isPresent()) {
                 throw new ImportedRecipeExistsException("Recipe of same name already exists in recipe database for this user");
             } else {
